@@ -1,18 +1,18 @@
 # 🌐 RadarSocial
 > **"Transparência e ritmo na execução dos recursos que movem a sociedade"**
 
-O **RadarSocial** é uma plataforma executiva desenvolvida para desdobramento estratégico, controle de rituais ágeis e aferição contínua do **descompasso físico-financeiro** em projetos socioambientais e iniciativas de inovação.
+O **RadarSocial** é um painel de gestão desenvolvido para facilitar o acompanhamento de metas, organizar rituais de trabalho e apoiar o equilíbrio físico-financeiro em projetos socioambientais e iniciativas de inovação.
 
 ---
 
 ## 🎯 Proposta de Valor
-Historicamente, projetos de impacto social e parcerias com o terceiro setor enfrentam desafios na conciliação entre o desembolso contábil e a entrega territorial concreta em campo. O **RadarSocial** soluciona esse gargalo ao integrar em um único cockpit:
-1. **Mapa de Fluxo Estratégico**: Desdobramento claro de Eixos Estratégicos ➔ Iniciativas ➔ Entregas em Campo.
-2. **Ritmo Físico vs. Gastos (Cockpit Físico-Financeiro)**: Curva S analítica, medição de desvios e cálculo em tempo real de descompasso orçamentário.
-3. **Painel Geral de Portfólio**: Visão consolidada dos projetos ativos com semáforos de risco e filtragem rápida.
-4. **Plano de Ação & Rituais Ágeis (5W2H Humanizado)**: Checklists periódicos de acompanhamento e planos de ação focados em resolução de gargalos operacionais.
-5. **Documentação & Relatórios Executivos**: Repositório de evidências (laudos, fotos e NFs) com emissão de relatório oficial em **1 página A4 (*One-Pager*)** pronto para conselhos e financiadores.
-6. **Copiloto IA**: Diagnósticos preditivos orientados a dados sem exposição ou julgamentos operacionais.
+Acompanhar projetos sociais exige conectar o planejamento orçamentário às entregas reais que acontecem no dia a dia das comunidades. O **RadarSocial** apoia gestores e equipes ao reunir em um só lugar:
+1. **Mapa de Fluxo Estratégico**: Conexão simples e direta entre os objetivos gerais do projeto e as entregas em campo.
+2. **Ritmo de Execução & Custos**: Acompanhamento visual da Curva S e leitura do equilíbrio entre o avanço físico e os recursos aplicados.
+3. **Visão Integrada de Portfólio**: Painel consolidado com indicadores claros para apoiar a tomada de decisão rápida e preventiva.
+4. **Planos de Ação & Rituais (5W2H em Português)**: Rotinas periódicas de alinhamento focadas em destravar atividades e apoiar a equipe técnica.
+5. **Documentação & Relatórios Oficiais**: Central de laudos e comprovantes com geração de relatório executivo em 1 página (*One-Pager*) para conselhos e financiadores.
+6. **Apoio Analítico**: Diagnósticos orientados a dados para sugerir ajustes de cronograma e logística de forma construtiva.
 
 ---
 
