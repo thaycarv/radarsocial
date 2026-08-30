@@ -24,17 +24,18 @@ A plataforma possui alternância instantânea entre 3 perfis visuais acessíveis
 
 ---
 
-## 🤝 Modelo de Concepção & Engenharia de Produto (RACI)
+## 🤝 Concepção Metodológica & Gestão do Projeto (RACI)
 
-O **RadarSocial** foi desenvolvido sob a disciplina de **AI-Assisted Product Engineering** (Engenharia de Produto Apoiada por IA), unindo liderança executiva de produto e automação técnica ágil:
+O **RadarSocial** foi idealizado e estruturado sob as melhores práticas de **Gestão de Projetos, Governança de Portfólio e PMO**, utilizando Inteligência Artificial aplicada para prototipagem rápida e validação de hipóteses:
 
-| Dimensão de Produto | Liderança & Concepção de Produto (**Thayâne Carvalho**) | Engenharia Técnica Apoiada por IA |
+| Dimensão da Gestão | Concepção & Gestão de Projetos (**Thayâne Carvalho**) | Implementação Técnica Apoiada por IA |
 | :--- | :--- | :--- |
-| **Visão & Estratégia de Negócio** | Tese de impacto, definição do problema, requisitos de governança e regras de negócio. | Arquitetura SPA em React 19, Vite, Tailwind CSS e Recharts. |
-| **UX & Design de Experiência** | Direcionamento dos 3 temas, acessibilidade (WCAG), contraste e micro-ajudas (`?`). | Componentização modular, tooltips flutuantes e estilização responsiva. |
-| **Metodologia & Rituais** | Estruturação de termos em português claro, humanização e matriz 5W2H. | Modelagem do estado global reativo com sincronização no LocalStorage. |
-| **Comprovações & PDF** | Especificação do hub documental e do modelo executivo One-Pager para conselhos. | Formulários de upload, manipulação de arquivos e regras de impressão `@media print`. |
-| **Qualidade & Homologação** | Testes de usabilidade, auditoria de dados e validação de relatórios e acessibilidade. | Refatoração contínua de código, testes de compilação e deploy contínuo via CI/CD. |
+| **Governança & Escopo do Portfólio** | Definição da metodologia de acompanhamento, critérios de desdobramento estratégico e indicadores de sucesso (KPIs). | Arquitetura SPA em React 19, Vite, Tailwind CSS e Recharts. |
+| **Aferição Físico-Financeira** | Estruturação da Curva S, limites de descompasso orçamentário territorial e semáforos de risco preventivo. | Fórmulas de cálculo de desvio, gráficos analíticos e modelagem reativa de dados. |
+| **Rituais de Gestão & 5W2H** | Padronização dos rituais de acompanhamento, checklists de status report e planos de ação focados em resolução de bloqueios. | Componentes interativos de acompanhamento, armazenamento local e formulários dinâmicos. |
+| **Prestação de Contas & Auditoria** | Requisitos do repositório de evidências técnicas e especificação do relatório executivo em 1 página (*One-Pager*). | Hub de upload de documentos e estilização `@media print` calibrada para PDF oficial. |
+| **Usabilidade & Experiência do Gestor** | Critérios de clareza visual, micro-ajudas conceituais (`?`), acessibilidade e sistemas de temas (Militar, Boho, Dark). | Componentes visuais com alto contraste e validação de acessibilidade (WCAG). |
+| **Garantia de Qualidade & Homologação** | Auditoria de integridade dos dados, validação de regras de negócio e homologação dos casos de uso. | Refatoração de código, testes de compilação (*npm run build*) e esteira de CI/CD. |
 
 ---
 
