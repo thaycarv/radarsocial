@@ -24,17 +24,17 @@ A plataforma possui alternância instantânea entre 3 perfis visuais acessíveis
 
 ---
 
-## 🤝 Matriz de Cocriação do Projeto (RACI)
+## 🤝 Modelo de Concepção & Engenharia de Produto (RACI)
 
-Este projeto foi construído em um modelo de **cocriação ágil orientada por Product Management**:
+O **RadarSocial** foi desenvolvido sob a disciplina de **AI-Assisted Product Engineering** (Engenharia de Produto Apoiada por IA), unindo liderança executiva de produto e automação técnica ágil:
 
-| Dimensão | Líder de Produto (Product Lead / Concepção) | Engenharia & IA (Antigravity / Execução) |
+| Dimensão de Produto | Liderança & Concepção de Produto (**Thayâne Carvalho**) | Engenharia Técnica Apoiada por IA |
 | :--- | :--- | :--- |
-| **Visão de Produto & Negócio** | Definição da tese de impacto, regras de negócio e governança. | Arquitetura SPA em React, Vite, Tailwind CSS e Recharts. |
-| **UX & Design Estratégico** | Direcionamento dos 3 temas, acessibilidade e micro-ajudas (`?`). | Codificação responsiva, componentes de tooltip flutuantes e CSS dark mode. |
-| **Metodologia & Rituais** | Estruturação de termos 100% em português e foco em soluções pedagógicas. | Modelagem do estado global (`ProjectContext`) com persistência no LocalStorage. |
-| **Comprovações & PDF** | Exigência de hub documental e emissão de One-Pager para conselhos. | Criação de formulários de upload e regras de impressão `@media print`. |
-| **Qualidade & Homologação** | Auditoria de consistência, teste de usabilidade e validação de relatórios. | Refatoração contínua, correção de contraste e sanitização de build. |
+| **Visão & Estratégia de Negócio** | Tese de impacto, definição do problema, requisitos de governança e regras de negócio. | Arquitetura SPA em React 19, Vite, Tailwind CSS e Recharts. |
+| **UX & Design de Experiência** | Direcionamento dos 3 temas, acessibilidade (WCAG), contraste e micro-ajudas (`?`). | Componentização modular, tooltips flutuantes e estilização responsiva. |
+| **Metodologia & Rituais** | Estruturação de termos em português claro, humanização e matriz 5W2H. | Modelagem do estado global reativo com sincronização no LocalStorage. |
+| **Comprovações & PDF** | Especificação do hub documental e do modelo executivo One-Pager para conselhos. | Formulários de upload, manipulação de arquivos e regras de impressão `@media print`. |
+| **Qualidade & Homologação** | Testes de usabilidade, auditoria de dados e validação de relatórios e acessibilidade. | Refatoração contínua de código, testes de compilação e deploy contínuo via CI/CD. |
 
 ---
 
