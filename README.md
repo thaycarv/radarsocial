@@ -18,9 +18,9 @@ Acompanhar projetos sociais exige conectar o planejamento orçamentário às ent
 
 ## 🎨 Sistema de Temas & Acessibilidade
 A plataforma possui alternância instantânea entre 3 perfis visuais acessíveis:
-* 🟢 **Padrão**: Tons de verde militar institucional (`#2D5A27`), refletindo sustentabilidade e solidez.
-* 🍂 **Boho**: Tons de terracota acolhedores (`#A64B2A`), comunicando acolhimento socioambiental.
-* 🌙 **Modo Escuro (Dark Mode)**: Alto contraste calibrado para análises prolongadas sem fadiga visual.
+* 🟢 **Padrão**: Tons de verde militar institucional (`#2D5A27`).
+* 🍂 **Boho**: Tons de terracota acolhedores (`#A64B2A`).
+* 🌙 **Modo Escuro (Dark Mode)**: Alto contraste.
 
 ---
 
