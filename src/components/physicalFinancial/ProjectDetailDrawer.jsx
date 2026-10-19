@@ -43,8 +43,8 @@ export const ProjectDetailDrawer = ({ project, isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/30 backdrop-blur-xs animate-in fade-in">
-      <div className="bg-white w-full max-w-2xl h-full shadow-2xl flex flex-col justify-between p-6 overflow-y-auto space-y-6">
+    <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300">
+      <div className="bg-white w-full max-w-2xl h-full shadow-2xl flex flex-col justify-between p-6 overflow-y-auto space-y-6 animate-drawer-slide">
         
         {/* Header Drawer */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">

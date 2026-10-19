@@ -1,10 +1,74 @@
 @import "tailwindcss";
 
 :root {
-  --primary-brand: #2D5A27;
-  --primary-dark: #1E3F20;
-  --primary-light: #ecfdf5;
-  --primary-border: #a7f3d0;
+  --primary-brand: #1e3a8a;
+  --primary-dark: #0f2942;
+  --primary-light: #eff6ff;
+  --primary-border: #bfdbfe;
+  --accent-gold: #d97706;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animações e Transições Motion Principles - Alta Percepção Visual */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.2);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 8px rgba(45, 90, 39, 0);
+  }
+}
+
+.animate-fade-scale {
+  animation: fadeInScale 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-drawer-slide {
+  animation: slideInRight 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.card-interactive {
+  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 240ms cubic-bezier(0.16, 1, 0.3, 1), border-color 240ms ease;
+}
+.card-interactive:hover {
+  transform: translateY(-3px) scale(1.005);
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.12);
+}
+
+.button-interactive {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms ease, background-color 180ms ease;
+}
+.button-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(45, 90, 39, 0.25);
+}
+.button-interactive:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 /* Tema Padrão: Verde Militar / Equilibrado */

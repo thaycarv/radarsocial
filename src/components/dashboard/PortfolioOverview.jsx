@@ -169,55 +169,56 @@ export const PortfolioOverview = ({ onNavigate }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredProjects.map((project) => {
-                const gapAnalysis = calculatePhysicalFinancialGap(project.actualPhysical, project.actualFinancial);
+              {filteredProjects.map((p) => {
+                const gapAnalysis = calculatePhysicalFinancialGap(p.actualPhysical, p.actualFinancial);
+                const isSelected = selectedProjectId === p.id;
                 return (
                   <tr
-                    key={project.id}
-                    className="hover:bg-slate-50/80 transition cursor-pointer"
+                    key={p.id}
+                    className={`card-interactive hover:bg-slate-50/80 transition cursor-pointer ${isSelected ? 'ring-2 ring-emerald-500/20 bg-emerald-50/30' : ''}`}
                     onClick={() => {
-                      setSelectedProjectId(project.id);
+                      setSelectedProjectId(p.id);
                       onNavigate('physicalFinancial');
                     }}
                   >
                     <td className="py-3 px-4">
-                      <div className="font-bold text-slate-900 text-sm hover:text-teal-700 transition">
-                        {project.name}
+                      <div className="font-bold text-slate-900 text-sm hover:text-emerald-700 transition">
+                        {p.name}
                       </div>
-                      <div className="text-[11px] text-slate-400 font-mono mt-0.5">{project.code}</div>
+                      <div className="text-[11px] text-slate-400 font-mono mt-0.5">{p.code}</div>
                     </td>
 
                     <td className="py-3 px-4">
-                      <div className="text-slate-800 font-medium">{project.manager}</div>
-                      <div className="text-[11px] text-slate-400">{project.sponsor}</div>
+                      <div className="text-slate-800 font-medium">{p.manager}</div>
+                      <div className="text-[11px] text-slate-400">{p.sponsor}</div>
                     </td>
 
                     <td className="py-3 px-4 font-semibold text-slate-800">
-                      <div>{formatCurrency(project.totalBudget)}</div>
-                      <div className="text-[11px] text-slate-400">{formatCurrency(project.executedBudget)} gasto</div>
+                      <div>{formatCurrency(p.totalBudget)}</div>
+                      <div className="text-[11px] text-slate-400">{formatCurrency(p.executedBudget)} gasto</div>
                     </td>
 
                     <td className="py-3 px-4 text-center">
                       <div className="flex items-center justify-center gap-1 font-medium">
-                        <span className="text-slate-400">{project.plannedPhysical}%</span>
+                        <span className="text-slate-400">{p.plannedPhysical}%</span>
                         <span className="text-slate-300">/</span>
-                        <span className="font-bold text-teal-700">{project.actualPhysical}%</span>
+                        <span className="font-bold text-slate-900">{p.actualPhysical}%</span>
                       </div>
                       <div className="w-20 bg-slate-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
-                        <div className="bg-teal-600 h-full rounded-full" style={{ width: `${project.actualPhysical}%` }}></div>
+                        <div className="bg-emerald-600 h-full rounded-full transition-all duration-500" style={{ width: `${p.actualPhysical}%` }}></div>
                       </div>
                     </td>
 
                     <td className="py-3 px-4 text-center">
                       <div className="flex items-center justify-center gap-1 font-medium">
-                        <span className="text-slate-400">{project.plannedFinancial}%</span>
+                        <span className="text-slate-400">{p.plannedFinancial}%</span>
                         <span className="text-slate-300">/</span>
-                        <span className={`font-bold ${project.actualFinancial > project.actualPhysical + 10 ? 'text-rose-600' : 'text-slate-800'}`}>
-                          {project.actualFinancial}%
+                        <span className={`font-bold ${p.actualFinancial > p.actualPhysical + 10 ? 'text-rose-600' : 'text-slate-800'}`}>
+                          {p.actualFinancial}%
                         </span>
                       </div>
                       <div className="w-20 bg-slate-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
-                        <div className="bg-sky-600 h-full rounded-full" style={{ width: `${project.actualFinancial}%` }}></div>
+                        <div className="bg-sky-600 h-full rounded-full transition-all duration-500" style={{ width: `${p.actualFinancial}%` }}></div>
                       </div>
                     </td>
 
