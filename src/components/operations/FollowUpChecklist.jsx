@@ -97,29 +97,28 @@ export const FollowUpChecklist = () => {
             <div
               key={item.id}
               onClick={() => toggleChecklistItem(activeFollowUp.id, item.id)}
-              className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-start gap-3 ${
+              className={`p-3.5 rounded-xl border cursor-pointer card-interactive flex items-start gap-3 transition-all duration-200 select-none ${
                 item.checked
-                  ? 'bg-emerald-50/50 border-emerald-200'
-                  : 'bg-white border-slate-200 hover:bg-slate-50'
+                  ? 'bg-emerald-50/70 border-emerald-300 shadow-xs'
+                  : 'bg-white border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/70'
               }`}
             >
-              <div className="mt-0.5">
+              <div className="mt-0.5 transition-transform duration-200 hover:scale-110">
                 {item.checked ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 animate-fade-scale" />
                 ) : (
                   <Circle className="w-4 h-4 text-slate-300" />
                 )}
               </div>
-
-              <div className="flex-1 space-y-1">
-                <p className={`text-xs font-semibold ${item.checked ? 'text-emerald-900' : 'text-slate-800'}`}>
-                  {item.title}
+              <div className="flex-1 text-xs">
+                <p className={`font-medium transition-colors duration-200 ${item.checked ? 'line-through text-slate-400' : 'text-slate-800'}`}>
+                  {item.text}
                 </p>
-                {item.note && (
-                  <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded-md border border-slate-200/80">
-                    <strong className="text-slate-700">Observação:</strong> {item.note}
-                  </p>
-                )}
+                <div className="flex items-center gap-3 mt-1 text-[11px] text-slate-400">
+                  <span className="font-semibold text-slate-500">Resp: {item.responsible}</span>
+                  <span>•</span>
+                  <span>Prazo: {item.deadline}</span>
+                </div>
               </div>
             </div>
           ))}

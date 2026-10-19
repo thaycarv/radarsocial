@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { ProjectProvider, useProjects } from './context/ProjectContext';
 import { Header } from './components/layout/Header';
 import { NamingModal } from './components/layout/NamingModal';
-import { LinearFlowBoard } from './components/strategic/LinearFlowBoard';
 import { ProjectDetailDrawer } from './components/physicalFinancial/ProjectDetailDrawer';
-import { PortfolioOverview } from './components/dashboard/PortfolioOverview';
-import { PhysicalFinancialCockpit } from './components/physicalFinancial/PhysicalFinancialCockpit';
-import { FollowUpChecklist } from './components/operations/FollowUpChecklist';
-import { DocumentationHub } from './components/documentation/DocumentationHub';
-import { StrategicCopilot } from './components/aiCopilot/StrategicCopilot';
+import { TabSkeleton } from './components/common/TabSkeleton';
+
+// Code Splitting & Lazy Loading dos Módulos Principais
+const LinearFlowBoard = lazy(() => import('./components/strategic/LinearFlowBoard').then(m => ({ default: m.LinearFlowBoard })));
+const PhysicalFinancialCockpit = lazy(() => import('./components/physicalFinancial/PhysicalFinancialCockpit').then(m => ({ default: m.PhysicalFinancialCockpit })));
+const PortfolioOverview = lazy(() => import('./components/dashboard/PortfolioOverview').then(m => ({ default: m.PortfolioOverview })));
+const FollowUpChecklist = lazy(() => import('./components/operations/FollowUpChecklist').then(m => ({ default: m.FollowUpChecklist })));
+const DocumentationHub = lazy(() => import('./components/documentation/DocumentationHub').then(m => ({ default: m.DocumentationHub })));
+const StrategicCopilot = lazy(() => import('./components/aiCopilot/StrategicCopilot').then(m => ({ default: m.StrategicCopilot })));
 
 function MainApp() {
   const { theme } = useProjects();
@@ -33,31 +36,35 @@ function MainApp() {
         setActiveTab={setActiveTab}
       />
 
-      {/* Main Fluid Canvas */}
+      {/* Main Fluid Canvas com Motion Transitions */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8">
-        {activeTab === 'flow' && (
-          <LinearFlowBoard onSelectProject={handleOpenProjectDrawer} />
-        )}
+        <Suspense fallback={<TabSkeleton />}>
+          <div key={activeTab} className="animate-fade-scale">
+            {activeTab === 'flow' && (
+              <LinearFlowBoard onSelectProject={handleOpenProjectDrawer} />
+            )}
 
-        {activeTab === 'physicalFinancial' && (
-          <PhysicalFinancialCockpit />
-        )}
+            {activeTab === 'physicalFinancial' && (
+              <PhysicalFinancialCockpit />
+            )}
 
-        {activeTab === 'dashboard' && (
-          <PortfolioOverview onNavigate={setActiveTab} />
-        )}
+            {activeTab === 'dashboard' && (
+              <PortfolioOverview onNavigate={setActiveTab} />
+            )}
 
-        {activeTab === 'operations' && (
-          <FollowUpChecklist />
-        )}
+            {activeTab === 'operations' && (
+              <FollowUpChecklist />
+            )}
 
-        {activeTab === 'documentation' && (
-          <DocumentationHub />
-        )}
+            {activeTab === 'documentation' && (
+              <DocumentationHub />
+            )}
 
-        {activeTab === 'copilot' && (
-          <StrategicCopilot />
-        )}
+            {activeTab === 'copilot' && (
+              <StrategicCopilot />
+            )}
+          </div>
+        </Suspense>
       </main>
 
       {/* Footer minimalista */}
