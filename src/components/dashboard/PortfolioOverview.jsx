@@ -27,12 +27,37 @@ export const PortfolioOverview = ({ onNavigate }) => {
     setFilter((prev) => (prev === targetStatus ? 'Todos' : targetStatus));
   };
 
-  const filteredProjects = projects.filter(
-    (p) => filter === 'Todos' || p.overallStatus === filter
-  );
+  const filteredProjects = projects.filter((p) => {
+    if (filter === 'Todos') return true;
+    if (filter === 'No prazo') return p.overallStatus === 'Normal';
+    if (filter === 'Em atenção') return p.overallStatus !== 'Normal';
+    return true;
+  });
 
   const visibleProjectIds = new Set(filteredProjects.map((p) => p.id));
   const filteredAlerts = governanceAlerts.filter((a) => visibleProjectIds.has(a.projectId));
+
+  const renderStatusBadge = (project) => {
+    if (project.overallStatus === 'Crítico') {
+      return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+          Requer ação
+        </span>
+      );
+    }
+    if (project.cost.label === 'NF retida') {
+      return (
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+          No prazo · NF retida
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+        No prazo
+      </span>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -49,60 +74,45 @@ export const PortfolioOverview = ({ onNavigate }) => {
           <button
             type="button"
             onClick={() => setFilter('Todos')}
-            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition cursor-pointer"
+            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition cursor-pointer"
           >
-            <span>Filtrando por: {filter} ({filteredProjects.length})</span>
+            <span>Filtro: {filter} ({filteredProjects.length})</span>
             <X className="w-3.5 h-3.5" />
           </button>
         )}
       </div>
 
-      {/* 4 Cards Principais */}
+      {/* 4 Cards Principais - Limpos e Executivos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Card 1: Saúde da Carteira */}
         <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div>
-            <p className="text-xs text-slate-500 font-medium">Programas Ativos</p>
-            <button
-              type="button"
-              onClick={() => setFilter('Todos')}
-              title="Mostrar todos os programas"
-              className="text-2xl font-extrabold text-slate-900 mt-1 hover:text-[#2D5A27] transition cursor-pointer block text-left"
-            >
-              {portfolioMetrics.totalProjects}
-            </button>
+            <p className="text-xs text-slate-500 font-medium">Saúde da Carteira</p>
+            <p className="text-2xl font-extrabold text-slate-900 mt-1">
+              {portfolioMetrics.totalProjects} programas
+            </p>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
               <button
                 type="button"
-                onClick={() => toggleStatusFilter('Normal')}
+                onClick={() => toggleStatusFilter('No prazo')}
                 className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition cursor-pointer ${
-                  filter === 'Normal'
+                  filter === 'No prazo'
                     ? 'bg-emerald-600 text-white border-emerald-600 shadow-2xs'
                     : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
                 }`}
               >
-                {portfolioMetrics.healthyCount} normal
+                {portfolioMetrics.healthyCount} no prazo
               </button>
               <button
                 type="button"
-                onClick={() => toggleStatusFilter('Atenção')}
+                onClick={() => toggleStatusFilter('Em atenção')}
                 className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition cursor-pointer ${
-                  filter === 'Atenção'
-                    ? 'bg-amber-600 text-white border-amber-600 shadow-2xs'
-                    : 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
-                }`}
-              >
-                {portfolioMetrics.warningCount} atenção
-              </button>
-              <button
-                type="button"
-                onClick={() => toggleStatusFilter('Crítico')}
-                className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition cursor-pointer ${
-                  filter === 'Crítico'
+                  filter === 'Em atenção'
                     ? 'bg-rose-600 text-white border-rose-600 shadow-2xs'
                     : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
                 }`}
               >
-                {portfolioMetrics.criticalCount} crítico
+                {portfolioMetrics.criticalCount + portfolioMetrics.warningCount} em atenção
               </button>
             </div>
           </div>
@@ -111,6 +121,7 @@ export const PortfolioOverview = ({ onNavigate }) => {
           </div>
         </div>
 
+        {/* Card 2: Orçamento Total */}
         <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div>
             <p className="text-xs text-slate-500 font-medium">Orçamento Total</p>
@@ -118,7 +129,10 @@ export const PortfolioOverview = ({ onNavigate }) => {
               {formatCurrency(portfolioMetrics.totalBudget)}
             </p>
             <p className="text-xs text-slate-500 mt-1.5">
-              Pago: <strong className="text-slate-800">{formatCurrency(portfolioMetrics.totalExecuted)}</strong> · Saldo: {formatCurrency(portfolioMetrics.totalRemaining)}
+              Utilizado: <strong className="text-slate-800">{formatCurrency(portfolioMetrics.totalExecuted)}</strong> ({formatPercent(portfolioMetrics.weightedActualFinancial)})
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Saldo em caixa: {formatCurrency(portfolioMetrics.totalRemaining)}
             </p>
           </div>
           <div className="p-2 bg-slate-50 rounded-lg text-[#2D5A27] border border-slate-200">
@@ -126,61 +140,57 @@ export const PortfolioOverview = ({ onNavigate }) => {
           </div>
         </div>
 
+        {/* Card 3: Entregas Realizadas */}
         <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div className="flex-1 pr-2">
-            <p className="text-xs text-slate-500 font-medium">Execução da Carteira</p>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-xl font-extrabold text-[#2D5A27]">
+            <p className="text-xs text-slate-500 font-medium">Entregas Realizadas</p>
+            <div className="flex items-baseline gap-1.5 mt-1">
+              <span className="text-2xl font-extrabold text-[#2D5A27]">
                 {formatPercent(portfolioMetrics.weightedActualPhysical)}
               </span>
-              <span className="text-xs text-slate-400">físico ·</span>
-              <span className="text-base font-bold text-sky-700">
-                {formatPercent(portfolioMetrics.weightedActualFinancial)}
-              </span>
-              <span className="text-xs text-slate-400">pago</span>
+              <span className="text-xs text-slate-400">concluído</span>
             </div>
-            <div className="mt-2 space-y-1">
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-[#2D5A27] h-full rounded-full"
-                  style={{ width: `${Math.min(100, portfolioMetrics.weightedActualPhysical)}%` }}
-                />
-              </div>
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-sky-600 h-full rounded-full"
-                  style={{ width: `${Math.min(100, portfolioMetrics.weightedActualFinancial)}%` }}
-                />
-              </div>
+            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-2">
+              <div
+                className="bg-[#2D5A27] h-full rounded-full"
+                style={{ width: `${Math.min(100, portfolioMetrics.weightedActualPhysical)}%` }}
+              />
             </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              Média ponderada do escopo físico
+            </p>
           </div>
           <div className="p-2 bg-slate-50 rounded-lg text-[#2D5A27] border border-slate-200">
             <TrendingUp className="w-4 h-4" />
           </div>
         </div>
 
+        {/* Card 4: Prestação de Contas */}
         <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div>
-            <p className="text-xs text-slate-500 font-medium">Pendente de Nota</p>
-            <p className="text-xl font-extrabold text-amber-700 mt-1">
-              {formatCurrency(portfolioMetrics.totalPendingProofs)}
+            <p className="text-xs text-slate-500 font-medium">Prestação de Contas</p>
+            <p className="text-xl font-extrabold text-slate-900 mt-1">
+              {formatPercent(portfolioMetrics.proofRegularityPercent)} <span className="text-xs font-normal text-slate-500">regular</span>
             </p>
             <p className="text-xs text-slate-500 mt-1.5">
-              Comprovado: <strong className="text-emerald-700">{formatCurrency(portfolioMetrics.totalApprovedProofs)}</strong>
+              Aprovado: <strong className="text-emerald-700">{formatCurrency(portfolioMetrics.totalApprovedProofs)}</strong>
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Em validação: {formatCurrency(portfolioMetrics.totalPendingProofs)}
             </p>
           </div>
-          <div className="p-2 bg-slate-50 rounded-lg text-amber-600 border border-slate-200">
+          <div className="p-2 bg-slate-50 rounded-lg text-emerald-700 border border-slate-200">
             <FileCheck className="w-4 h-4" />
           </div>
         </div>
       </div>
 
-      {/* Tabela de Programas (logo abaixo dos cards para resposta imediata ao filtro) */}
+      {/* Tabela de Programas - 5 Colunas Claras e Humanas */}
       <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-bold text-slate-900">
-              {filter === 'Todos' ? 'Programas' : `Programas · ${filter}`}
+              {filter === 'Todos' ? 'Programas em Execução' : `Programas · ${filter}`}
             </h2>
             <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold border border-slate-200">
               {filteredProjects.length}
@@ -188,12 +198,12 @@ export const PortfolioOverview = ({ onNavigate }) => {
           </div>
 
           <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs self-start">
-            {['Todos', 'Crítico', 'Atenção', 'Normal'].map((st) => (
+            {['Todos', 'No prazo', 'Em atenção'].map((st) => (
               <button
                 key={st}
                 type="button"
                 onClick={() => setFilter(st)}
-                className={`px-2.5 py-1 rounded-md font-medium transition cursor-pointer ${
+                className={`px-3 py-1 rounded-md font-medium transition cursor-pointer ${
                   filter === st
                     ? 'bg-white text-slate-900 shadow-2xs font-semibold'
                     : 'text-slate-600 hover:text-slate-900'
@@ -210,19 +220,18 @@ export const PortfolioOverview = ({ onNavigate }) => {
             <thead className="bg-slate-50 text-slate-600 font-semibold border-y border-slate-200">
               <tr>
                 <th className="py-2.5 px-3">Programa</th>
-                <th className="py-2.5 px-3">Orçamento</th>
-                <th className="py-2.5 px-3 text-center">Avanço Físico</th>
-                <th className="py-2.5 px-3 text-center">Pago</th>
-                <th className="py-2.5 px-3 text-center">Prazo</th>
-                <th className="py-2.5 px-3 text-center">Custo</th>
+                <th className="py-2.5 px-3 text-center">Status</th>
+                <th className="py-2.5 px-3">Entregas</th>
+                <th className="py-2.5 px-3">Orçamento Utilizado</th>
+                <th className="py-2.5 px-3">Situação Atual</th>
                 <th className="py-2.5 px-2 w-8"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredProjects.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-500">
-                    Nenhum programa classificado como <strong>{filter}</strong> no momento.
+                  <td colSpan={6} className="py-8 text-center text-slate-500">
+                    Nenhum programa encontrado com o filtro <strong>{filter}</strong>.
                   </td>
                 </tr>
               ) : (
@@ -239,6 +248,7 @@ export const PortfolioOverview = ({ onNavigate }) => {
                         isSelected ? 'bg-emerald-50/30' : ''
                       }`}
                     >
+                      {/* 1. Programa & Financiador */}
                       <td className="py-3.5 px-3">
                         <div className="font-bold text-slate-900 text-xs">
                           <span className="font-mono text-[11px] text-[#2D5A27] mr-1.5">{p.code}</span>
@@ -249,21 +259,18 @@ export const PortfolioOverview = ({ onNavigate }) => {
                         </div>
                       </td>
 
-                      <td className="py-3.5 px-3">
-                        <div className="font-bold text-slate-900">{formatCurrency(p.totalBudget)}</div>
-                        <div className="text-[11px] text-slate-500">
-                          Pago: {formatCurrency(p.executedBudget)}
-                        </div>
+                      {/* 2. Status Geral Unificado */}
+                      <td className="py-3.5 px-3 text-center whitespace-nowrap">
+                        {renderStatusBadge(p)}
                       </td>
 
-                      <td className="py-3.5 px-3 text-center">
-                        <div>
-                          <span className="font-bold text-[#2D5A27]">{formatPercent(p.actualPhysical)}</span>
-                          <span className="text-[11px] text-slate-400 ml-1">
-                            / meta {formatPercent(p.plannedPhysical)}
-                          </span>
+                      {/* 3. Entregas Físicas */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-900">{formatPercent(p.actualPhysical)}</span>
+                          <span className="text-[11px] text-slate-400">meta {formatPercent(p.plannedPhysical)}</span>
                         </div>
-                        <div className="w-20 bg-slate-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
+                        <div className="w-24 bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden">
                           <div
                             className="bg-[#2D5A27] h-full rounded-full"
                             style={{ width: `${Math.min(100, p.actualPhysical)}%` }}
@@ -271,40 +278,27 @@ export const PortfolioOverview = ({ onNavigate }) => {
                         </div>
                       </td>
 
-                      <td className="py-3.5 px-3 text-center">
-                        <div
-                          className={`font-bold ${
-                            p.cost.severity === 'high' ? 'text-rose-600' : 'text-sky-700'
-                          }`}
-                        >
-                          {formatPercent(p.actualFinancial)}
+                      {/* 4. Orçamento Utilizado */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <div className="font-bold text-slate-900">
+                          {formatCurrency(p.executedBudget)}{' '}
+                          <span className="text-[11px] font-normal text-slate-500">
+                            ({formatPercent(p.actualFinancial)})
+                          </span>
                         </div>
-                        <div className="w-20 bg-slate-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${
-                              p.cost.severity === 'high' ? 'bg-rose-500' : 'bg-sky-600'
-                            }`}
-                            style={{ width: `${Math.min(100, p.actualFinancial)}%` }}
-                          />
+                        <div className="text-[11px] text-slate-400">
+                          Total: {formatCurrency(p.totalBudget)}
                         </div>
                       </td>
 
-                      <td className="py-3.5 px-3 text-center">
-                        <span
-                          className={`inline-block px-2.5 py-0.5 rounded-full border font-semibold text-[11px] ${p.schedule.badgeClass}`}
-                        >
-                          {p.schedule.label}
-                        </span>
+                      {/* 5. Situação Atual / Headline */}
+                      <td className="py-3.5 px-3 max-w-xs sm:max-w-sm">
+                        <p className="text-xs text-slate-700 leading-snug">
+                          {p.operationalHeadline || p.name}
+                        </p>
                       </td>
 
-                      <td className="py-3.5 px-3 text-center">
-                        <span
-                          className={`inline-block px-2.5 py-0.5 rounded-full border font-semibold text-[11px] ${p.cost.badgeClass}`}
-                        >
-                          {p.cost.label}
-                        </span>
-                      </td>
-
+                      {/* 6. Seta de Navegação */}
                       <td className="py-3.5 px-2 text-right">
                         <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#2D5A27] inline" />
                       </td>
@@ -317,13 +311,13 @@ export const PortfolioOverview = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Pontos de Atenção (também filtrados conforme o status selecionado) */}
+      {/* Prioridades de Gestão do Mês (apenas ações reais necessárias) */}
       {filteredAlerts.length > 0 && (
         <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-3">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-600" />
             <h2 className="text-sm font-bold text-slate-900">
-              Pontos de Atenção ({filteredAlerts.length})
+              Prioridades de Gestão do Mês ({filteredAlerts.length})
             </h2>
           </div>
 
@@ -332,9 +326,7 @@ export const PortfolioOverview = ({ onNavigate }) => {
               const borderStyle =
                 alert.severity === 'high'
                   ? 'border-l-4 border-l-rose-600 bg-rose-50/40 border-slate-200'
-                  : alert.severity === 'medium'
-                  ? 'border-l-4 border-l-amber-500 bg-amber-50/40 border-slate-200'
-                  : 'border-l-4 border-l-sky-600 bg-sky-50/40 border-slate-200';
+                  : 'border-l-4 border-l-amber-500 bg-amber-50/40 border-slate-200';
 
               return (
                 <button
@@ -355,8 +347,8 @@ export const PortfolioOverview = ({ onNavigate }) => {
                         {alert.projectName}
                       </span>
                     </div>
-                    <p className="text-xs font-medium text-slate-800">{alert.title}</p>
-                    <p className="text-[11px] text-slate-500">{alert.detail}</p>
+                    <p className="text-xs font-semibold text-slate-800">{alert.title}</p>
+                    <p className="text-[11px] text-slate-600 leading-relaxed">{alert.detail}</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-700 shrink-0" />
                 </button>

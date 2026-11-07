@@ -116,7 +116,7 @@ export const deriveProjectMetrics = (project) => {
   let overallStatus = 'Normal';
   if (schedule.severity === 'high' || cost.severity === 'high') {
     overallStatus = 'Crítico';
-  } else if (schedule.severity === 'medium' || cost.severity === 'medium' || cost.severity === 'info') {
+  } else if (schedule.severity === 'medium' || cost.severity === 'medium') {
     overallStatus = 'Atenção';
   }
 
@@ -168,6 +168,7 @@ export const calculatePortfolioMetrics = (derivedProjects) => {
   const weightedPlannedPhysical = totalBudget > 0 ? Number(((totalPV / totalBudget) * 100).toFixed(1)) : 0;
   const weightedActualPhysical = totalBudget > 0 ? Number(((totalEV / totalBudget) * 100).toFixed(1)) : 0;
   const weightedActualFinancial = totalBudget > 0 ? Number(((totalExecuted / totalBudget) * 100).toFixed(1)) : 0;
+  const proofRegularityPercent = totalExecuted > 0 ? Number(((totalApprovedProofs / totalExecuted) * 100).toFixed(1)) : 100;
 
   const criticalCount = derivedProjects.filter((p) => p.overallStatus === 'Crítico').length;
   const warningCount = derivedProjects.filter((p) => p.overallStatus === 'Atenção').length;
@@ -183,6 +184,7 @@ export const calculatePortfolioMetrics = (derivedProjects) => {
     weightedPlannedPhysical,
     weightedActualPhysical,
     weightedActualFinancial,
+    proofRegularityPercent,
     criticalCount,
     warningCount,
     healthyCount
@@ -193,55 +195,31 @@ export const generateGovernanceAlerts = (derivedProjects) => {
   const alerts = [];
 
   derivedProjects.forEach((p) => {
-    if (p.cost.gap > 15) {
+    // 1. Projeto com atenção prioritária (como PRG-02)
+    if (p.overallStatus === 'Crítico') {
       alerts.push({
-        id: `alert-cost-${p.id}`,
+        id: `action-crit-${p.id}`,
         projectId: p.id,
         projectName: p.name,
         severity: 'high',
-        category: 'Orçamento',
-        title: `${formatPercent(p.actualFinancial)} do orçamento já pago para ${formatPercent(p.actualPhysical)} de entregas`,
-        detail: `Restam ${formatCurrency(p.remainingBudget)} em caixa para concluir ${formatPercent(p.remainingScope)} do programa.`,
-        targetTab: 'physicalFinancial'
-      });
-    }
-
-    if (p.schedule.gap < -10) {
-      alerts.push({
-        id: `alert-sched-${p.id}`,
-        projectId: p.id,
-        projectName: p.name,
-        severity: 'high',
-        category: 'Cronograma',
-        title: `Cronograma atrasado (${formatPercent(p.actualPhysical)} entregue vs. ${formatPercent(p.plannedPhysical)} previsto)`,
-        detail: `Existem etapas com prazo vencido aguardando conclusão.`,
+        category: 'Ação Prioritária',
+        title: `Readequar turmas e recolher ${formatCurrency(p.pendingProofs)} em comprovantes`,
+        detail: `${formatPercent(p.actualFinancial)} do orçamento utilizado para ${formatPercent(p.actualPhysical)} de avanço físico. Suspender novos adiantamentos e readequar cronograma pedagógico.`,
         targetTab: 'operations'
       });
     }
 
-    if (p.pendingProofs >= 10000) {
+    // 2. Projeto com retenção documental de fornecedor (como PRG-04)
+    if (p.cost.label === 'NF retida') {
       alerts.push({
-        id: `alert-proof-${p.id}`,
+        id: `action-compliance-${p.id}`,
         projectId: p.id,
         projectName: p.name,
         severity: 'medium',
-        category: 'Notas Fiscais',
-        title: `${formatCurrency(p.pendingProofs)} pagos aguardando nota fiscal ou recibo`,
-        detail: `Regularizar comprovantes antes do fechamento da prestação de contas.`,
+        category: 'Conformidade',
+        title: 'Liberar pagamento da balança após CND municipal do fornecedor',
+        detail: `Entregas em ${formatPercent(p.actualPhysical)} com pagamento retido preventivamente até regularização fiscal do parceiro.`,
         targetTab: 'physicalFinancial'
-      });
-    }
-
-    if (p.cost.gap < -10) {
-      alerts.push({
-        id: `alert-lag-${p.id}`,
-        projectId: p.id,
-        projectName: p.name,
-        severity: 'info',
-        category: 'Fornecedor',
-        title: `Etapas concluídas (${formatPercent(p.actualPhysical)}) com pagamento retido (${formatPercent(p.actualFinancial)})`,
-        detail: `Verificar notas fiscais aguardando regularização cadastral para baixa.`,
-        targetTab: 'operations'
       });
     }
   });
