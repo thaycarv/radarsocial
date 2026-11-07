@@ -4,19 +4,13 @@
 ---
 
 ### 📋 O que mudou?
-- [Descreva detalhadamente o que foi implementado, alterado ou corrigido nesta entrega]
+- [Descreva de forma objetiva o que foi implementado, ajustado ou corrigido]
 
 ---
 
-### ✅ Como foi validado?
-- [x] Compilação e build sem erros (`npm run build`)
-- [x] Validação visual nos temas (Padrão, Boho e Dark Mode)
-- [x] Teste funcional dos componentes e persistência de dados
-- [x] Validação de impressão do relatório em 1 página A4
-
----
-
-### ⚠️ Riscos, Limitações & Próximos Passos
-- **Riscos Mapeados:** [Identificação de eventuais riscos de regressão ou dependências]
-- **Limitações:** [Limitações de escopo conhecidas desta versão]
-- **Próximos Passos:** [Próximas etapas ou melhorias sugeridas]
+### ✅ Validação
+- [x] Verificação estática sem avisos (`npm run lint`)
+- [x] Compilação de produção sem erros (`npm run build`)
+- [x] Validação visual nos temas Padrão e Modo Escuro
+- [x] Conferência das fórmulas de medição e persistência em `localStorage`
+- [x] Validação de impressão do relatório executivo em 1 página A4

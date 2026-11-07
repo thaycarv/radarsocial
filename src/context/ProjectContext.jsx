@@ -1,245 +1,288 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import {
-  INITIAL_IDENTITY,
-  INITIAL_SWOT,
-  INITIAL_STRATEGY_TREE,
+  PORTFOLIO_CUTOFF,
   INITIAL_PROJECTS,
   INITIAL_FOLLOW_UPS,
-  INITIAL_DOCUMENTS,
-  NAMING_OPTIONS
+  INITIAL_EVIDENCES
 } from '../data/mockData';
+import {
+  deriveProjectMetrics,
+  calculatePortfolioMetrics,
+  generateGovernanceAlerts
+} from '../utils/calculations';
+
+const STORAGE_KEYS = {
+  projects: 'radarsocial_v2_projects',
+  followUps: 'radarsocial_v2_followups',
+  evidences: 'radarsocial_v2_evidences',
+  theme: 'radarsocial_v2_theme'
+};
 
 const ProjectContext = createContext();
 
+const loadFromStorage = (key, fallback) => {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
 export const ProjectProvider = ({ children }) => {
-  const [identity, setIdentity] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_identity_v7');
-    return saved ? JSON.parse(saved) : INITIAL_IDENTITY;
-  });
-
-  const [swot, setSwot] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_swot_v7');
-    return saved ? JSON.parse(saved) : INITIAL_SWOT;
-  });
-
-  const [strategyTree, setStrategyTree] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_strategy_tree_v7');
-    return saved ? JSON.parse(saved) : INITIAL_STRATEGY_TREE;
-  });
-
-  const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_projects_v7');
-    return saved ? JSON.parse(saved) : INITIAL_PROJECTS;
-  });
-
-  const [followUps, setFollowUps] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_follow_ups_v7');
-    return saved ? JSON.parse(saved) : INITIAL_FOLLOW_UPS;
-  });
-
-  const [documents, setDocuments] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_documents_v7');
-    return saved ? JSON.parse(saved) : INITIAL_DOCUMENTS;
-  });
-
-  const [selectedProjectId, setSelectedProjectId] = useState("proj-101");
+  const [rawProjects, setRawProjects] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.projects, INITIAL_PROJECTS)
+  );
+  const [followUps, setFollowUps] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.followUps, INITIAL_FOLLOW_UPS)
+  );
+  const [evidences, setEvidences] = useState(() =>
+    loadFromStorage(STORAGE_KEYS.evidences, INITIAL_EVIDENCES)
+  );
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('radarsocial_theme') || 'default';
+    const saved = localStorage.getItem(STORAGE_KEYS.theme);
+    return saved === 'dark' ? 'dark' : 'default';
   });
-  const [currentBrand, setCurrentBrand] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_current_brand_v7');
-    return saved ? JSON.parse(saved) : NAMING_OPTIONS[0];
-  });
+
+  const [selectedProjectId, setSelectedProjectId] = useState(
+    () => rawProjects[0]?.id || 'prog-101'
+  );
 
   useEffect(() => {
-    localStorage.setItem('radarsocial_theme', theme);
+    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(rawProjects));
+  }, [rawProjects]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.followUps, JSON.stringify(followUps));
+  }, [followUps]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.evidences, JSON.stringify(evidences));
+  }, [evidences]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.theme, theme);
   }, [theme]);
 
-  // Sync with LocalStorage
-  useEffect(() => {
-    localStorage.setItem('radarsocial_identity_v7', JSON.stringify(identity));
-  }, [identity]);
+  // Todos os projetos com indicadores derivados das entregas e rubricas
+  const projects = useMemo(
+    () => rawProjects.map((p) => deriveProjectMetrics(p)),
+    [rawProjects]
+  );
 
-  useEffect(() => {
-    localStorage.setItem('radarsocial_swot_v7', JSON.stringify(swot));
-  }, [swot]);
+  const selectedProject = useMemo(
+    () => projects.find((p) => p.id === selectedProjectId) || projects[0],
+    [projects, selectedProjectId]
+  );
 
-  useEffect(() => {
-    localStorage.setItem('radarsocial_strategy_tree_v7', JSON.stringify(strategyTree));
-  }, [strategyTree]);
+  const portfolioMetrics = useMemo(
+    () => calculatePortfolioMetrics(projects),
+    [projects]
+  );
 
-  useEffect(() => {
-    localStorage.setItem('radarsocial_projects_v7', JSON.stringify(projects));
-  }, [projects]);
+  const governanceAlerts = useMemo(
+    () => generateGovernanceAlerts(projects, followUps),
+    [projects, followUps]
+  );
 
-  useEffect(() => {
-    localStorage.setItem('radarsocial_follow_ups_v7', JSON.stringify(followUps));
-  }, [followUps]);
-
-  useEffect(() => {
-    localStorage.setItem('radarsocial_documents_v7', JSON.stringify(documents));
-  }, [documents]);
-
-  useEffect(() => {
-    localStorage.setItem('desdobra_follow_ups', JSON.stringify(followUps));
-  }, [followUps]);
-
-  useEffect(() => {
-    localStorage.setItem('desdobra_current_brand', JSON.stringify(currentBrand));
-  }, [currentBrand]);
-
-  const selectedProject = projects.find(p => p.id === selectedProjectId) || projects[0];
-
-  const updateIdentity = (newIdentity) => setIdentity(newIdentity);
-
-  const addSwotItem = (quadrant, text) => {
-    setSwot(prev => ({
-      ...prev,
-      [quadrant]: [...prev[quadrant], { id: `swot-${Date.now()}`, text }]
-    }));
-  };
-
-  const removeSwotItem = (quadrant, id) => {
-    setSwot(prev => ({
-      ...prev,
-      [quadrant]: prev[quadrant].filter(item => item.id !== id)
-    }));
-  };
-
-  const updateProjectProgress = (id, actualPhysical, actualFinancial) => {
-    const physical = Number(actualPhysical);
-    const financial = Number(actualFinancial);
-
-    let status = "Normal";
-    if (financial - physical > 15) status = "Crítico";
-    else if (financial - physical > 5) status = "Atenção";
-
-    setProjects(prev => prev.map(p => {
-      if (p.id === id) {
-        // Atualizar o último ponto medido na Curva S para refletir no gráfico imediatamente
-        const updatedCurveS = p.curveS ? p.curveS.map((pt, idx, arr) => {
-          // Encontrar o último mês com medição real ou o mês atual (Jun)
-          if (idx === 5 || idx === arr.findIndex(item => item.actualPhysical === null) - 1 || idx === arr.length - 1) {
-            return { ...pt, actualPhysical: physical, actualFinancial: financial };
-          }
-          return pt;
-        }) : [];
-
+  // Atualiza o avanço percentual (0-100) de uma entrega física específica
+  const updateDeliverableProgress = (projectId, deliverableId, newProgress) => {
+    const clamped = Math.max(0, Math.min(100, Number(newProgress) || 0));
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
         return {
           ...p,
-          actualPhysical: physical,
-          actualFinancial: financial,
-          status,
-          executedBudget: Math.round((financial / 100) * p.totalBudget),
-          curveS: updatedCurveS
+          deliverables: p.deliverables.map((d) =>
+            d.id === deliverableId ? { ...d, progress: clamped } : d
+          )
         };
-      }
-      return p;
-    }));
-
-    // Sincronizar também na árvore de desdobramento
-    setStrategyTree(prev => prev.map(oe => ({
-      ...oe,
-      tacticalProjects: oe.tacticalProjects ? oe.tacticalProjects.map(tp => {
-        if (tp.id === id) {
-          return {
-            ...tp,
-            physicalProgress: physical,
-            financialProgress: financial,
-            spent: Math.round((financial / 100) * (tp.budget || 300000)),
-            status: status === "Normal" ? "Em Dia" : status === "Crítico" ? "Em Risco" : "Atenção"
-          };
-        }
-        return tp;
-      }) : []
-    })));
+      })
+    );
   };
 
-  const resetProjectProgress = (id) => {
-    const original = INITIAL_PROJECTS.find(p => p.id === id);
+  // Atualiza os valores executado (pago) e comprovado de uma rubrica orçamentária
+  const updateRubricValues = (projectId, rubricId, executedValue, approvedValue) => {
+    const executed = Math.max(0, Math.round(Number(executedValue) || 0));
+    const approvedProofs = Math.max(0, Math.min(executed, Math.round(Number(approvedValue) || 0)));
+
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          budgetBreakdown: p.budgetBreakdown.map((r) =>
+            r.id === rubricId ? { ...r, executed, approvedProofs } : r
+          )
+        };
+      })
+    );
+  };
+
+  // Atualiza valor realizado de um indicador de produto/resultado
+  const updateImpactActual = (projectId, metricId, newActual) => {
+    const val = Math.max(0, Number(newActual) || 0);
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          impactMetrics: p.impactMetrics.map((m) =>
+            m.id === metricId ? { ...m, actual: val } : m
+          )
+        };
+      })
+    );
+  };
+
+  // Restaura apenas um programa aos valores originais da demonstração
+  const resetProjectToDefault = (projectId) => {
+    const original = INITIAL_PROJECTS.find((p) => p.id === projectId);
     if (!original) return;
-
-    updateProjectProgress(id, original.actualPhysical, original.actualFinancial);
+    setRawProjects((prev) => prev.map((p) => (p.id === projectId ? original : p)));
   };
 
+  // Marca/desmarca item de verificação da reunião
   const toggleChecklistItem = (followUpId, itemId) => {
-    setFollowUps(prev => prev.map(f => {
-      if (f.id === followUpId) {
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
         return {
           ...f,
-          items: f.items.map(item => item.id === itemId ? { ...item, checked: !item.checked } : item)
+          items: f.items.map((item) =>
+            item.id === itemId ? { ...item, checked: !item.checked } : item
+          )
         };
-      }
-      return f;
-    }));
+      })
+    );
   };
 
-  const addActionPlan = (followUpId, plan) => {
-    setFollowUps(prev => prev.map(f => {
-      if (f.id === followUpId) {
-        return { ...f, actionPlan5W2H: plan };
-      }
-      return f;
-    }));
+  // Adiciona novo item ao checklist da reunião
+  const addChecklistItem = (followUpId, itemData) => {
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
+        return {
+          ...f,
+          items: [
+            ...f.items,
+            {
+              id: `chk-item-${Date.now()}`,
+              title: itemData.title,
+              responsible: itemData.responsible || 'Equipe do Programa',
+              deadline: itemData.deadline || PORTFOLIO_CUTOFF.formattedDate,
+              note: itemData.note || '',
+              checked: false
+            }
+          ]
+        };
+      })
+    );
   };
 
-  const addDocument = (newDoc) => {
-    setDocuments(prev => [
+  // Adiciona nova ação corretiva 5W2H vinculada ao programa
+  const addActionPlanItem = (followUpId, actionData) => {
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
+        return {
+          ...f,
+          actionPlans: [
+            ...(f.actionPlans || []),
+            {
+              id: `act-${Date.now()}`,
+              originGap: actionData.originGap || 'Desvio identificado em reunião',
+              what: actionData.what,
+              why: actionData.why,
+              where: actionData.where,
+              who: actionData.who,
+              when: actionData.when,
+              how: actionData.how,
+              howMuch: Math.max(0, Number(actionData.howMuch) || 0),
+              costNote: actionData.costNote || '',
+              status: 'Pendente'
+            }
+          ]
+        };
+      })
+    );
+  };
+
+  // Alterna status de uma ação 5W2H: Pendente -> Em Andamento -> Concluída
+  const cycleActionStatus = (followUpId, actionId) => {
+    const nextStatus = {
+      Pendente: 'Em Andamento',
+      'Em Andamento': 'Concluída',
+      Concluída: 'Pendente'
+    };
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
+        return {
+          ...f,
+          actionPlans: (f.actionPlans || []).map((a) =>
+            a.id === actionId ? { ...a, status: nextStatus[a.status] || 'Pendente' } : a
+          )
+        };
+      })
+    );
+  };
+
+  // Registra vínculo de evidência / documento de prestação de contas
+  const addEvidence = (evidenceData) => {
+    setEvidences((prev) => [
       {
-        id: `doc-${Date.now()}`,
-        uploadDate: new Date().toISOString().split('T')[0],
-        ...newDoc
+        id: `ev-${Date.now()}`,
+        ...evidenceData
       },
       ...prev
     ]);
   };
 
-  const deleteDocument = (docId) => {
-    setDocuments(prev => prev.filter(d => d.id !== docId));
+  const deleteEvidence = (id) => {
+    setEvidences((prev) => prev.filter((e) => e.id !== id));
   };
 
+  // Restaura toda a demonstração removendo APENAS chaves do RadarSocial
   const resetToDefault = () => {
-    localStorage.clear();
-    setIdentity(INITIAL_IDENTITY);
-    setSwot(INITIAL_SWOT);
-    setStrategyTree(INITIAL_STRATEGY_TREE);
-    setProjects(INITIAL_PROJECTS);
+    Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
+    setRawProjects(INITIAL_PROJECTS);
     setFollowUps(INITIAL_FOLLOW_UPS);
-    setDocuments(INITIAL_DOCUMENTS);
-    setCurrentBrand(NAMING_OPTIONS[0]);
+    setEvidences(INITIAL_EVIDENCES);
+    setSelectedProjectId(INITIAL_PROJECTS[0].id);
   };
 
   return (
-    <ProjectContext.Provider value={{
-      identity,
-      updateIdentity,
-      swot,
-      addSwotItem,
-      removeSwotItem,
-      strategyTree,
-      setStrategyTree,
-      projects,
-      selectedProject,
-      selectedProjectId,
-      setSelectedProjectId,
-      updateProjectProgress,
-      resetProjectProgress,
-      followUps,
-      toggleChecklistItem,
-      addActionPlan,
-      documents,
-      addDocument,
-      deleteDocument,
-      currentBrand,
-      setCurrentBrand,
-      theme,
-      setTheme,
-      namingOptions: NAMING_OPTIONS,
-      resetToDefault
-    }}>
+    <ProjectContext.Provider
+      value={{
+        cutoff: PORTFOLIO_CUTOFF,
+        projects,
+        selectedProjectId,
+        setSelectedProjectId,
+        selectedProject,
+        portfolioMetrics,
+        governanceAlerts,
+        followUps,
+        evidences,
+        theme,
+        setTheme,
+        updateDeliverableProgress,
+        updateRubricValues,
+        updateImpactActual,
+        resetProjectToDefault,
+        toggleChecklistItem,
+        addChecklistItem,
+        addActionPlanItem,
+        cycleActionStatus,
+        addEvidence,
+        deleteEvidence,
+        resetToDefault
+      }}
+    >
       {children}
     </ProjectContext.Provider>
   );
 };
 
+// oxlint-disable-next-line react/only-export-components
 export const useProjects = () => useContext(ProjectContext);
