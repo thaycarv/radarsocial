@@ -5,9 +5,10 @@ import { PortfolioOverview } from './components/dashboard/PortfolioOverview';
 import { PhysicalFinancialCockpit } from './components/physicalFinancial/PhysicalFinancialCockpit';
 import { FollowUpChecklist } from './components/operations/FollowUpChecklist';
 import { ImpactAndReports } from './components/impact/ImpactAndReports';
+import { ExecutiveReportModal } from './components/common/ExecutiveReportModal';
 
 function MainApp() {
-  const { theme, cutoff } = useProjects();
+  const { theme } = useProjects();
   const [activeTab, setActiveTab] = useState('dashboard');
 
   useEffect(() => {
@@ -18,7 +19,7 @@ function MainApp() {
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col transition-colors duration-200">
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 print:hidden">
         <div key={activeTab} className="animate-fade-scale">
           {activeTab === 'dashboard' && <PortfolioOverview onNavigate={setActiveTab} />}
           {activeTab === 'physicalFinancial' && <PhysicalFinancialCockpit onNavigate={setActiveTab} />}
@@ -27,9 +28,7 @@ function MainApp() {
         </div>
       </main>
 
-      <footer className="border-t border-slate-200/80 bg-white py-4 px-6 text-center text-xs text-slate-500 transition-colors duration-200 print:hidden">
-        RadarSocial • Monitoramento físico-financeiro e de resultados (Data de corte da carteira: {cutoff.formattedDate})
-      </footer>
+      <ExecutiveReportModal />
     </div>
   );
 }

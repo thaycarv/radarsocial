@@ -12,15 +12,13 @@ import {
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v2_projects',
-  followUps: 'radarsocial_v2_followups',
-  evidences: 'radarsocial_v2_evidences',
-  theme: 'radarsocial_v2_theme'
+  projects: 'radarsocial_v3_projects',
+  followUps: 'radarsocial_v3_followups',
+  evidences: 'radarsocial_v3_evidences',
+  theme: 'radarsocial_v3_theme'
 };
 
-const ProjectContext = createContext();
-
-const loadFromStorage = (key, fallback) => {
+const safeLoad = (key, fallback) => {
   try {
     const saved = localStorage.getItem(key);
     return saved ? JSON.parse(saved) : fallback;
@@ -29,15 +27,17 @@ const loadFromStorage = (key, fallback) => {
   }
 };
 
+const ProjectContext = createContext();
+
 export const ProjectProvider = ({ children }) => {
   const [rawProjects, setRawProjects] = useState(() =>
-    loadFromStorage(STORAGE_KEYS.projects, INITIAL_PROJECTS)
+    safeLoad(STORAGE_KEYS.projects, INITIAL_PROJECTS)
   );
   const [followUps, setFollowUps] = useState(() =>
-    loadFromStorage(STORAGE_KEYS.followUps, INITIAL_FOLLOW_UPS)
+    safeLoad(STORAGE_KEYS.followUps, INITIAL_FOLLOW_UPS)
   );
   const [evidences, setEvidences] = useState(() =>
-    loadFromStorage(STORAGE_KEYS.evidences, INITIAL_EVIDENCES)
+    safeLoad(STORAGE_KEYS.evidences, INITIAL_EVIDENCES)
   );
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.theme);
@@ -47,6 +47,7 @@ export const ProjectProvider = ({ children }) => {
   const [selectedProjectId, setSelectedProjectId] = useState(
     () => rawProjects[0]?.id || 'prog-101'
   );
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(rawProjects));
@@ -64,7 +65,6 @@ export const ProjectProvider = ({ children }) => {
     localStorage.setItem(STORAGE_KEYS.theme, theme);
   }, [theme]);
 
-  // Todos os projetos com indicadores derivados das entregas e rubricas
   const projects = useMemo(
     () => rawProjects.map((p) => deriveProjectMetrics(p)),
     [rawProjects]
@@ -81,11 +81,10 @@ export const ProjectProvider = ({ children }) => {
   );
 
   const governanceAlerts = useMemo(
-    () => generateGovernanceAlerts(projects, followUps),
-    [projects, followUps]
+    () => generateGovernanceAlerts(projects),
+    [projects]
   );
 
-  // Atualiza o avanço percentual (0-100) de uma entrega física específica
   const updateDeliverableProgress = (projectId, deliverableId, newProgress) => {
     const clamped = Math.max(0, Math.min(100, Number(newProgress) || 0));
     setRawProjects((prev) =>
@@ -101,25 +100,24 @@ export const ProjectProvider = ({ children }) => {
     );
   };
 
-  // Atualiza os valores executado (pago) e comprovado de uma rubrica orçamentária
-  const updateRubricValues = (projectId, rubricId, executedValue, approvedValue) => {
-    const executed = Math.max(0, Math.round(Number(executedValue) || 0));
-    const approvedProofs = Math.max(0, Math.min(executed, Math.round(Number(approvedValue) || 0)));
-
+  const updateRubricValues = (projectId, rubricId, executed, approvedProofs) => {
+    const execVal = Math.max(0, Number(executed) || 0);
+    const approvedVal = Math.max(0, Math.min(execVal, Number(approvedProofs) || 0));
     setRawProjects((prev) =>
       prev.map((p) => {
         if (p.id !== projectId) return p;
         return {
           ...p,
           budgetBreakdown: p.budgetBreakdown.map((r) =>
-            r.id === rubricId ? { ...r, executed, approvedProofs } : r
+            r.id === rubricId
+              ? { ...r, executed: execVal, approvedProofs: approvedVal }
+              : r
           )
         };
       })
     );
   };
 
-  // Atualiza valor realizado de um indicador de produto/resultado
   const updateImpactActual = (projectId, metricId, newActual) => {
     const val = Math.max(0, Number(newActual) || 0);
     setRawProjects((prev) =>
@@ -135,14 +133,6 @@ export const ProjectProvider = ({ children }) => {
     );
   };
 
-  // Restaura apenas um programa aos valores originais da demonstração
-  const resetProjectToDefault = (projectId) => {
-    const original = INITIAL_PROJECTS.find((p) => p.id === projectId);
-    if (!original) return;
-    setRawProjects((prev) => prev.map((p) => (p.id === projectId ? original : p)));
-  };
-
-  // Marca/desmarca item de verificação da reunião
   const toggleChecklistItem = (followUpId, itemId) => {
     setFollowUps((prev) =>
       prev.map((f) => {
@@ -157,8 +147,7 @@ export const ProjectProvider = ({ children }) => {
     );
   };
 
-  // Adiciona novo item ao checklist da reunião
-  const addChecklistItem = (followUpId, itemData) => {
+  const addChecklistItem = (followUpId, newItem) => {
     setFollowUps((prev) =>
       prev.map((f) => {
         if (f.id !== followUpId) return f;
@@ -167,12 +156,9 @@ export const ProjectProvider = ({ children }) => {
           items: [
             ...f.items,
             {
-              id: `chk-item-${Date.now()}`,
-              title: itemData.title,
-              responsible: itemData.responsible || 'Equipe do Programa',
-              deadline: itemData.deadline || PORTFOLIO_CUTOFF.formattedDate,
-              note: itemData.note || '',
-              checked: false
+              id: `item-${Date.now()}`,
+              checked: false,
+              ...newItem
             }
           ]
         };
@@ -180,7 +166,6 @@ export const ProjectProvider = ({ children }) => {
     );
   };
 
-  // Adiciona nova ação corretiva 5W2H vinculada ao programa
   const addActionPlanItem = (followUpId, actionData) => {
     setFollowUps((prev) =>
       prev.map((f) => {
@@ -191,16 +176,8 @@ export const ProjectProvider = ({ children }) => {
             ...(f.actionPlans || []),
             {
               id: `act-${Date.now()}`,
-              originGap: actionData.originGap || 'Desvio identificado em reunião',
-              what: actionData.what,
-              why: actionData.why,
-              where: actionData.where,
-              who: actionData.who,
-              when: actionData.when,
-              how: actionData.how,
-              howMuch: Math.max(0, Number(actionData.howMuch) || 0),
-              costNote: actionData.costNote || '',
-              status: 'Pendente'
+              status: 'Pendente',
+              ...actionData
             }
           ]
         };
@@ -208,7 +185,6 @@ export const ProjectProvider = ({ children }) => {
     );
   };
 
-  // Alterna status de uma ação 5W2H: Pendente -> Em Andamento -> Concluída
   const cycleActionStatus = (followUpId, actionId) => {
     const nextStatus = {
       Pendente: 'Em Andamento',
@@ -221,34 +197,25 @@ export const ProjectProvider = ({ children }) => {
         return {
           ...f,
           actionPlans: (f.actionPlans || []).map((a) =>
-            a.id === actionId ? { ...a, status: nextStatus[a.status] || 'Pendente' } : a
+            a.id === actionId
+              ? { ...a, status: nextStatus[a.status] || 'Pendente' }
+              : a
           )
         };
       })
     );
   };
 
-  // Registra vínculo de evidência / documento de prestação de contas
-  const addEvidence = (evidenceData) => {
-    setEvidences((prev) => [
-      {
-        id: `ev-${Date.now()}`,
-        ...evidenceData
-      },
-      ...prev
-    ]);
+  const addEvidence = (doc) => {
+    setEvidences((prev) => [{ id: `ev-${Date.now()}`, ...doc }, ...prev]);
   };
 
-  const deleteEvidence = (id) => {
-    setEvidences((prev) => prev.filter((e) => e.id !== id));
-  };
-
-  // Restaura toda a demonstração removendo APENAS chaves do RadarSocial
   const resetToDefault = () => {
-    Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
+    Object.values(STORAGE_KEYS).forEach((k) => localStorage.removeItem(k));
     setRawProjects(INITIAL_PROJECTS);
     setFollowUps(INITIAL_FOLLOW_UPS);
     setEvidences(INITIAL_EVIDENCES);
+    setTheme('default');
     setSelectedProjectId(INITIAL_PROJECTS[0].id);
   };
 
@@ -266,16 +233,16 @@ export const ProjectProvider = ({ children }) => {
         evidences,
         theme,
         setTheme,
+        showReportModal,
+        setShowReportModal,
         updateDeliverableProgress,
         updateRubricValues,
         updateImpactActual,
-        resetProjectToDefault,
         toggleChecklistItem,
         addChecklistItem,
         addActionPlanItem,
         cycleActionStatus,
         addEvidence,
-        deleteEvidence,
         resetToDefault
       }}
     >

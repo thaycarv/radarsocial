@@ -179,12 +179,23 @@ body {
   }
 
   body,
-  body[data-theme="dark"] {
+  body[data-theme="dark"],
+  body[data-theme="dark"] .bg-white,
+  body[data-theme="dark"] .bg-slate-50,
+  body[data-theme="dark"] .bg-slate-100 {
     background-color: #ffffff !important;
     color: #0f172a !important;
+    border-color: #cbd5e1 !important;
     font-size: 9.5pt !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  body[data-theme="dark"] .text-slate-900,
+  body[data-theme="dark"] .text-slate-800,
+  body[data-theme="dark"] .text-slate-700,
+  body[data-theme="dark"] .text-slate-600 {
+    color: #0f172a !important;
   }
 
   header,
