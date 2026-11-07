@@ -16,8 +16,14 @@ import { formatCurrency, formatPercent } from '../../utils/calculations';
 import { BudgetBreakdown } from './BudgetBreakdown';
 import { ProgramSelectorBar } from '../common/ProgramSelectorBar';
 
+const STATUS_OPTIONS = [
+  { id: 'pending', label: 'Não iniciada' },
+  { id: 'in_progress', label: 'Em andamento' },
+  { id: 'done', label: 'Concluída' }
+];
+
 export const PhysicalFinancialCockpit = ({ onNavigate }) => {
-  const { selectedProject, updateDeliverableProgress } = useProjects();
+  const { selectedProject, updateDeliverableStatus } = useProjects();
 
   if (!selectedProject) return null;
   const p = selectedProject;
@@ -90,7 +96,7 @@ export const PhysicalFinancialCockpit = ({ onNavigate }) => {
             {formatCurrency(p.remainingBudget)}
           </p>
           <p className="text-xs text-slate-500 mt-1">
-            Para concluir <strong>{formatPercent(p.remainingScope)}</strong> das entregas
+            Para concluir <strong>{formatPercent(p.remainingScope)}</strong> do cronograma
           </p>
         </div>
 
@@ -109,12 +115,12 @@ export const PhysicalFinancialCockpit = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Gráfico + Entregas */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      {/* Gráfico + Marcos do Cronograma */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         <div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs flex flex-col justify-between space-y-3">
           <h2 className="text-sm font-bold text-slate-900">Evolução Físico-Financeira</h2>
 
-          <div className="h-72 w-full">
+          <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={p.curveS} margin={{ top: 10, right: 16, left: -16, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -177,49 +183,69 @@ export const PhysicalFinancialCockpit = ({ onNavigate }) => {
           </div>
         </div>
 
-        {/* Entregas limpas com 1 slider por entrega */}
-        <div className="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs flex flex-col justify-between space-y-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-slate-900">Entregas do Programa</h2>
-              <span className="text-xs font-bold text-[#2D5A27]">
-                {formatPercent(p.actualPhysical)} concluído
-              </span>
-            </div>
+        {/* Marcos do Cronograma (0 / 50 / 100) */}
+        <div className="lg:col-span-5 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-3.5">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-sm font-bold text-slate-900">Marcos do Cronograma</h2>
+            <span className="text-xs font-semibold text-slate-500">
+              {p.completedMilestones}/{p.totalMilestones} concluídos ·{' '}
+              <strong className="text-[#2D5A27]">{formatPercent(p.actualPhysical)}</strong>
+            </span>
+          </div>
 
-            <div className="space-y-3">
-              {p.deliverables.map((del) => (
-                <div
-                  key={del.id}
-                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2.5"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-xs font-semibold text-slate-900 leading-snug">{del.name}</p>
-                    <span className="shrink-0 px-2 py-0.5 rounded bg-white border border-slate-200 text-[11px] font-medium text-slate-600">
-                      Peso {del.physicalWeight}%
+          <div className="space-y-2.5">
+            {p.deliverables.map((del, idx) => (
+              <div
+                key={del.id}
+                className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2 min-w-0">
+                    <span className="w-5 h-5 rounded-full bg-white border border-slate-200 text-[11px] font-bold text-slate-600 flex items-center justify-center shrink-0 mt-0.5">
+                      {idx + 1}
                     </span>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-slate-900 leading-snug">
+                        {del.name}
+                      </p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[11px] text-slate-500">Prazo: {del.deadline}</span>
+                        {del.isOverdue && (
+                          <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                            Atrasada
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      step={5}
-                      aria-label={`Progresso de ${del.name}`}
-                      value={del.progress}
-                      onChange={(e) => updateDeliverableProgress(p.id, del.id, e.target.value)}
-                      className="flex-1 accent-[#2D5A27] cursor-pointer h-1.5 bg-slate-200 rounded-lg"
-                    />
-                    <span className="w-10 text-right text-xs font-bold text-slate-900">
-                      {del.progress}%
-                    </span>
-                  </div>
-
-                  <p className="text-[11px] text-slate-500">Prazo: {del.deadline}</p>
                 </div>
-              ))}
-            </div>
+
+                <div className="grid grid-cols-3 gap-1 bg-white p-1 rounded-lg border border-slate-200">
+                  {STATUS_OPTIONS.map((opt) => {
+                    const active = del.status === opt.id;
+                    let activeStyle = 'text-slate-500 hover:text-slate-800';
+                    if (active && opt.id === 'done') {
+                      activeStyle = 'bg-emerald-600 text-white font-semibold shadow-2xs';
+                    } else if (active && opt.id === 'in_progress') {
+                      activeStyle = 'bg-sky-600 text-white font-semibold shadow-2xs';
+                    } else if (active && opt.id === 'pending') {
+                      activeStyle = 'bg-slate-600 text-white font-semibold shadow-2xs';
+                    }
+
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => updateDeliverableStatus(p.id, del.id, opt.id)}
+                        className={`py-1 px-1.5 rounded-md text-[11px] transition cursor-pointer text-center ${activeStyle}`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

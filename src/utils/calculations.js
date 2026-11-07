@@ -1,3 +1,11 @@
+import { PORTFOLIO_CUTOFF } from '../data/mockData.js';
+
+export const MILESTONE_STATUS_VALUE = {
+  pending: 0,
+  in_progress: 50,
+  done: 100
+};
+
 export const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -73,15 +81,23 @@ export const evaluateCostStatus = (actualPhysical, actualFinancial) => {
 };
 
 export const deriveProjectMetrics = (project) => {
-  const deliverables = project.deliverables || [];
+  const rawDeliverables = project.deliverables || [];
   const rubrics = project.budgetBreakdown || [];
 
-  const totalWeight = deliverables.reduce((acc, d) => acc + Number(d.physicalWeight || 0), 0) || 100;
-  const rawPhysical = deliverables.reduce(
-    (acc, d) => acc + (Number(d.physicalWeight || 0) * Number(d.progress || 0)) / 100,
-    0
-  );
-  const actualPhysical = Number(((rawPhysical / totalWeight) * 100).toFixed(1));
+  const deliverables = rawDeliverables.map((d) => {
+    const score = MILESTONE_STATUS_VALUE[d.status] ?? 0;
+    const isOverdue = d.status !== 'done' && Boolean(d.deadlineISO && d.deadlineISO < PORTFOLIO_CUTOFF.date);
+    return {
+      ...d,
+      score,
+      isOverdue
+    };
+  });
+
+  const totalMilestones = deliverables.length || 1;
+  const completedMilestones = deliverables.filter((d) => d.status === 'done').length;
+  const sumScores = deliverables.reduce((acc, d) => acc + d.score, 0);
+  const actualPhysical = Number((sumScores / totalMilestones).toFixed(1));
 
   const totalBudget = rubrics.reduce((acc, r) => acc + Number(r.budgeted || 0), 0);
   const executedBudget = rubrics.reduce((acc, r) => acc + Number(r.executed || 0), 0);
@@ -120,6 +136,9 @@ export const deriveProjectMetrics = (project) => {
 
   return {
     ...project,
+    deliverables,
+    totalMilestones: rawDeliverables.length,
+    completedMilestones,
     totalBudget,
     executedBudget,
     approvedProofs,
@@ -194,8 +213,8 @@ export const generateGovernanceAlerts = (derivedProjects) => {
         projectName: p.name,
         severity: 'high',
         category: 'Cronograma',
-        title: `Entrega abaixo do previsto (${formatPercent(p.actualPhysical)} real vs. ${formatPercent(p.plannedPhysical)} planejado)`,
-        detail: `Revisar pendências e prazos no plano de ação do programa.`,
+        title: `Cronograma atrasado (${formatPercent(p.actualPhysical)} entregue vs. ${formatPercent(p.plannedPhysical)} previsto)`,
+        detail: `Existem etapas com prazo vencido aguardando conclusão.`,
         targetTab: 'operations'
       });
     }
@@ -220,7 +239,7 @@ export const generateGovernanceAlerts = (derivedProjects) => {
         projectName: p.name,
         severity: 'info',
         category: 'Fornecedor',
-        title: `Entrega física avançou (${formatPercent(p.actualPhysical)}) com pagamento retido (${formatPercent(p.actualFinancial)})`,
+        title: `Etapas concluídas (${formatPercent(p.actualPhysical)}) com pagamento retido (${formatPercent(p.actualFinancial)})`,
         detail: `Verificar notas fiscais aguardando regularização cadastral para baixa.`,
         targetTab: 'operations'
       });

@@ -12,10 +12,10 @@ import {
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v3_projects',
-  followUps: 'radarsocial_v3_followups',
-  evidences: 'radarsocial_v3_evidences',
-  theme: 'radarsocial_v3_theme'
+  projects: 'radarsocial_v4_projects',
+  followUps: 'radarsocial_v4_followups',
+  evidences: 'radarsocial_v4_evidences',
+  theme: 'radarsocial_v4_theme'
 };
 
 const safeLoad = (key, fallback) => {
@@ -85,15 +85,15 @@ export const ProjectProvider = ({ children }) => {
     [projects]
   );
 
-  const updateDeliverableProgress = (projectId, deliverableId, newProgress) => {
-    const clamped = Math.max(0, Math.min(100, Number(newProgress) || 0));
+  const updateDeliverableStatus = (projectId, deliverableId, newStatus) => {
+    if (!['pending', 'in_progress', 'done'].includes(newStatus)) return;
     setRawProjects((prev) =>
       prev.map((p) => {
         if (p.id !== projectId) return p;
         return {
           ...p,
           deliverables: p.deliverables.map((d) =>
-            d.id === deliverableId ? { ...d, progress: clamped } : d
+            d.id === deliverableId ? { ...d, status: newStatus } : d
           )
         };
       })
@@ -235,7 +235,7 @@ export const ProjectProvider = ({ children }) => {
         setTheme,
         showReportModal,
         setShowReportModal,
-        updateDeliverableProgress,
+        updateDeliverableStatus,
         updateRubricValues,
         updateImpactActual,
         toggleChecklistItem,

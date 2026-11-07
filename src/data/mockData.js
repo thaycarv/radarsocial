@@ -16,30 +16,44 @@ export const INITIAL_PROJECTS = [
     funder: 'Fundo Socioambiental BNDES',
     startDate: '10/01/2026',
     endDate: '31/08/2026',
-    plannedPhysical: 80,
+    plannedPhysical: 70,
     plannedFinancial: 72,
     cutoffMonth: 'Jun',
     deliverables: [
       {
         id: 'del-101-1',
-        name: 'Adequação elétrica, rede e mobiliário dos 5 polos',
-        deadline: '31/03/2026',
-        physicalWeight: 35,
-        progress: 100
+        name: 'Vistoria técnica e projeto elétrico dos 5 polos',
+        deadline: '15/02/2026',
+        deadlineISO: '2026-02-15',
+        status: 'done'
       },
       {
         id: 'del-101-2',
-        name: 'Compra e instalação de 100 computadores',
-        deadline: '30/06/2026',
-        physicalWeight: 45,
-        progress: 80
+        name: 'Adequação civil, rede lógica e mobiliário',
+        deadline: '31/03/2026',
+        deadlineISO: '2026-03-31',
+        status: 'done'
       },
       {
         id: 'del-101-3',
-        name: 'Ativação de internet fibra nos 5 polos',
-        deadline: '31/07/2026',
-        physicalWeight: 20,
-        progress: 35
+        name: 'Compra e entrega dos 100 computadores',
+        deadline: '25/05/2026',
+        deadlineISO: '2026-05-25',
+        status: 'done'
+      },
+      {
+        id: 'del-101-4',
+        name: 'Montagem das bancadas e ativação de internet fibra',
+        deadline: '15/07/2026',
+        deadlineISO: '2026-07-15',
+        status: 'in_progress'
+      },
+      {
+        id: 'del-101-5',
+        name: 'Abertura dos 5 polos e treinamento dos monitores',
+        deadline: '25/08/2026',
+        deadlineISO: '2026-08-25',
+        status: 'pending'
       }
     ],
     budgetBreakdown: [
@@ -50,12 +64,12 @@ export const INITIAL_PROJECTS = [
     ],
     curveS: [
       { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 15, actualFinancial: 14 },
-      { month: 'Fev', plannedPhysical: 25, actualPhysical: 24, plannedFinancial: 30, actualFinancial: 28 },
-      { month: 'Mar', plannedPhysical: 45, actualPhysical: 46, plannedFinancial: 45, actualFinancial: 45 },
-      { month: 'Abr', plannedPhysical: 60, actualPhysical: 58, plannedFinancial: 58, actualFinancial: 56 },
-      { month: 'Mai', plannedPhysical: 72, actualPhysical: 70, plannedFinancial: 66, actualFinancial: 64 },
-      { month: 'Jun', plannedPhysical: 80, actualPhysical: 78, plannedFinancial: 72, actualFinancial: 70 },
-      { month: 'Jul', plannedPhysical: 92, actualPhysical: null, plannedFinancial: 88, actualFinancial: null },
+      { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 28, actualFinancial: 26 },
+      { month: 'Mar', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 44, actualFinancial: 43 },
+      { month: 'Abr', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 56, actualFinancial: 55 },
+      { month: 'Mai', plannedPhysical: 60, actualPhysical: 60, plannedFinancial: 65, actualFinancial: 63 },
+      { month: 'Jun', plannedPhysical: 70, actualPhysical: 70, plannedFinancial: 72, actualFinancial: 70 },
+      { month: 'Jul', plannedPhysical: 85, actualPhysical: null, plannedFinancial: 88, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 100, actualPhysical: null, plannedFinancial: 100, actualFinancial: null }
     ],
     impactMetrics: [
@@ -102,7 +116,7 @@ export const INITIAL_PROJECTS = [
     funder: 'Instituto Futuro Presente',
     startDate: '01/02/2026',
     endDate: '30/09/2026',
-    plannedPhysical: 65,
+    plannedPhysical: 60,
     plannedFinancial: 60,
     cutoffMonth: 'Jun',
     deliverables: [
@@ -110,22 +124,36 @@ export const INITIAL_PROJECTS = [
         id: 'del-102-1',
         name: 'Ementa técnica (360h) e material prático das aulas',
         deadline: '28/02/2026',
-        physicalWeight: 25,
-        progress: 100
+        deadlineISO: '2026-02-28',
+        status: 'done'
       },
       {
         id: 'del-102-2',
-        name: 'Formação de 12 instrutores e monitores locais',
+        name: 'Formação dos 12 instrutores e monitores locais',
         deadline: '30/04/2026',
-        physicalWeight: 25,
-        progress: 40
+        deadlineISO: '2026-04-30',
+        status: 'in_progress'
       },
       {
         id: 'del-102-3',
-        name: 'Execução das 4 turmas presenciais (120 vagas)',
-        deadline: '31/08/2026',
-        physicalWeight: 50,
-        progress: 20
+        name: 'Ciclo de aulas presenciais — Turmas 1 e 2 (60 vagas)',
+        deadline: '15/06/2026',
+        deadlineISO: '2026-06-15',
+        status: 'in_progress'
+      },
+      {
+        id: 'del-102-4',
+        name: 'Ciclo de aulas presenciais — Turmas 3 e 4 (60 vagas)',
+        deadline: '15/08/2026',
+        deadlineISO: '2026-08-15',
+        status: 'pending'
+      },
+      {
+        id: 'del-102-5',
+        name: 'Mostra de projetos e encaminhamento profissional',
+        deadline: '30/09/2026',
+        deadlineISO: '2026-09-30',
+        status: 'pending'
       }
     ],
     budgetBreakdown: [
@@ -135,13 +163,13 @@ export const INITIAL_PROJECTS = [
       { id: 'rub-102-4', category: 'Coordenação Pedagógica', budgeted: 30000, executed: 15000, approvedProofs: 15000 }
     ],
     curveS: [
-      { month: 'Fev', plannedPhysical: 15, actualPhysical: 12, plannedFinancial: 15, actualFinancial: 20 },
+      { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 15, actualFinancial: 20 },
       { month: 'Mar', plannedPhysical: 30, actualPhysical: 25, plannedFinancial: 30, actualFinancial: 42 },
-      { month: 'Abr', plannedPhysical: 45, actualPhysical: 34, plannedFinancial: 42, actualFinancial: 60 },
-      { month: 'Mai', plannedPhysical: 55, actualPhysical: 40, plannedFinancial: 50, actualFinancial: 75 },
-      { month: 'Jun', plannedPhysical: 65, actualPhysical: 45, plannedFinancial: 60, actualFinancial: 85 },
-      { month: 'Jul', plannedPhysical: 80, actualPhysical: null, plannedFinancial: 75, actualFinancial: null },
-      { month: 'Ago', plannedPhysical: 95, actualPhysical: null, plannedFinancial: 90, actualFinancial: null },
+      { month: 'Abr', plannedPhysical: 40, actualPhysical: 30, plannedFinancial: 42, actualFinancial: 60 },
+      { month: 'Mai', plannedPhysical: 50, actualPhysical: 35, plannedFinancial: 50, actualFinancial: 75 },
+      { month: 'Jun', plannedPhysical: 60, actualPhysical: 40, plannedFinancial: 60, actualFinancial: 85 },
+      { month: 'Jul', plannedPhysical: 75, actualPhysical: null, plannedFinancial: 75, actualFinancial: null },
+      { month: 'Ago', plannedPhysical: 90, actualPhysical: null, plannedFinancial: 90, actualFinancial: null },
       { month: 'Set', plannedPhysical: 100, actualPhysical: null, plannedFinancial: 100, actualFinancial: null }
     ],
     impactMetrics: [
@@ -194,37 +222,51 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-103-1',
-        name: 'Seleção e diagnóstico ambiental de 30 empresas',
-        deadline: '31/03/2026',
-        physicalWeight: 30,
-        progress: 100
+        name: 'Edital e seleção dos 30 pequenos negócios',
+        deadline: '15/03/2026',
+        deadlineISO: '2026-03-15',
+        status: 'done'
       },
       {
         id: 'del-103-2',
-        name: 'Consultorias em energia e gestão de resíduos',
-        deadline: '31/07/2026',
-        physicalWeight: 45,
-        progress: 60
+        name: 'Diagnóstico ambiental individual das 30 empresas',
+        deadline: '30/04/2026',
+        deadlineISO: '2026-04-30',
+        status: 'done'
       },
       {
         id: 'del-103-3',
+        name: 'Oficinas coletivas de energia e gestão de resíduos',
+        deadline: '10/07/2026',
+        deadlineISO: '2026-07-10',
+        status: 'in_progress'
+      },
+      {
+        id: 'del-103-4',
+        name: 'Consultorias técnicas de adequação nos negócios',
+        deadline: '31/08/2026',
+        deadlineISO: '2026-08-31',
+        status: 'in_progress'
+      },
+      {
+        id: 'del-103-5',
         name: 'Rodada comercial com empresas âncoras da região',
-        deadline: '30/09/2026',
-        physicalWeight: 25,
-        progress: 0
+        deadline: '15/10/2026',
+        deadlineISO: '2026-10-15',
+        status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-103-1', category: 'Consultorias Técnicas em Gestão e ESG', budgeted: 110000, executed: 70000, approvedProofs: 64000 },
+      { id: 'rub-103-1', category: 'Consultorias Técnicas em Gestão e ESG', budgeted: 110000, executed: 77000, approvedProofs: 71000 },
       { id: 'rub-103-2', category: 'Apoio para Adequações Ambientais', budgeted: 70000, executed: 45000, approvedProofs: 45000 },
       { id: 'rub-103-3', category: 'Oficinas e Rodada de Negócios', budgeted: 40000, executed: 28000, approvedProofs: 25000 }
     ],
     curveS: [
       { month: 'Fev', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 12, actualFinancial: 15 },
-      { month: 'Mar', plannedPhysical: 30, actualPhysical: 30, plannedFinancial: 26, actualFinancial: 30 },
-      { month: 'Abr', plannedPhysical: 42, actualPhysical: 40, plannedFinancial: 38, actualFinancial: 44 },
-      { month: 'Mai', plannedPhysical: 52, actualPhysical: 49, plannedFinancial: 48, actualFinancial: 55 },
-      { month: 'Jun', plannedPhysical: 60, actualPhysical: 57, plannedFinancial: 58, actualFinancial: 65 },
+      { month: 'Mar', plannedPhysical: 25, actualPhysical: 25, plannedFinancial: 26, actualFinancial: 30 },
+      { month: 'Abr', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 38, actualFinancial: 45 },
+      { month: 'Mai', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 48, actualFinancial: 57 },
+      { month: 'Jun', plannedPhysical: 60, actualPhysical: 60, plannedFinancial: 58, actualFinancial: 68.2 },
       { month: 'Jul', plannedPhysical: 75, actualPhysical: null, plannedFinancial: 72, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 85, actualPhysical: null, plannedFinancial: 84, actualFinancial: null },
       { month: 'Set', plannedPhysical: 95, actualPhysical: null, plannedFinancial: 94, actualFinancial: null },
@@ -260,7 +302,7 @@ export const INITIAL_PROJECTS = [
         id: 'r-103-1',
         description: 'Sinal de reserva do espaço da Rodada elevou o gasto antes da realização do evento',
         impact: 'Baixo',
-        mitigation: 'Concluir ciclo de consultorias em julho para equilibrar entrega e desembolso'
+        mitigation: 'Concluir ciclo de consultorias em agosto para equilibrar entrega e desembolso'
       }
     ]
   },
@@ -281,23 +323,30 @@ export const INITIAL_PROJECTS = [
       {
         id: 'del-104-1',
         name: 'Reforma dos galpões e entrega de EPIs (2 cooperativas)',
-        deadline: '31/03/2026',
-        physicalWeight: 40,
-        progress: 100
+        deadline: '15/03/2026',
+        deadlineISO: '2026-03-15',
+        status: 'done'
       },
       {
         id: 'del-104-2',
-        name: 'Rota de coleta seletiva ativa em 40 empresas parceiras',
-        deadline: '30/06/2026',
-        physicalWeight: 40,
-        progress: 75
+        name: 'Instalação das prensas hidráulicas e balanças digitais',
+        deadline: '15/05/2026',
+        deadlineISO: '2026-05-15',
+        status: 'done'
       },
       {
         id: 'del-104-3',
+        name: 'Ativação da rota de coleta seletiva em 40 empresas',
+        deadline: '28/06/2026',
+        deadlineISO: '2026-06-28',
+        status: 'done'
+      },
+      {
+        id: 'del-104-4',
         name: 'Controle digital de pesagem e divisão mensal de receitas',
-        deadline: '15/08/2026',
-        physicalWeight: 20,
-        progress: 25
+        deadline: '20/08/2026',
+        deadlineISO: '2026-08-20',
+        status: 'pending'
       }
     ],
     budgetBreakdown: [
@@ -307,10 +356,10 @@ export const INITIAL_PROJECTS = [
     ],
     curveS: [
       { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 10, actualFinancial: 10 },
-      { month: 'Fev', plannedPhysical: 25, actualPhysical: 26, plannedFinancial: 24, actualFinancial: 22 },
-      { month: 'Mar', plannedPhysical: 45, actualPhysical: 45, plannedFinancial: 42, actualFinancial: 38 },
-      { month: 'Abr', plannedPhysical: 58, actualPhysical: 58, plannedFinancial: 54, actualFinancial: 46 },
-      { month: 'Mai', plannedPhysical: 68, actualPhysical: 67, plannedFinancial: 64, actualFinancial: 53 },
+      { month: 'Fev', plannedPhysical: 25, actualPhysical: 25, plannedFinancial: 24, actualFinancial: 22 },
+      { month: 'Mar', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 42, actualFinancial: 38 },
+      { month: 'Abr', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 54, actualFinancial: 46 },
+      { month: 'Mai', plannedPhysical: 65, actualPhysical: 65, plannedFinancial: 64, actualFinancial: 53 },
       { month: 'Jun', plannedPhysical: 75, actualPhysical: 75, plannedFinancial: 72, actualFinancial: 60 },
       { month: 'Jul', plannedPhysical: 90, actualPhysical: null, plannedFinancial: 88, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 100, actualPhysical: null, plannedFinancial: 100, actualFinancial: null }
