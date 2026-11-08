@@ -116,7 +116,7 @@ export const deriveProjectMetrics = (project) => {
   let overallStatus = 'Normal';
   if (schedule.severity === 'high' || cost.severity === 'high') {
     overallStatus = 'Crítico';
-  } else if (schedule.severity === 'medium' || cost.severity === 'medium') {
+  } else if (schedule.severity === 'medium' || cost.severity === 'medium' || cost.label === 'NF retida') {
     overallStatus = 'Atenção';
   }
 

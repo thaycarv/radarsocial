@@ -84,11 +84,10 @@ export const PortfolioOverview = ({ onNavigate }) => {
 
       {/* 4 Cards Principais - Limpos e Executivos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Saúde da Carteira */}
+        {/* Card 1: Programas (sem o label "Saúde da Carteira") */}
         <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div>
-            <p className="text-xs text-slate-500 font-medium">Saúde da Carteira</p>
-            <p className="text-2xl font-extrabold text-slate-900 mt-1">
+            <p className="text-2xl font-extrabold text-slate-900">
               {portfolioMetrics.totalProjects} programas
             </p>
             <div className="flex items-center gap-1.5 mt-2 flex-wrap">
