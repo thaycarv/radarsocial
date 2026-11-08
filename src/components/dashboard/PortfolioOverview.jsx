@@ -189,7 +189,7 @@ export const PortfolioOverview = ({ onNavigate }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-bold text-slate-900">
-              {filter === 'Todos' ? 'Programas em Execução' : `Programas · ${filter}`}
+              {filter === 'Todos' ? 'Em execução' : `Em execução · ${filter}`}
             </h2>
             <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold border border-slate-200">
               {filteredProjects.length}
