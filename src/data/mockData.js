@@ -14,7 +14,7 @@ export const INITIAL_PROJECTS = [
     strategicAxis: 'Inclusão Digital',
     manager: 'Carlos Mendonça',
     funder: 'Fundo Socioambiental Horizonte',
-    operationalHeadline: '4 dos 5 polos equipados com 80 PCs; ativando internet no Polo Norte',
+    operationalHeadline: 'Salas reformadas e mobiliadas; finalizando instalação dos computadores',
     startDate: '10/01/2026',
     endDate: '31/08/2026',
     plannedPhysical: 70,
@@ -110,12 +110,12 @@ export const INITIAL_PROJECTS = [
   {
     id: 'prog-102',
     code: 'PRG-02',
-    shortName: 'Trilha Jovem Dev',
-    name: 'Trilha Jovem Dev e Análise de Dados',
-    strategicAxis: 'Qualificação e Empregabilidade',
+    shortName: 'Hortas Urbanas',
+    name: 'Hortas Urbanas e Agricultura Sustentável',
+    strategicAxis: 'Agricultura Urbana e Sustentabilidade',
     manager: 'Juliana Duarte',
     funder: 'Instituto Futuro Presente',
-    operationalHeadline: '32 de 120 jovens formados; turmas seguintes em readequação de grade',
+    operationalHeadline: 'Canteiros iniciais ativos; expansão das hortas em revisão orçamentária',
     startDate: '01/02/2026',
     endDate: '30/09/2026',
     plannedPhysical: 60,
@@ -124,45 +124,45 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-102-1',
-        name: 'Ementa técnica (360h) e material prático das aulas',
+        name: 'Mapeamento do solo e cercamento dos primeiros 3 terrenos',
         deadline: '28/02/2026',
         deadlineISO: '2026-02-28',
         status: 'done'
       },
       {
         id: 'del-102-2',
-        name: 'Formação dos 12 instrutores e monitores locais',
+        name: 'Instalação da rede de irrigação e pontos de água',
         deadline: '30/04/2026',
         deadlineISO: '2026-04-30',
         status: 'in_progress'
       },
       {
         id: 'del-102-3',
-        name: 'Ciclo de aulas presenciais — Turmas 1 e 2 (60 vagas)',
+        name: 'Preparo dos canteiros e adubagem orgânica (Polos 1 a 3)',
         deadline: '15/06/2026',
         deadlineISO: '2026-06-15',
         status: 'in_progress'
       },
       {
         id: 'del-102-4',
-        name: 'Ciclo de aulas presenciais — Turmas 3 e 4 (60 vagas)',
+        name: 'Montagem das estufas nos 3 terrenos restantes',
         deadline: '15/08/2026',
         deadlineISO: '2026-08-15',
         status: 'pending'
       },
       {
         id: 'del-102-5',
-        name: 'Mostra de projetos e encaminhamento profissional',
+        name: 'Oficinas de cultivo orgânico e colheita para 120 famílias',
         deadline: '30/09/2026',
         deadlineISO: '2026-09-30',
         status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-102-1', category: 'Hora-aula de Instrutores e Mentoria', budgeted: 120000, executed: 110000, approvedProofs: 95000 },
-      { id: 'rub-102-2', category: 'Bolsas-auxílio e Transporte', budgeted: 80000, executed: 78000, approvedProofs: 65000 },
-      { id: 'rub-102-3', category: 'Licenças e Ambiente em Nuvem', budgeted: 50000, executed: 35000, approvedProofs: 35000 },
-      { id: 'rub-102-4', category: 'Coordenação Pedagógica', budgeted: 30000, executed: 15000, approvedProofs: 15000 }
+      { id: 'rub-102-1', category: 'Preparo do Solo, Adubo e Cercamento', budgeted: 120000, executed: 110000, approvedProofs: 95000 },
+      { id: 'rub-102-2', category: 'Sistema de Irrigação e Estufas', budgeted: 80000, executed: 78000, approvedProofs: 65000 },
+      { id: 'rub-102-3', category: 'Mudas Orgânicas e Ferramentas', budgeted: 50000, executed: 35000, approvedProofs: 35000 },
+      { id: 'rub-102-4', category: 'Oficinas Técnicas e Mobilização', budgeted: 30000, executed: 15000, approvedProofs: 15000 }
     ],
     curveS: [
       { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 15, actualFinancial: 20 },
@@ -178,33 +178,33 @@ export const INITIAL_PROJECTS = [
       {
         id: 'imp-102-1',
         level: 'Entrega',
-        indicator: 'Jovens formados com frequência mínima de 75%',
-        unit: 'jovens',
+        indicator: 'Hortas comunitárias em produção',
+        unit: 'hortas',
         baseline: 0,
-        target: 120,
-        actual: 32,
-        verificationSource: 'Diários de classe e certificados'
+        target: 6,
+        actual: 3,
+        verificationSource: 'Termo de entrega e vistoria técnica'
       },
       {
         id: 'imp-102-2',
         level: 'Resultado',
-        indicator: 'Formados empregados ou estagiando em até 6 meses',
-        unit: '%',
+        indicator: 'Famílias colhendo alimentos orgânicos',
+        unit: 'famílias',
         baseline: 0,
-        target: 65,
-        actual: 22,
-        verificationSource: 'Pesquisa trimestral com egressos'
+        target: 120,
+        actual: 48,
+        verificationSource: 'Cadastro ativo de famílias participantes'
       }
     ],
     beneficiariesTarget: 120,
     beneficiariesActual: 48,
-    beneficiaryUnit: 'jovens',
+    beneficiaryUnit: 'famílias',
     risks: [
       {
         id: 'r-102-1',
-        description: 'Saldo curto de hora-aula (restam R$ 42 mil para concluir metade das turmas)',
+        description: 'Saldo curto para estufas (restam R$ 42 mil para finalizar os 3 últimos terrenos)',
         impact: 'Alto',
-        mitigation: 'Unificar aulas teóricas das Turmas 3 e 4 e bloquear adiantamentos sem nota fiscal'
+        mitigation: 'Unificar compras de irrigação e pausar adiantamentos sem nota fiscal'
       }
     ]
   },
@@ -312,12 +312,12 @@ export const INITIAL_PROJECTS = [
   {
     id: 'prog-104',
     code: 'PRG-04',
-    shortName: 'Economia Circular',
-    name: 'Economia Circular e Cooperativas de Triagem',
-    strategicAxis: 'Reciclagem e Geração de Renda',
+    shortName: 'Cozinhas Comunitárias',
+    name: 'Segurança Alimentar e Cozinhas Comunitárias',
+    strategicAxis: 'Segurança Alimentar e Nutrição',
     manager: 'Roberto Tavares',
     funder: 'Convênio Municipal de Desenvolvimento',
-    operationalHeadline: 'Coleta ativa · liberação de balança aguarda certidão',
+    operationalHeadline: '3 cozinhas equipadas; pagamento de fornos aguarda certidão do fornecedor',
     startDate: '15/01/2026',
     endDate: '31/08/2026',
     plannedPhysical: 75,
@@ -326,37 +326,37 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-104-1',
-        name: 'Reforma dos galpões e entrega de EPIs (2 cooperativas)',
+        name: 'Reforma civil e adequação sanitária das 3 cozinhas',
         deadline: '15/03/2026',
         deadlineISO: '2026-03-15',
         status: 'done'
       },
       {
         id: 'del-104-2',
-        name: 'Instalação das prensas hidráulicas e balanças digitais',
+        name: 'Instalação dos fornos industriais e bancadas inox',
         deadline: '15/05/2026',
         deadlineISO: '2026-05-15',
         status: 'done'
       },
       {
         id: 'del-104-3',
-        name: 'Ativação da rota de coleta seletiva em 40 empresas',
+        name: 'Capacitação em boas práticas e início da oferta de refeições',
         deadline: '28/06/2026',
         deadlineISO: '2026-06-28',
         status: 'done'
       },
       {
         id: 'del-104-4',
-        name: 'Controle digital de pesagem e divisão mensal de receitas',
+        name: 'Controle nutricional e distribuição diária de refeições',
         deadline: '20/08/2026',
         deadlineISO: '2026-08-20',
         status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-104-1', category: 'Prensas, Balanças e EPIs', budgeted: 75000, executed: 55000, approvedProofs: 55000 },
-      { id: 'rub-104-2', category: 'Logística de Coleta e Educação Ambiental', budgeted: 50000, executed: 25000, approvedProofs: 25000 },
-      { id: 'rub-104-3', category: 'Apoio Contábil e Regularização', budgeted: 25000, executed: 10000, approvedProofs: 10000 }
+      { id: 'rub-104-1', category: 'Fornos, Freezers e Bancadas Inox', budgeted: 75000, executed: 55000, approvedProofs: 55000 },
+      { id: 'rub-104-2', category: 'Reforma Civil e Instalação de Gás', budgeted: 50000, executed: 25000, approvedProofs: 25000 },
+      { id: 'rub-104-3', category: 'Capacitação Sanitária e Utensílios', budgeted: 25000, executed: 10000, approvedProofs: 10000 }
     ],
     curveS: [
       { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 10, actualFinancial: 10 },
@@ -372,31 +372,31 @@ export const INITIAL_PROJECTS = [
       {
         id: 'imp-104-1',
         level: 'Entrega',
-        indicator: 'Volume mensal de recicláveis vendidos sem atravessador',
-        unit: 't/mês',
-        baseline: 12,
-        target: 45,
-        actual: 36,
-        verificationSource: 'Notas de pesagem e certificados de destinação'
+        indicator: 'Refeições nutritivas servidas mensalmente',
+        unit: 'refeições/mês',
+        baseline: 800,
+        target: 4500,
+        actual: 3600,
+        verificationSource: 'Relatório diário de distribuição e presença'
       },
       {
         id: 'imp-104-2',
         level: 'Resultado',
-        indicator: 'Renda média mensal por cooperado (42 cooperados)',
-        unit: 'R$',
-        baseline: 1350,
-        target: 1950,
-        actual: 1780,
-        verificationSource: 'Folha mensal de rateio das cooperativas'
+        indicator: 'Famílias atendidas com segurança nutricional',
+        unit: 'famílias',
+        baseline: 80,
+        target: 250,
+        actual: 210,
+        verificationSource: 'Cadastro de atendimento das cozinhas'
       }
     ],
-    beneficiariesTarget: 42,
-    beneficiariesActual: 42,
-    beneficiaryUnit: 'cooperados',
+    beneficiariesTarget: 250,
+    beneficiariesActual: 210,
+    beneficiaryUnit: 'famílias',
     risks: [
       {
         id: 'r-104-1',
-        description: 'Pagamento de R$ 18 mil da segunda balança retido por certidão vencida do fornecedor',
+        description: 'Pagamento de R$ 18 mil dos fornos industriais retido por certidão vencida do fornecedor',
         impact: 'Médio',
         mitigation: 'Notificar fornecedor para regularizar certidão fiscal até 10/07'
       }
@@ -408,53 +408,53 @@ export const INITIAL_FOLLOW_UPS = [
   {
     id: 'chk-102',
     projectId: 'prog-102',
-    projectName: 'Trilha Jovem Dev e Análise de Dados',
+    projectName: 'Hortas Urbanas e Agricultura Sustentável',
     date: '26/06/2026',
     responsible: 'Thayâne Carvalho',
     frequency: 'Semanal',
     items: [
       {
         id: 'i-102-1',
-        title: 'Revisar consumo de hora-aula e travar novos adiantamentos',
+        title: 'Revisar custos de irrigação e pausar adiantamentos de materiais',
         checked: true,
         responsible: 'Thayâne Carvalho',
         deadline: '26/06/2026',
-        note: '85% da verba já consumida; novos adiantamentos suspensos até avanço das turmas.'
+        note: '85% da verba já consumida; novos adiantamentos suspensos até alinhamento.'
       },
       {
         id: 'i-102-2',
-        title: 'Cobrar R$ 28.000 em recibos e notas pendentes de maio',
+        title: 'Cobrar R$ 28.000 em recibos de frete de terra e adubo pendentes de maio',
         checked: false,
         responsible: 'Juliana Duarte',
         deadline: '05/07/2026',
-        note: 'Faltam 14 recibos de auxílio-transporte e 2 notas de mentoria.'
+        note: 'Faltam 12 recibos de frete e notas de insumos orgânicos.'
       },
       {
         id: 'i-102-3',
-        title: 'Concluir formação dos 7 instrutores restantes (atrasada desde 30/04)',
+        title: 'Concluir cercamento dos terrenos restantes (atrasado desde 30/04)',
         checked: false,
         responsible: 'Rafael Nunes',
         deadline: '12/07/2026',
-        note: 'Banca prática reagendada para os dois primeiros sábados de julho.'
+        note: 'Mutirão com a comunidade agendado para o início de julho.'
       }
     ],
     actionPlans: [
       {
         id: 'act-102-1',
         originGap: 'Orçamento',
-        what: 'Unificar aulas teóricas das Turmas 3 e 4 em encontros conjuntos',
+        what: 'Readequar compra de estufas e mudas ao saldo restante de R$ 42 mil',
         who: 'Juliana Duarte',
         when: '2026-07-15',
-        how: 'Reduzir custo restante de hora-aula para caber no saldo de R$ 42 mil sem cortar bolsas.',
+        how: 'Unificar fornecedores para caber no saldo restante sem reduzir área plantada.',
         status: 'Em Andamento'
       },
       {
         id: 'act-102-2',
         originGap: 'Notas Fiscais',
-        what: 'Condicionar liberação do próximo lote de bolsas à entrega dos recibos anteriores',
-        who: 'Camila Borges',
+        what: 'Condicionar liberação de novos lotes de mudas à entrega dos recibos pendentes',
+        who: 'Juliana Duarte',
         when: '2026-07-05',
-        how: 'Conferência quinzenal pela secretaria antes do envio para pagamento.',
+        how: 'Conferência quinzenal antes do envio para autorização financeira.',
         status: 'Pendente'
       }
     ]
@@ -534,33 +534,33 @@ export const INITIAL_FOLLOW_UPS = [
   {
     id: 'chk-104',
     projectId: 'prog-104',
-    projectName: 'Economia Circular e Cooperativas de Triagem',
+    projectName: 'Segurança Alimentar e Cozinhas Comunitárias',
     date: '23/06/2026',
     responsible: 'Thayâne Carvalho',
     frequency: 'Quinzenal',
     items: [
       {
         id: 'i-104-1',
-        title: 'Conferir volume coletado nas 30 empresas já ativas na rota',
+        title: 'Conferir funcionamento das 3 cozinhas comunitárias em operação',
         checked: true,
         responsible: 'Roberto Tavares',
         deadline: '23/06/2026',
-        note: '36 toneladas comercializadas em junho.'
+        note: '3.600 refeições nutritivas servidas em junho.'
       },
       {
         id: 'i-104-2',
-        title: 'Destravar pagamento da balança digital retido por certidão vencida',
+        title: 'Destravar pagamento dos fornos industriais retido por certidão vencida',
         checked: false,
         responsible: 'Roberto Tavares',
         deadline: '10/07/2026',
-        note: 'Equipamento já entregue em campo; pagamento de R$ 18 mil aguarda CND renovada.'
+        note: 'Equipamentos já instalados; pagamento de R$ 18 mil aguarda CND renovada.'
       }
     ],
     actionPlans: [
       {
         id: 'act-104-1',
         originGap: 'Fornecedor',
-        what: 'Notificar fornecedor da balança para envio de certidão negativa atualizada',
+        what: 'Notificar fornecedor dos fornos para envio de certidão negativa atualizada',
         who: 'Roberto Tavares',
         when: '2026-07-10',
         how: 'Prazo de 5 dias úteis para regularização e baixa do pagamento de R$ 18.000.',
@@ -592,9 +592,9 @@ export const INITIAL_EVIDENCES = [
   {
     id: 'ev-3',
     projectId: 'prog-102',
-    category: 'Pedagógico',
-    title: 'Diários de frequência e certificados emitidos — Turma 1 (32 alunos)',
-    referenceCode: 'ATA #T1-2026',
+    category: 'Técnico',
+    title: 'Laudo de análise de solo e termo de implantação dos primeiros 3 canteiros',
+    referenceCode: 'LAUDO #SOLO-03',
     date: '15/06/2026',
     responsible: 'Juliana Duarte'
   },
@@ -610,9 +610,9 @@ export const INITIAL_EVIDENCES = [
   {
     id: 'ev-5',
     projectId: 'prog-104',
-    category: 'Operacional',
-    title: 'Certificados de destinação (36 t) e folha de rateio das cooperativas',
-    referenceCode: 'MTR #06-2026',
+    category: 'Sanitário',
+    title: 'Alvará sanitário das 3 cozinhas e termo de entrega dos fornos industriais',
+    referenceCode: 'ALV #COZ-2026',
     date: '28/06/2026',
     responsible: 'Roberto Tavares'
   }

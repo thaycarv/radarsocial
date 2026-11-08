@@ -195,7 +195,7 @@ export const generateGovernanceAlerts = (derivedProjects) => {
   const alerts = [];
 
   derivedProjects.forEach((p) => {
-    // 1. Projeto com atenção prioritária (como PRG-02)
+    // 1. Projeto com atenção prioritária (como PRG-02: Hortas Urbanas)
     if (p.overallStatus === 'Crítico') {
       alerts.push({
         id: `action-crit-${p.id}`,
@@ -203,13 +203,13 @@ export const generateGovernanceAlerts = (derivedProjects) => {
         projectName: p.name,
         severity: 'high',
         category: 'Ação Prioritária',
-        title: `Readequar turmas e recolher ${formatCurrency(p.pendingProofs)} em comprovantes`,
-        detail: `${formatPercent(p.actualFinancial)} do orçamento utilizado para ${formatPercent(p.actualPhysical)} de avanço físico. Suspender novos adiantamentos e readequar cronograma pedagógico.`,
+        title: `Readequar canteiros e recolher ${formatCurrency(p.pendingProofs)} em comprovantes`,
+        detail: `${formatPercent(p.actualFinancial)} do orçamento utilizado para ${formatPercent(p.actualPhysical)} de avanço físico. Suspender novos adiantamentos e readequar cronograma de plantio.`,
         targetTab: 'operations'
       });
     }
 
-    // 2. Projeto com retenção documental de fornecedor (como PRG-04)
+    // 2. Projeto com retenção documental de fornecedor (como PRG-04: Cozinhas Comunitárias)
     if (p.cost.label === 'NF retida') {
       alerts.push({
         id: `action-compliance-${p.id}`,
@@ -217,7 +217,7 @@ export const generateGovernanceAlerts = (derivedProjects) => {
         projectName: p.name,
         severity: 'medium',
         category: 'Conformidade',
-        title: 'Liberar pagamento da balança após CND municipal do fornecedor',
+        title: 'Liberar pagamento de fornos industriais após CND do fornecedor',
         detail: `Entregas em ${formatPercent(p.actualPhysical)} com pagamento retido preventivamente até regularização fiscal do parceiro.`,
         targetTab: 'physicalFinancial'
       });

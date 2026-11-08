@@ -12,10 +12,10 @@ import {
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v8_projects',
-  followUps: 'radarsocial_v8_followups',
-  evidences: 'radarsocial_v8_evidences',
-  theme: 'radarsocial_v8_theme'
+  projects: 'radarsocial_v9_projects',
+  followUps: 'radarsocial_v9_followups',
+  evidences: 'radarsocial_v9_evidences',
+  theme: 'radarsocial_v9_theme'
 };
 
 // Purge all legacy storage keys to guarantee no cached institutional names linger in client browsers
