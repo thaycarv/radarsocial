@@ -23,7 +23,7 @@ function MainApp() {
         <div key={activeTab} className="animate-fade-scale">
           {activeTab === 'dashboard' && <PortfolioOverview onNavigate={setActiveTab} />}
           {activeTab === 'physicalFinancial' && <PhysicalFinancialCockpit onNavigate={setActiveTab} />}
-          {activeTab === 'operations' && <FollowUpChecklist />}
+          {activeTab === 'operations' && <FollowUpChecklist onNavigate={setActiveTab} />}
           {activeTab === 'impact' && <ImpactAndReports />}
         </div>
       </main>

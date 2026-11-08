@@ -135,23 +135,27 @@ export const ExecutiveReportModal = () => {
 
           <div className="space-y-1.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              2. Principais Resultados Apurados
+              2. Indicadores de Resultado e Verificação
             </h3>
             <table className="w-full text-left text-[11px] border border-slate-300">
               <thead className="bg-slate-100 text-slate-800 font-bold">
                 <tr>
                   <th className="py-1.5 px-2.5">Programa</th>
                   <th className="py-1.5 px-2.5">Indicador de Resultado</th>
-                  <th className="py-1.5 px-2.5 text-center">Inicial → Meta</th>
+                  <th className="py-1.5 px-2.5 text-center">Linha de Base → Meta</th>
                   <th className="py-1.5 px-2.5 text-center">Atual</th>
-                  <th className="py-1.5 px-2.5">Meio de Verificação</th>
+                  <th className="py-1.5 px-2.5">Fonte de Verificação</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {projects.map((p) => {
                   const outcome = p.impactMetrics.find((m) => m.level === 'Resultado') || p.impactMetrics[0];
                   const fmtVal = (v) =>
-                    outcome.unit === 'R$' ? formatCurrency(v) : `${v} ${outcome.unit}`;
+                    outcome.unit === 'R$'
+                      ? formatCurrency(v)
+                      : outcome.unit === '%'
+                      ? `${v}%`
+                      : `${v} ${outcome.unit}`;
                   return (
                     <tr key={p.id}>
                       <td className="py-1.5 px-2.5 font-semibold">{p.code}</td>

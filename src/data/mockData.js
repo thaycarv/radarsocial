@@ -202,22 +202,23 @@ export const INITIAL_PROJECTS = [
       {
         id: 'imp-101-1',
         level: 'Entrega',
-        indicator: 'Polos equipados e em operação',
+        indicator: 'Laboratórios equipados e abertos à comunidade',
         unit: 'polos',
         baseline: 0,
         target: 5,
         actual: 4,
-        verificationSource: 'Termo de vistoria e tombamento'
+        verificationSource: 'Termo de vistoria e registro patrimonial dos equipamentos'
       },
       {
         id: 'imp-101-2',
         level: 'Resultado',
+        syncsBeneficiaries: true,
         indicator: 'Moradores utilizando os laboratórios mensalmente',
         unit: 'pessoas',
         baseline: 0,
         target: 300,
         actual: 215,
-        verificationSource: 'Cadastro ativo de acesso nos polos'
+        verificationSource: 'Controle mensal de acesso e frequência nos polos'
       }
     ],
     beneficiariesTarget: 300,
@@ -226,9 +227,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-101-1',
-        description: 'Atraso da operadora local na ativação de fibra óptica do Polo Norte',
+        description: 'Atraso da operadora local na ativação de fibra óptica do Polo Norte comprometer abertura final',
         impact: 'Médio',
-        mitigation: 'Acionar fornecedor secundário de internet via rádio caso passe de 10/07'
+        mitigation: 'Acionar link secundário via rádio já pré-aprovado caso a fibra passe de 10/07'
       }
     ]
   },
@@ -410,22 +411,23 @@ export const INITIAL_PROJECTS = [
       {
         id: 'imp-102-1',
         level: 'Entrega',
-        indicator: 'Hortas comunitárias em produção',
+        indicator: 'Hortas comunitárias implantadas e em produção',
         unit: 'hortas',
         baseline: 0,
         target: 6,
         actual: 3,
-        verificationSource: 'Termo de entrega e vistoria técnica'
+        verificationSource: 'Termo de implantação e registro fotográfico de campo'
       },
       {
         id: 'imp-102-2',
         level: 'Resultado',
-        indicator: 'Famílias colhendo alimentos orgânicos',
+        syncsBeneficiaries: true,
+        indicator: 'Famílias colhendo alimentos orgânicos regularmente',
         unit: 'famílias',
         baseline: 0,
         target: 120,
         actual: 48,
-        verificationSource: 'Cadastro ativo de famílias participantes'
+        verificationSource: 'Cadastro das famílias e listas de retirada semanal'
       }
     ],
     beneficiariesTarget: 120,
@@ -434,9 +436,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-102-1',
-        description: 'Rubrica de irrigação e estufas com apenas R$ 2 mil livres (saldo global de R$ 42 mil)',
+        description: 'Demora na aprovação do remanejamento entre rubricas paralisar o plantio de julho nos 3 terrenos restantes',
         impact: 'Alto',
-        mitigation: 'Solicitar remanejamento entre rubricas ao financiador e suspender novos adiantamentos sem NF'
+        mitigation: 'Protocolar pedido formal ao financiador até 08/07 priorizando irrigação antes das estufas'
       }
     ]
   },
@@ -617,17 +619,17 @@ export const INITIAL_PROJECTS = [
         baseline: 0,
         target: 30,
         actual: 18,
-        verificationSource: 'Relatório técnico assinado pela empresa'
+        verificationSource: 'Relatório técnico assinado pela empresa (REL #ESG-18)'
       },
       {
         id: 'imp-103-2',
         level: 'Resultado',
-        indicator: 'Redução média em energia ou descarte em aterro',
+        indicator: 'Redução média no consumo de energia elétrica (grupo concluído)',
         unit: '%',
         baseline: 0,
-        target: 18,
-        actual: 11,
-        verificationSource: 'Faturas de energia e manifesto de resíduos'
+        target: 15,
+        actual: 9,
+        verificationSource: 'Comparativo de faturas de energia antes e após kits LED'
       }
     ],
     beneficiariesTarget: 30,
@@ -636,9 +638,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-103-1',
-        description: 'Reserva antecipada do espaço da Rodada adiantou o desembolso frente ao físico',
+        description: 'Desengajamento das 12 empresas ainda em consultoria comprometer fechamento antes da Rodada de outubro',
         impact: 'Baixo',
-        mitigation: 'Concluir ciclo de consultorias em agosto para equilibrar avanço físico e financeiro'
+        mitigation: 'Manter visitas presenciais quinzenais de apoio técnico até a conclusão do ciclo em agosto'
       }
     ]
   },
@@ -775,22 +777,23 @@ export const INITIAL_PROJECTS = [
       {
         id: 'imp-104-1',
         level: 'Entrega',
-        indicator: 'Refeições nutritivas servidas mensalmente',
+        indicator: 'Refeições balanceadas ofertadas mensalmente',
         unit: 'refeições/mês',
-        baseline: 800,
+        baseline: 0,
         target: 4500,
         actual: 3600,
-        verificationSource: 'Relatório diário de distribuição e presença'
+        verificationSource: 'Mapa diário de produção e entrega das 3 cozinhas'
       },
       {
         id: 'imp-104-2',
         level: 'Resultado',
-        indicator: 'Famílias atendidas com segurança nutricional',
+        syncsBeneficiaries: true,
+        indicator: 'Famílias em vulnerabilidade atendidas com regularidade',
         unit: 'famílias',
-        baseline: 80,
+        baseline: 0,
         target: 250,
         actual: 210,
-        verificationSource: 'Cadastro de atendimento das cozinhas'
+        verificationSource: 'Cadastro referenciado (CRAS) e lista de presença'
       }
     ],
     beneficiariesTarget: 250,
@@ -799,9 +802,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-104-1',
-        description: 'Pagamento de R$ 18 mil (NF-e #3019 · fornos industriais) retido por certidão vencida do fornecedor',
+        description: 'Demora do fornecedor na renovação da CND impedir quitação da NF-e #3019 até o fechamento do convênio',
         impact: 'Médio',
-        mitigation: 'Manter bloqueio preventivo na tesouraria e cobrar CND municipal atualizada até 10/07'
+        mitigation: 'Manter bloqueio preventivo na tesouraria e notificar formalmente com prazo até 10/07'
       }
     ]
   }
@@ -818,47 +821,56 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-102-1',
-        title: 'Suspender novos adiantamentos de irrigação e revisar saldo por rubrica',
+        title: 'Conferir saldo livre por rubrica e travar novos adiantamentos sem NF',
         checked: true,
         responsible: 'Thayâne Carvalho',
         deadline: '26/06/2026',
-        note: '85% do orçamento já utilizado; rubrica de irrigação/estufas restou com R$ 2 mil livres.'
+        note: 'Rubrica de irrigação restou com R$ 2 mil livres; saldo global de R$ 42 mil mapeado.'
       },
       {
         id: 'i-102-2',
-        title: 'Cobrar R$ 28.000 em comprovantes pendentes (fretes de solo e medição hidráulica)',
-        checked: false,
+        title: 'Validar produção e listas de retirada das 48 famílias nas 3 hortas ativas',
+        checked: true,
         responsible: 'Juliana Duarte',
-        deadline: '05/07/2026',
-        note: 'R$ 15 mil de fretes rurais (TED #5591) e R$ 13 mil da HidroCampo (PIX #9104).'
+        deadline: '26/06/2026',
+        note: 'Cadastro CAD #HORTAS-03 arquivado no dossiê de evidências.'
       },
       {
         id: 'i-102-3',
-        title: 'Concluir rede de irrigação dos 3 terrenos restantes (atrasada desde 30/04)',
+        title: 'Aprovar cotações unificadas para protocolar pedido de remanejamento',
         checked: false,
-        responsible: 'Rafael Nunes',
-        deadline: '12/07/2026',
-        note: 'Ligação dos pontos de água agendada após formalização do remanejamento.'
+        responsible: 'Juliana Duarte',
+        deadline: '03/07/2026',
+        note: 'Necessário para destravar ligação de água dos 3 terrenos em atraso.'
       }
     ],
     actionPlans: [
       {
         id: 'act-102-1',
         originGap: 'Orçamento',
-        what: 'Formalizar pedido de remanejamento de rubricas para viabilizar estufas dentro dos R$ 42 mil restantes',
+        what: 'Protocolar pedido de remanejamento de saldo entre rubricas junto ao financiador',
         who: 'Juliana Duarte',
-        when: '2026-07-15',
-        how: 'Redirecionar folga parcial de mudas/oficinas sem reduzir o número de famílias atendidas.',
+        when: '2026-07-08',
+        how: 'Redirecionar folga de mudas e oficinas para concluir irrigação nos 3 terrenos dentro dos R$ 42 mil.',
         status: 'Em Andamento'
       },
       {
         id: 'act-102-2',
         originGap: 'Notas Fiscais',
-        what: 'Bloquear novos pagamentos aos fornecedores até baixa dos R$ 28 mil sem nota fiscal',
+        what: 'Recolher comprovantes pendentes de R$ 28 mil (TED #5591 e PIX #9104)',
         who: 'Juliana Duarte',
         when: '2026-07-05',
-        how: 'Conferência documental obrigatória antes de enviar remessa ao financeiro.',
+        how: 'Condicionar qualquer novo pagamento ao envio prévio dos recibos e notas fiscais pendentes.',
         status: 'Pendente'
+      },
+      {
+        id: 'act-102-3',
+        originGap: 'Cronograma',
+        what: 'Concluir pontos de água e irrigação dos terrenos 4 a 6 (atrasado desde 30/04)',
+        who: 'Rafael Nunes',
+        when: '2026-07-12',
+        how: 'Executar frentes em mutirão comunitário imediatamente após autorização do remanejamento.',
+        status: 'Em Andamento'
       }
     ]
   },
@@ -872,27 +884,27 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-101-1',
-        title: 'Conferir tombamento patrimonial dos 100 computadores entregues nos 5 polos',
+        title: 'Conferir tombamento patrimonial dos 100 computadores nos 5 polos',
         checked: true,
         responsible: 'Carlos Mendonça',
         deadline: '24/06/2026',
-        note: 'NF-e #4180 e planilha com 100 números de série conferidas.'
+        note: 'NF-e #4180 e planilha com 100 números de série validados.'
       },
       {
         id: 'i-101-2',
-        title: 'Acompanhar montagem final das bancadas e link fibra no 5º polo (Polo Norte)',
+        title: 'Confirmar frequência de acesso nos 4 laboratórios já em funcionamento',
         checked: true,
         responsible: 'Carlos Mendonça',
-        deadline: '30/06/2026',
-        note: '4 polos já em operação; instalação técnica do Polo Norte dentro do prazo de 15/07.'
+        deadline: '24/06/2026',
+        note: '215 moradores atendidos regularmente no mês de junho.'
       },
       {
         id: 'i-101-3',
-        title: 'Baixar R$ 7.000 em comprovantes pendentes (marcenaria e endosso do seguro)',
+        title: 'Monitorar ativação de fibra e montagem final das bancadas no Polo Norte',
         checked: false,
-        responsible: 'Patrícia Lima',
-        deadline: '08/07/2026',
-        note: 'R$ 5 mil da Marcenaria Sul (PIX #8821) e R$ 2 mil da SeguraMais (Boleto #4410).'
+        responsible: 'Carlos Mendonça',
+        deadline: '10/07/2026',
+        note: 'Dentro do prazo contratual (15/07); contingência via rádio em prontidão.'
       }
     ],
     actionPlans: [
@@ -902,8 +914,17 @@ export const INITIAL_FOLLOW_UPS = [
         what: 'Manter fornecedor secundário de internet via rádio pré-aprovado para o Polo Norte',
         who: 'Carlos Mendonça',
         when: '2026-07-10',
-        how: 'Acionar contingência caso a operadora de fibra não conclua ativação até 10/07.',
+        how: 'Acionar contingência automaticamente caso a operadora local não instale a fibra até 10/07.',
         status: 'Concluída'
+      },
+      {
+        id: 'act-101-2',
+        originGap: 'Notas Fiscais',
+        what: 'Baixar R$ 7 mil sem NF (Marcenaria Sul · PIX #8821 e SeguraMais · Boleto #4410)',
+        who: 'Patrícia Lima',
+        when: '2026-07-08',
+        how: 'Conferir emissão da NF-e de montagem e endosso formal da apólice para arquivar no dossiê.',
+        status: 'Em Andamento'
       }
     ]
   },
@@ -917,22 +938,49 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-103-1',
-        title: 'Validar planos ambientais assinados pelas primeiras 18 empresas atendidas',
+        title: 'Auditar relatórios e faturas comparativas das primeiras 18 empresas concluídas',
         checked: true,
         responsible: 'Marina Alencar',
         deadline: '25/06/2026',
-        note: 'Relatórios arquivados no dossiê do programa (REL #ESG-18).'
+        note: 'REL #ESG-18 arquivado; redução média aferida de 9% no consumo de energia.'
       },
       {
         id: 'i-103-2',
-        title: 'Recolher notas fiscais de R$ 9.000 referentes à consultoria e material gráfico',
+        title: 'Confirmar reserva de auditório para Rodada Comercial de outubro',
+        checked: true,
+        responsible: 'Marina Alencar',
+        deadline: '25/06/2026',
+        note: 'Sinal de R$ 8 mil quitado com NFS-e #0890.'
+      },
+      {
+        id: 'i-103-3',
+        title: 'Acompanhar adesão das 12 empresas restantes às visitas presenciais de julho',
         checked: false,
         responsible: 'Marina Alencar',
         deadline: '10/07/2026',
-        note: 'R$ 6 mil da Ciclo Limpo (TED #6320) e R$ 3 mil da Gráfica Expressa (PIX #7712).'
+        note: 'Agenda de visitas confirmada para fechamento até agosto.'
       }
     ],
-    actionPlans: []
+    actionPlans: [
+      {
+        id: 'act-103-1',
+        originGap: 'Notas Fiscais',
+        what: 'Recolher notas fiscais de R$ 9 mil pendentes (Ciclo Limpo · TED #6320 e Gráfica · PIX #7712)',
+        who: 'Marina Alencar',
+        when: '2026-07-10',
+        how: 'Validar NFS-e do fechamento mensal da consultoria e NF-e de impressão dos guias.',
+        status: 'Em Andamento'
+      },
+      {
+        id: 'act-103-2',
+        originGap: 'Cronograma',
+        what: 'Concluir implantação dos planos ambientais nas 12 empresas restantes',
+        who: 'Marina Alencar',
+        when: '2026-08-20',
+        how: 'Realizar acompanhamento quinzenal em campo para manter equilíbrio físico-financeiro.',
+        status: 'Em Andamento'
+      }
+    ]
   },
   {
     id: 'chk-104',
@@ -944,30 +992,39 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-104-1',
-        title: 'Conferir operação regular das 3 cozinhas comunitárias no 1º turno',
+        title: 'Conferir mapas de produção (3.600 refeições) e alvarás sanitários das 3 cozinhas',
         checked: true,
         responsible: 'Roberto Tavares',
         deadline: '23/06/2026',
-        note: '3.600 refeições nutritivas servidas em junho com alvará sanitário vigente.'
+        note: 'Boas práticas RDC 216 e atendimento a 210 famílias CRAS regulares em junho.'
       },
       {
         id: 'i-104-2',
-        title: 'Cobrar CND municipal do fornecedor para liberar pagamento da NF-e #3019 (R$ 18 mil)',
-        checked: false,
-        responsible: 'Roberto Tavares',
-        deadline: '10/07/2026',
-        note: 'Fornos já entregues e operando; valor segue retido na conta do convênio.'
+        title: 'Manter retenção financeira da NF-e #3019 (R$ 18 mil) até regularização de CND',
+        checked: true,
+        responsible: 'Thayâne Carvalho',
+        deadline: '23/06/2026',
+        note: 'Fornos entregues e instalados; bloqueio preventivo mantido na tesouraria.'
       }
     ],
     actionPlans: [
       {
         id: 'act-104-1',
         originGap: 'Fornecedor',
-        what: 'Notificar TermoFornos Equipamentos para envio da certidão negativa municipal renovada',
+        what: 'Cobrar CND municipal da TermoFornos Equipamentos para liberar NF-e #3019 (R$ 18 mil)',
         who: 'Roberto Tavares',
         when: '2026-07-10',
-        how: 'Liberar transferência bancária de R$ 18.000 somente após validação fiscal no portal municipal.',
+        how: 'Validar certidão atualizada no portal municipal antes de autorizar o pagamento na tesouraria.',
         status: 'Em Andamento'
+      },
+      {
+        id: 'act-104-2',
+        originGap: 'Cronograma',
+        what: 'Iniciar 2º turno de atendimento nas 3 cozinhas para atingir 4.500 refeições/mês',
+        who: 'Roberto Tavares',
+        when: '2026-07-20',
+        how: 'Escalar escala de manipuladores treinados e ampliar encaminhamentos via CRAS local.',
+        status: 'Pendente'
       }
     ]
   }
@@ -978,7 +1035,7 @@ export const INITIAL_EVIDENCES = [
     id: 'ev-1',
     projectId: 'prog-101',
     category: 'Financeiro',
-    title: 'Nota fiscal e termo de tombamento patrimonial — 100 computadores (5 polos)',
+    title: 'Nota fiscal e planilha patrimonial dos 100 computadores (5 polos)',
     referenceCode: 'NF-e #4180',
     date: '22/05/2026',
     responsible: 'Carlos Mendonça'
@@ -987,7 +1044,7 @@ export const INITIAL_EVIDENCES = [
     id: 'ev-2',
     projectId: 'prog-101',
     category: 'Engenharia',
-    title: 'ART e relatório fotográfico da adequação elétrica e civil dos 5 polos',
+    title: 'ART elétrica, projeto aprovado e fotos da adequação civil dos 5 polos',
     referenceCode: 'ART #884120',
     date: '28/03/2026',
     responsible: 'Carlos Mendonça'
@@ -1003,20 +1060,38 @@ export const INITIAL_EVIDENCES = [
   },
   {
     id: 'ev-4',
+    projectId: 'prog-102',
+    category: 'Atendimento',
+    title: 'Termo de entrega dos 3 canteiros ativos e cadastro das 48 famílias',
+    referenceCode: 'CAD #HORTAS-03',
+    date: '15/06/2026',
+    responsible: 'Juliana Duarte'
+  },
+  {
+    id: 'ev-5',
     projectId: 'prog-103',
     category: 'Técnico',
-    title: 'Planos de eficiência energética e resíduos assinados (18 empresas)',
+    title: 'Planos ambientais assinados e faturas comparativas (18 empresas concluídas)',
     referenceCode: 'REL #ESG-18',
     date: '22/06/2026',
     responsible: 'Marina Alencar'
   },
   {
-    id: 'ev-5',
+    id: 'ev-6',
     projectId: 'prog-104',
     category: 'Sanitário',
-    title: 'Alvará sanitário das 3 cozinhas e termo de aceite técnico dos fornos',
+    title: 'Alvará sanitário vigente (RDC 216) e aceite técnico dos fornos',
     referenceCode: 'ALV #COZ-2026',
     date: '26/06/2026',
+    responsible: 'Roberto Tavares'
+  },
+  {
+    id: 'ev-7',
+    projectId: 'prog-104',
+    category: 'Atendimento',
+    title: 'Mapa mensal de 3.600 refeições servidas e cadastro CRAS (210 famílias)',
+    referenceCode: 'MAPA #COZ-JUN26',
+    date: '30/06/2026',
     responsible: 'Roberto Tavares'
   }
 ];

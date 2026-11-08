@@ -13,15 +13,15 @@ import {
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v11_projects',
-  followUps: 'radarsocial_v11_followups',
-  evidences: 'radarsocial_v11_evidences',
-  theme: 'radarsocial_v11_theme'
+  projects: 'radarsocial_v12_projects',
+  followUps: 'radarsocial_v12_followups',
+  evidences: 'radarsocial_v12_evidences',
+  theme: 'radarsocial_v12_theme'
 };
 
 // Purge legacy storage keys so client browsers never load stale schemas or brand names
 if (typeof window !== 'undefined' && window.localStorage) {
-  const versions = ['', '_v2', '_v3', '_v4', '_v5', '_v6', '_v7', '_v8', '_v9', '_v10'];
+  const versions = ['', '_v2', '_v3', '_v4', '_v5', '_v6', '_v7', '_v8', '_v9', '_v10', '_v11'];
   const suffixes = ['projects', 'followups', 'evidences', 'theme'];
   versions.forEach((v) => {
     suffixes.forEach((s) => {
@@ -243,8 +243,12 @@ export const ProjectProvider = ({ children }) => {
     setRawProjects((prev) =>
       prev.map((p) => {
         if (p.id !== projectId) return p;
+        const targetMetric = p.impactMetrics.find((m) => m.id === metricId);
         return {
           ...p,
+          beneficiariesActual: targetMetric?.syncsBeneficiaries
+            ? Math.round(val)
+            : p.beneficiariesActual,
           impactMetrics: p.impactMetrics.map((m) =>
             m.id === metricId ? { ...m, actual: val } : m
           )
@@ -305,21 +309,15 @@ export const ProjectProvider = ({ children }) => {
     );
   };
 
-  const cycleActionStatus = (followUpId, actionId) => {
-    const nextStatus = {
-      Pendente: 'Em Andamento',
-      'Em Andamento': 'Concluída',
-      Concluída: 'Pendente'
-    };
+  const updateActionStatus = (followUpId, actionId, newStatus) => {
+    if (!['Pendente', 'Em Andamento', 'Concluída'].includes(newStatus)) return;
     setFollowUps((prev) =>
       prev.map((f) => {
         if (f.id !== followUpId) return f;
         return {
           ...f,
           actionPlans: (f.actionPlans || []).map((a) =>
-            a.id === actionId
-              ? { ...a, status: nextStatus[a.status] || 'Pendente' }
-              : a
+            a.id === actionId ? { ...a, status: newStatus } : a
           )
         };
       })
@@ -367,7 +365,7 @@ export const ProjectProvider = ({ children }) => {
         toggleChecklistItem,
         addChecklistItem,
         addActionPlanItem,
-        cycleActionStatus,
+        updateActionStatus,
         addEvidence,
         resetToDefault
       }}

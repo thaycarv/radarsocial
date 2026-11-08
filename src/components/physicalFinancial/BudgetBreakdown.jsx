@@ -526,13 +526,24 @@ export const BudgetBreakdown = ({ project }) => {
                                             </span>
                                             <button
                                               type="button"
-                                              onClick={() =>
+                                              onClick={() => {
                                                 releaseRetainedExpense(
                                                   project.id,
                                                   item.id,
                                                   exp.id
-                                                )
-                                              }
+                                                );
+                                                addEvidence({
+                                                  projectId: project.id,
+                                                  category: 'Financeiro',
+                                                  title: `${exp.supplier} — quitação liberada após renovação da CND`,
+                                                  referenceCode:
+                                                    (exp.docRef || '')
+                                                      .replace(/\s*·\s*CND pendente/i, '')
+                                                      .trim() || 'CND regularizada',
+                                                  date: cutoff.formattedDate,
+                                                  responsible: project.manager
+                                                });
+                                              }}
                                               className="px-2 py-0.5 rounded bg-[#2D5A27] hover:bg-[#1E3F20] text-white font-semibold inline-flex items-center gap-1 cursor-pointer transition"
                                               title="Registrar renovação da certidão negativa e liberar pagamento"
                                             >
