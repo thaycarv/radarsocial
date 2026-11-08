@@ -229,12 +229,39 @@ export const deriveProjectMetrics = (project) => {
 
   const statusMeta = getProjectStatusMeta(overallStatus, cost.label);
 
+  const monthMap = {
+    Jan: 1,
+    Fev: 2,
+    Mar: 3,
+    Abr: 4,
+    Mai: 5,
+    Jun: 6,
+    Jul: 7,
+    Ago: 8,
+    Set: 9,
+    Out: 10,
+    Nov: 11,
+    Dez: 12
+  };
+  const cutoffIdx = monthMap[project.cutoffMonth] || 6;
+  const paidExpenses = budgetBreakdown.flatMap((r) =>
+    (r.expenses || []).filter((e) => e.status !== 'retained')
+  );
+
   const curveS = (project.curveS || []).map((pt) => {
-    if (pt.month === project.cutoffMonth) {
+    const ptIdx = monthMap[pt.month] || 0;
+    if (ptIdx > 0 && ptIdx <= cutoffIdx) {
+      const cumPaid = paidExpenses
+        .filter((e) => {
+          const mm = Number((e.date || '').split('/')[1] || cutoffIdx);
+          return mm <= ptIdx;
+        })
+        .reduce((acc, e) => acc + Number(e.amount || 0), 0);
+      const dynamicFin = totalBudget > 0 ? Number(((cumPaid / totalBudget) * 100).toFixed(1)) : 0;
       return {
         ...pt,
-        actualPhysical,
-        actualFinancial
+        actualPhysical: pt.month === project.cutoffMonth ? actualPhysical : pt.actualPhysical,
+        actualFinancial: dynamicFin
       };
     }
     return pt;

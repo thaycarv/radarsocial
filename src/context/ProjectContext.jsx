@@ -13,15 +13,15 @@ import {
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v12_projects',
-  followUps: 'radarsocial_v12_followups',
-  evidences: 'radarsocial_v12_evidences',
-  theme: 'radarsocial_v12_theme'
+  projects: 'radarsocial_v14_projects',
+  followUps: 'radarsocial_v14_followups',
+  evidences: 'radarsocial_v14_evidences',
+  theme: 'radarsocial_v14_theme'
 };
 
-// Purge legacy storage keys so client browsers never load stale schemas or brand names
+// Purge legacy storage keys so client browsers always initialize with the current schema
 if (typeof window !== 'undefined' && window.localStorage) {
-  const versions = ['', '_v2', '_v3', '_v4', '_v5', '_v6', '_v7', '_v8', '_v9', '_v10', '_v11'];
+  const versions = ['', '_v2', '_v3', '_v4', '_v5', '_v6', '_v7', '_v8', '_v9', '_v10', '_v11', '_v12', '_v13'];
   const suffixes = ['projects', 'followups', 'evidences', 'theme'];
   versions.forEach((v) => {
     suffixes.forEach((s) => {
@@ -34,22 +34,11 @@ if (typeof window !== 'undefined' && window.localStorage) {
   });
 }
 
-const sanitizeFictitiousNames = (data) => {
-  if (!data) return data;
-  let str = JSON.stringify(data);
-  str = str.replace(/Fundo Socioambiental (BNDES|Horizonte)/gi, 'Fundo de Inovação e Inclusão Digital');
-  str = str.replace(/BNDES/gi, 'Fundo de Inovação Digital');
-  str = str.replace(/ACIF\s*&\s*Sebrae/gi, 'Aliança Empresarial Regional');
-  str = str.replace(/ACIF/gi, 'Aliança Empresarial');
-  str = str.replace(/Sebrae/gi, 'Rede Regional');
-  return JSON.parse(str);
-};
-
 const safeLoad = (key, fallback, validator) => {
   try {
     const saved = localStorage.getItem(key);
     if (!saved) return fallback;
-    const parsed = sanitizeFictitiousNames(JSON.parse(saved));
+    const parsed = JSON.parse(saved);
     if (validator && !validator(parsed)) return fallback;
     return parsed;
   } catch {
@@ -184,8 +173,9 @@ export const ProjectProvider = ({ children }) => {
                   .trim();
                 return {
                   ...exp,
+                  date: PORTFOLIO_CUTOFF.formattedDate,
                   status: 'approved',
-                  docRef: cleanRef ? `${cleanRef} · CND regular` : 'CND regularizada'
+                  docRef: cleanRef ? `${cleanRef} · CND regularizada` : 'CND regularizada'
                 };
               })
             };

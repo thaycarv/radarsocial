@@ -44,8 +44,8 @@ export const ImpactAndReports = () => {
 
   const formatMetricValue = (val, unit) => {
     if (unit === 'R$') return formatCurrency(val);
-    if (unit === '%') return `${val}%`;
-    return `${val} ${unit}`;
+    if (unit === '%') return `${Number(val || 0)}%`;
+    return `${Number(val || 0).toLocaleString('pt-BR')} ${unit}`;
   };
 
   const handleSaveMetric = (projectId, metricId) => {
@@ -277,7 +277,13 @@ export const ImpactAndReports = () => {
 
           <button
             type="button"
-            onClick={() => setShowDocForm(!showDocForm)}
+            onClick={() => {
+              const nextOpen = !showDocForm;
+              setShowDocForm(nextOpen);
+              if (nextOpen && programFilter !== 'Todos') {
+                setDocForm((prev) => ({ ...prev, projectId: programFilter }));
+              }
+            }}
             className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer self-start sm:self-auto shrink-0"
           >
             <Plus className="w-3.5 h-3.5 text-[#2D5A27]" />

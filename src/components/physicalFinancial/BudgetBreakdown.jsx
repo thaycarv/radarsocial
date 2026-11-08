@@ -231,7 +231,7 @@ export const BudgetBreakdown = ({ project }) => {
                 type="number"
                 required
                 min={1}
-                step={100}
+                step={1}
                 value={expenseForm.amount}
                 onChange={(e) =>
                   setExpenseForm({ ...expenseForm, amount: e.target.value })

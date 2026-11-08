@@ -14,7 +14,7 @@ export const INITIAL_PROJECTS = [
     strategicAxis: 'Inclusão Digital',
     manager: 'Carlos Mendonça',
     funder: 'Fundo de Inovação e Inclusão Digital',
-    operationalHeadline: 'Salas reformadas e mobiliadas; finalizando instalação dos computadores',
+    operationalHeadline: '4 laboratórios já em operação; ativando a última unidade no prazo',
     startDate: '10/01/2026',
     endDate: '31/08/2026',
     plannedPhysical: 70,
@@ -29,51 +29,51 @@ export const INITIAL_PROJECTS = [
         deadlineISO: '2026-02-15',
         completedAt: '12/02/2026',
         deliverableDoc: 'ART #884120 e plantas elétricas aprovadas',
-        fieldNote: 'Quadro de carga dimensionado para 20 computadores por polo.',
+        fieldNote: 'Quadro elétrico dimensionado para as 10 estações, climatização e projetor em cada polo.',
         status: 'done'
       },
       {
         id: 'del-101-2',
         period: 'Fev–Mar/2026',
-        name: 'Adequação civil, cabeamento interno e mobiliário dos 5 polos',
+        name: 'Adequação civil, elétrica e cabeamento estruturado dos 5 polos',
         deadline: '31/03/2026',
         deadlineISO: '2026-03-31',
         completedAt: '28/03/2026',
         deliverableDoc: 'Termo de entrega civil (NF-e #1904 e #2041)',
-        fieldNote: 'Salas pintadas, climatizadas e com pontos de rede instalados.',
+        fieldNote: 'Salas pintadas, climatizadas e com pontos de rede lógica instalados nos 5 polos.',
         status: 'done'
       },
       {
         id: 'del-101-3',
         period: 'Abr–Mai/2026',
-        name: 'Compra, entrega e tombamento dos 100 computadores',
+        name: 'Compra, entrega e tombamento dos 50 computadores (10 por polo)',
         deadline: '25/05/2026',
         deadlineISO: '2026-05-25',
         completedAt: '22/05/2026',
-        deliverableDoc: 'NF-e #4180 e planilha de patrimônio (100 números de série)',
-        fieldNote: 'Lote integral recebido e etiquetado nos 5 espaços.',
+        deliverableDoc: 'NF-e #4180 / #4295 e planilha patrimonial (50 números de série)',
+        fieldNote: 'Lote integral recebido e etiquetado nos 5 espaços (10 estações completas por polo).',
         status: 'done'
       },
       {
         id: 'del-101-4',
         period: 'Jun–Jul/2026',
-        name: 'Montagem das bancadas finais e ativação da internet fibra',
+        name: 'Montagem das bancadas finais, 50 cadeiras ergonômicas e internet fibra',
         deadline: '15/07/2026',
         deadlineISO: '2026-07-15',
         completedAt: null,
-        deliverableDoc: 'Laudo de conectividade e aceite dos 5 laboratórios',
-        fieldNote: '4 dos 5 polos já conectados e em operação; 5º polo (Polo Norte) em conclusão até 15/07.',
+        deliverableDoc: 'Laudo de conectividade e aceite do mobiliário nos 5 laboratórios',
+        fieldNote: 'Mobiliário entregue nos polos 1 a 4 (em operação); 5º polo (Polo Norte) conclui fibra até 15/07.',
         status: 'in_progress'
       },
       {
         id: 'del-101-5',
         period: 'Jul–Ago/2026',
-        name: 'Capacitação dos monitores locais e abertura plena das turmas',
+        name: 'Kits multimídia (projetores e impressoras), capacitação de monitores e turmas',
         deadline: '25/08/2026',
         deadlineISO: '2026-08-25',
         completedAt: null,
-        deliverableDoc: 'Lista de presença dos monitores e grade horária publicada',
-        fieldNote: 'Seleção dos monitores concluída; treinamento inicia após ativação do 5º polo.',
+        deliverableDoc: 'NF-e dos kits multimídia, lista de presença dos monitores e grade horária',
+        fieldNote: 'Equipamentos audiovisuais e treinamento iniciam após ativação completa do 5º polo.',
         status: 'pending'
       }
     ],
@@ -85,27 +85,36 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-101-1a',
-            date: '18/02/2026',
+            date: '28/01/2026',
             supplier: 'MestreObra Engenharia Ltda',
-            description: 'Adequação elétrica, iluminação e pintura dos Polos 1 a 3',
-            docRef: 'NF-e #1904',
-            amount: 85000,
+            description: 'Mobilização civil e material elétrico inicial dos 5 polos',
+            docRef: 'NF-e #1790',
+            amount: 53000,
             status: 'approved'
           },
           {
             id: 'exp-101-1b',
-            date: '27/03/2026',
+            date: '20/02/2026',
             supplier: 'MestreObra Engenharia Ltda',
-            description: 'Reforma civil e bancadas sob medida dos Polos 4 e 5',
-            docRef: 'NF-e #2041',
-            amount: 55000,
+            description: 'Adequação elétrica, iluminação e pintura dos Polos 1 a 3',
+            docRef: 'NF-e #1904',
+            amount: 54000,
             status: 'approved'
           },
           {
             id: 'exp-101-1c',
+            date: '27/03/2026',
+            supplier: 'MestreObra Engenharia Ltda',
+            description: 'Reforma civil e bancadas dos Polos 4 e 5',
+            docRef: 'NF-e #2041',
+            amount: 33000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-1d',
             date: '19/06/2026',
             supplier: 'Marcenaria Sul Projetos',
-            description: 'Parcela final de montagem das bancadas do Polo Norte',
+            description: 'Ajuste final e montagem de bancadas do Polo Norte',
             docRef: 'PIX #8821 · aguarda NF-e',
             amount: 5000,
             status: 'pending_proof'
@@ -119,20 +128,29 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-101-2a',
-            date: '12/05/2026',
-            supplier: 'TecnoRede Distribuidora S.A.',
-            description: 'Aquisição dos 100 computadores desktop e monitores LED',
-            docRef: 'NF-e #4180',
-            amount: 115000,
+            date: '25/03/2026',
+            supplier: 'ConectaFibra Suprimentos',
+            description: 'Switches gerenciáveis, roteadores Wi-Fi e nobreaks (5 polos)',
+            docRef: 'NF-e #0912',
+            amount: 20000,
             status: 'approved'
           },
           {
             id: 'exp-101-2b',
-            date: '24/05/2026',
-            supplier: 'ConectaFibra Suprimentos',
-            description: 'Switches gerenciáveis, roteadores Wi-Fi e nobreaks',
-            docRef: 'NF-e #0912',
-            amount: 20000,
+            date: '24/04/2026',
+            supplier: 'TecnoRede Distribuidora S.A.',
+            description: '1º lote: 30 computadores desktop com monitor LED (Polos 1 a 3)',
+            docRef: 'NF-e #4180',
+            amount: 69000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-2c',
+            date: '22/05/2026',
+            supplier: 'TecnoRede Distribuidora S.A.',
+            description: '2º lote: 20 computadores desktop com monitor LED (Polos 4 e 5)',
+            docRef: 'NF-e #4295',
+            amount: 46000,
             status: 'approved'
           }
         ]
@@ -144,20 +162,29 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-101-3a',
-            date: '05/04/2026',
+            date: '15/01/2026',
             supplier: 'Ricardo Prado Engenharia · ME',
-            description: 'Coordenação técnica de obras e laudos elétricos (Jan–Mar)',
-            docRef: 'NFS-e #0311',
-            amount: 12500,
+            description: 'Vistorias iniciais e projeto elétrico dos 5 polos',
+            docRef: 'NFS-e #0274',
+            amount: 10000,
             status: 'approved'
           },
           {
             id: 'exp-101-3b',
-            date: '05/06/2026',
+            date: '30/03/2026',
             supplier: 'Ricardo Prado Engenharia · ME',
-            description: 'Configuração dos computadores e rede lógica (Abr–Mai)',
+            description: 'Fiscalização de reforma e emissão de ART (#884120)',
+            docRef: 'NFS-e #0311',
+            amount: 10000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-3c',
+            date: '26/05/2026',
+            supplier: 'Ricardo Prado Engenharia · ME',
+            description: 'Configuração lógica dos 50 computadores e rede local',
             docRef: 'NFS-e #0389',
-            amount: 12500,
+            amount: 5000,
             status: 'approved'
           }
         ]
@@ -191,9 +218,9 @@ export const INITIAL_PROJECTS = [
     curveS: [
       { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 15, actualFinancial: 14 },
       { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 28, actualFinancial: 26 },
-      { month: 'Mar', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 44, actualFinancial: 43 },
-      { month: 'Abr', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 56, actualFinancial: 55 },
-      { month: 'Mai', plannedPhysical: 60, actualPhysical: 60, plannedFinancial: 65, actualFinancial: 63 },
+      { month: 'Mar', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 44, actualFinancial: 40 },
+      { month: 'Abr', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 56, actualFinancial: 55.3 },
+      { month: 'Mai', plannedPhysical: 60, actualPhysical: 60, plannedFinancial: 68, actualFinancial: 68.4 },
       { month: 'Jun', plannedPhysical: 70, actualPhysical: 70, plannedFinancial: 72, actualFinancial: 70 },
       { month: 'Jul', plannedPhysical: 85, actualPhysical: null, plannedFinancial: 88, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 100, actualPhysical: null, plannedFinancial: 100, actualFinancial: null }
@@ -398,10 +425,10 @@ export const INITIAL_PROJECTS = [
       }
     ],
     curveS: [
-      { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 15, actualFinancial: 20 },
-      { month: 'Mar', plannedPhysical: 30, actualPhysical: 25, plannedFinancial: 30, actualFinancial: 42 },
-      { month: 'Abr', plannedPhysical: 40, actualPhysical: 30, plannedFinancial: 42, actualFinancial: 60 },
-      { month: 'Mai', plannedPhysical: 50, actualPhysical: 35, plannedFinancial: 50, actualFinancial: 75 },
+      { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 15, actualFinancial: 20.7 },
+      { month: 'Mar', plannedPhysical: 30, actualPhysical: 25, plannedFinancial: 30, actualFinancial: 43.9 },
+      { month: 'Abr', plannedPhysical: 40, actualPhysical: 30, plannedFinancial: 42, actualFinancial: 57.1 },
+      { month: 'Mai', plannedPhysical: 50, actualPhysical: 35, plannedFinancial: 50, actualFinancial: 79.6 },
       { month: 'Jun', plannedPhysical: 60, actualPhysical: 40, plannedFinancial: 60, actualFinancial: 85 },
       { month: 'Jul', plannedPhysical: 75, actualPhysical: null, plannedFinancial: 75, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 90, actualPhysical: null, plannedFinancial: 90, actualFinancial: null },
@@ -521,24 +548,42 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-103-1a',
-            date: '29/04/2026',
+            date: '20/02/2026',
             supplier: 'Ciclo Limpo Consultoria Ambiental',
-            description: 'Diagnósticos presenciais nas 30 empresas participantes',
-            docRef: 'NFS-e #0412',
-            amount: 45000,
+            description: 'Estruturação metodológica e triagem inicial do edital',
+            docRef: 'NFS-e #0355',
+            amount: 25000,
             status: 'approved'
           },
           {
             id: 'exp-103-1b',
-            date: '02/06/2026',
+            date: '25/03/2026',
             supplier: 'Ciclo Limpo Consultoria Ambiental',
-            description: 'Horas técnicas de implantação no 1º grupo (18 empresas)',
-            docRef: 'NFS-e #0468',
-            amount: 26000,
+            description: 'Levantamento ambiental inicial nas 30 empresas selecionadas',
+            docRef: 'NFS-e #0412',
+            amount: 20000,
             status: 'approved'
           },
           {
             id: 'exp-103-1c',
+            date: '29/04/2026',
+            supplier: 'Ciclo Limpo Consultoria Ambiental',
+            description: 'Entrega dos 30 diagnósticos e planos individuais de ação',
+            docRef: 'NFS-e #0449',
+            amount: 13000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-1d',
+            date: '02/06/2026',
+            supplier: 'Ciclo Limpo Consultoria Ambiental',
+            description: 'Horas técnicas de implantação no 1º grupo (18 empresas)',
+            docRef: 'NFS-e #0468',
+            amount: 13000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-1e',
             date: '26/06/2026',
             supplier: 'Ciclo Limpo Consultoria Ambiental',
             description: 'Adiantamento de visitas técnicas da 2ª quinzena de junho',
@@ -555,11 +600,20 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-103-2a',
+            date: '24/04/2026',
+            supplier: 'EcoLuz Eficiência & Coleta Ltda',
+            description: '1º lote: kits LED e coletores seletivos (8 negócios piloto)',
+            docRef: 'NF-e #2198',
+            amount: 20000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-2b',
             date: '20/05/2026',
             supplier: 'EcoLuz Eficiência & Coleta Ltda',
-            description: 'Kits de iluminação LED, arejadores e coletores seletivos (18 negócios)',
+            description: '2º lote: kits de iluminação LED e arejadores (10 negócios)',
             docRef: 'NF-e #2290',
-            amount: 45000,
+            amount: 25000,
             status: 'approved'
           }
         ]
@@ -571,15 +625,24 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-103-3a',
-            date: '15/05/2026',
+            date: '28/03/2026',
             supplier: 'Espaço Conecta Eventos Ltda',
-            description: 'Salas, sonorização e alimentação das 3 primeiras oficinas',
-            docRef: 'NFS-e #1105',
-            amount: 17000,
+            description: 'Oficina de abertura e nivelamento ESG com os 30 negócios',
+            docRef: 'NFS-e #1042',
+            amount: 8000,
             status: 'approved'
           },
           {
             id: 'exp-103-3b',
+            date: '15/05/2026',
+            supplier: 'Espaço Conecta Eventos Ltda',
+            description: 'Salas, sonorização e alimentação das oficinas temáticas 2 e 3',
+            docRef: 'NFS-e #1105',
+            amount: 9000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-3c',
             date: '12/06/2026',
             supplier: 'Centro de Convenções Serra Azul',
             description: 'Sinal de reserva do auditório para a Rodada Comercial de outubro',
@@ -588,7 +651,7 @@ export const INITIAL_PROJECTS = [
             status: 'approved'
           },
           {
-            id: 'exp-103-3c',
+            id: 'exp-103-3d',
             date: '25/06/2026',
             supplier: 'Gráfica Expressa Regional',
             description: 'Impressão de guias práticos e crachás da 4ª oficina',
@@ -600,10 +663,10 @@ export const INITIAL_PROJECTS = [
       }
     ],
     curveS: [
-      { month: 'Fev', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 12, actualFinancial: 15 },
-      { month: 'Mar', plannedPhysical: 25, actualPhysical: 25, plannedFinancial: 26, actualFinancial: 30 },
-      { month: 'Abr', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 38, actualFinancial: 45 },
-      { month: 'Mai', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 48, actualFinancial: 57 },
+      { month: 'Fev', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 12, actualFinancial: 11.4 },
+      { month: 'Mar', plannedPhysical: 25, actualPhysical: 25, plannedFinancial: 26, actualFinancial: 24.1 },
+      { month: 'Abr', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 38, actualFinancial: 39.1 },
+      { month: 'Mai', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 50, actualFinancial: 54.5 },
       { month: 'Jun', plannedPhysical: 60, actualPhysical: 60, plannedFinancial: 58, actualFinancial: 68.2 },
       { month: 'Jul', plannedPhysical: 75, actualPhysical: null, plannedFinancial: 72, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 85, actualPhysical: null, plannedFinancial: 84, actualFinancial: null },
@@ -712,18 +775,27 @@ export const INITIAL_PROJECTS = [
         expenses: [
           {
             id: 'exp-104-1a',
-            date: '18/04/2026',
+            date: '20/03/2026',
             supplier: 'InoxSul Cozinhas Profissionais',
-            description: 'Freezers horizontais, fogões industriais e bancadas em aço inox',
-            docRef: 'NF-e #2844',
-            amount: 55000,
+            description: 'Bancadas, pias e coifas em aço inox das 3 cozinhas',
+            docRef: 'NF-e #2610',
+            amount: 30000,
             status: 'approved'
           },
           {
             id: 'exp-104-1b',
+            date: '18/04/2026',
+            supplier: 'InoxSul Cozinhas Profissionais',
+            description: 'Freezers horizontais e fogões industriais das 3 cozinhas',
+            docRef: 'NF-e #2844',
+            amount: 25000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-104-1c',
             date: '14/05/2026',
             supplier: 'TermoFornos Equipamentos Ltda',
-            description: '3 fornos combinados instalados (pagamento retido até renovação de CND municipal)',
+            description: '3 fornos industriais a gás (6 esteiras) instalados — retido por CND',
             docRef: 'NF-e #3019 · CND pendente',
             amount: 18000,
             status: 'retained'
@@ -733,23 +805,32 @@ export const INITIAL_PROJECTS = [
       {
         id: 'rub-104-2',
         category: 'Reforma Civil e Instalação de Gás',
-        budgeted: 50000,
+        budgeted: 30000,
         expenses: [
           {
             id: 'exp-104-2a',
-            date: '10/03/2026',
+            date: '26/01/2026',
             supplier: 'Construtora Alvorada Serviços',
-            description: 'Adequação de revestimentos, exaustão e central GLP das 3 cozinhas',
+            description: 'Projetos sanitários, revisão GLP e preparo civil das 3 unidades',
+            docRef: 'NF-e #1045',
+            amount: 10000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-104-2b',
+            date: '24/02/2026',
+            supplier: 'Construtora Alvorada Serviços',
+            description: 'Revestimentos laváveis, exaustão e central GLP concluídos',
             docRef: 'NF-e #1192',
-            amount: 25000,
+            amount: 15000,
             status: 'approved'
           }
         ]
       },
       {
         id: 'rub-104-3',
-        category: 'Capacitação Sanitária e Utensílios',
-        budgeted: 25000,
+        category: 'Capacitação, Utensílios e Insumos do 2º Turno',
+        budgeted: 45000,
         expenses: [
           {
             id: 'exp-104-3a',
@@ -764,11 +845,11 @@ export const INITIAL_PROJECTS = [
       }
     ],
     curveS: [
-      { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 10, actualFinancial: 10 },
-      { month: 'Fev', plannedPhysical: 25, actualPhysical: 25, plannedFinancial: 24, actualFinancial: 22 },
-      { month: 'Mar', plannedPhysical: 40, actualPhysical: 40, plannedFinancial: 42, actualFinancial: 38 },
-      { month: 'Abr', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 54, actualFinancial: 46 },
-      { month: 'Mai', plannedPhysical: 65, actualPhysical: 65, plannedFinancial: 64, actualFinancial: 53 },
+      { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 10, actualFinancial: 6.7 },
+      { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 22, actualFinancial: 16.7 },
+      { month: 'Mar', plannedPhysical: 35, actualPhysical: 35, plannedFinancial: 38, actualFinancial: 36.7 },
+      { month: 'Abr', plannedPhysical: 50, actualPhysical: 50, plannedFinancial: 54, actualFinancial: 53.3 },
+      { month: 'Mai', plannedPhysical: 65, actualPhysical: 65, plannedFinancial: 64, actualFinancial: 53.3 },
       { month: 'Jun', plannedPhysical: 75, actualPhysical: 75, plannedFinancial: 72, actualFinancial: 60 },
       { month: 'Jul', plannedPhysical: 90, actualPhysical: null, plannedFinancial: 88, actualFinancial: null },
       { month: 'Ago', plannedPhysical: 100, actualPhysical: null, plannedFinancial: 100, actualFinancial: null }
@@ -867,7 +948,7 @@ export const INITIAL_FOLLOW_UPS = [
         id: 'act-102-3',
         originGap: 'Cronograma',
         what: 'Concluir pontos de água e irrigação dos terrenos 4 a 6 (atrasado desde 30/04)',
-        who: 'Rafael Nunes',
+        who: 'Juliana Duarte',
         when: '2026-07-12',
         how: 'Executar frentes em mutirão comunitário imediatamente após autorização do remanejamento.',
         status: 'Em Andamento'
@@ -884,11 +965,11 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-101-1',
-        title: 'Conferir tombamento patrimonial dos 100 computadores nos 5 polos',
+        title: 'Conferir tombamento patrimonial dos 50 computadores nos 5 polos',
         checked: true,
         responsible: 'Carlos Mendonça',
         deadline: '24/06/2026',
-        note: 'NF-e #4180 e planilha com 100 números de série validados.'
+        note: 'NF-e #4180 e #4295 e planilha com 50 números de série validados (10 por polo).'
       },
       {
         id: 'i-101-2',
@@ -911,17 +992,17 @@ export const INITIAL_FOLLOW_UPS = [
       {
         id: 'act-101-1',
         originGap: 'Cronograma',
-        what: 'Manter fornecedor secundário de internet via rádio pré-aprovado para o Polo Norte',
+        what: 'Pré-aprovar fornecedor secundário de internet via rádio para o Polo Norte',
         who: 'Carlos Mendonça',
-        when: '2026-07-10',
-        how: 'Acionar contingência automaticamente caso a operadora local não instale a fibra até 10/07.',
+        when: '2026-06-24',
+        how: 'Proposta técnica pré-aprovada em ata para acionamento imediato caso a fibra passe de 10/07.',
         status: 'Concluída'
       },
       {
         id: 'act-101-2',
         originGap: 'Notas Fiscais',
         what: 'Baixar R$ 7 mil sem NF (Marcenaria Sul · PIX #8821 e SeguraMais · Boleto #4410)',
-        who: 'Patrícia Lima',
+        who: 'Carlos Mendonça',
         when: '2026-07-08',
         how: 'Conferir emissão da NF-e de montagem e endosso formal da apólice para arquivar no dossiê.',
         status: 'Em Andamento'
@@ -1035,8 +1116,8 @@ export const INITIAL_EVIDENCES = [
     id: 'ev-1',
     projectId: 'prog-101',
     category: 'Financeiro',
-    title: 'Nota fiscal e planilha patrimonial dos 100 computadores (5 polos)',
-    referenceCode: 'NF-e #4180',
+    title: 'Notas fiscais e planilha patrimonial dos 50 computadores (10 por polo)',
+    referenceCode: 'NF-e #4180 / #4295',
     date: '22/05/2026',
     responsible: 'Carlos Mendonça'
   },

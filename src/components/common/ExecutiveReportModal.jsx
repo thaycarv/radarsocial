@@ -53,7 +53,7 @@ export const ExecutiveReportModal = () => {
             </div>
             <div className="text-right text-xs">
               <p className="font-bold text-slate-900">Referência: {cutoff.formattedDate}</p>
-              <p className="text-slate-500">Emitido em {new Date().toLocaleDateString('pt-BR')}</p>
+              <p className="text-slate-500">Fechamento {cutoff.shortRef} · RadarSocial</p>
             </div>
           </div>
 
@@ -154,8 +154,8 @@ export const ExecutiveReportModal = () => {
                     outcome.unit === 'R$'
                       ? formatCurrency(v)
                       : outcome.unit === '%'
-                      ? `${v}%`
-                      : `${v} ${outcome.unit}`;
+                      ? `${Number(v || 0)}%`
+                      : `${Number(v || 0).toLocaleString('pt-BR')} ${outcome.unit}`;
                   return (
                     <tr key={p.id}>
                       <td className="py-1.5 px-2.5 font-semibold">{p.code}</td>

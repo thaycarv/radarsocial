@@ -204,7 +204,7 @@ export const FollowUpChecklist = ({ onNavigate }) => {
 
         {/* Coluna Direita: Plano de Ação (Providências) */}
         <div className="lg:col-span-7">
-          <ActionPlan5W2H followUp={activeFollowUp} project={p} />
+          <ActionPlan5W2H key={p.id} followUp={activeFollowUp} project={p} />
         </div>
       </div>
     </div>
