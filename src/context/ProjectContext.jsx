@@ -12,10 +12,10 @@ import {
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v9_projects',
-  followUps: 'radarsocial_v9_followups',
-  evidences: 'radarsocial_v9_evidences',
-  theme: 'radarsocial_v9_theme'
+  projects: 'radarsocial_v10_projects',
+  followUps: 'radarsocial_v10_followups',
+  evidences: 'radarsocial_v10_evidences',
+  theme: 'radarsocial_v10_theme'
 };
 
 // Purge all legacy storage keys to guarantee no cached institutional names linger in client browsers
@@ -50,8 +50,8 @@ if (typeof window !== 'undefined' && window.localStorage) {
 const sanitizeFictitiousNames = (data) => {
   if (!data) return data;
   let str = JSON.stringify(data);
-  str = str.replace(/Fundo Socioambiental BNDES/gi, 'Fundo Socioambiental Horizonte');
-  str = str.replace(/BNDES/gi, 'Fundo Horizonte');
+  str = str.replace(/Fundo Socioambiental (BNDES|Horizonte)/gi, 'Fundo de Inovação e Inclusão Digital');
+  str = str.replace(/BNDES/gi, 'Fundo de Inovação Digital');
   str = str.replace(/ACIF\s*&\s*Sebrae/gi, 'Aliança Empresarial Regional');
   str = str.replace(/ACIF/gi, 'Aliança Empresarial');
   str = str.replace(/Sebrae/gi, 'Rede Regional');

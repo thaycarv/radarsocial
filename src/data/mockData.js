@@ -13,7 +13,7 @@ export const INITIAL_PROJECTS = [
     name: 'Laboratórios Comunitários de Inclusão Digital',
     strategicAxis: 'Inclusão Digital',
     manager: 'Carlos Mendonça',
-    funder: 'Fundo Socioambiental Horizonte',
+    funder: 'Fundo de Inovação e Inclusão Digital',
     operationalHeadline: 'Salas reformadas e mobiliadas; finalizando instalação dos computadores',
     startDate: '10/01/2026',
     endDate: '31/08/2026',
