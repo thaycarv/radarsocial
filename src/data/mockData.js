@@ -23,45 +23,170 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-101-1',
+        period: 'Jan–Fev/2026',
         name: 'Vistoria técnica e projeto elétrico dos 5 polos',
         deadline: '15/02/2026',
         deadlineISO: '2026-02-15',
+        completedAt: '12/02/2026',
+        deliverableDoc: 'ART #884120 e plantas elétricas aprovadas',
+        fieldNote: 'Quadro de carga dimensionado para 20 computadores por polo.',
         status: 'done'
       },
       {
         id: 'del-101-2',
-        name: 'Adequação civil, rede lógica e mobiliário',
+        period: 'Fev–Mar/2026',
+        name: 'Adequação civil, cabeamento interno e mobiliário dos 5 polos',
         deadline: '31/03/2026',
         deadlineISO: '2026-03-31',
+        completedAt: '28/03/2026',
+        deliverableDoc: 'Termo de entrega civil (NF-e #1904 e #2041)',
+        fieldNote: 'Salas pintadas, climatizadas e com pontos de rede instalados.',
         status: 'done'
       },
       {
         id: 'del-101-3',
-        name: 'Compra e entrega dos 100 computadores',
+        period: 'Abr–Mai/2026',
+        name: 'Compra, entrega e tombamento dos 100 computadores',
         deadline: '25/05/2026',
         deadlineISO: '2026-05-25',
+        completedAt: '22/05/2026',
+        deliverableDoc: 'NF-e #4180 e planilha de patrimônio (100 números de série)',
+        fieldNote: 'Lote integral recebido e etiquetado nos 5 espaços.',
         status: 'done'
       },
       {
         id: 'del-101-4',
-        name: 'Montagem das bancadas e ativação de internet fibra',
+        period: 'Jun–Jul/2026',
+        name: 'Montagem das bancadas finais e ativação da internet fibra',
         deadline: '15/07/2026',
         deadlineISO: '2026-07-15',
+        completedAt: null,
+        deliverableDoc: 'Laudo de conectividade e aceite dos 5 laboratórios',
+        fieldNote: '4 dos 5 polos já conectados e em operação; 5º polo (Polo Norte) em conclusão até 15/07.',
         status: 'in_progress'
       },
       {
         id: 'del-101-5',
-        name: 'Abertura dos 5 polos e treinamento dos monitores',
+        period: 'Jul–Ago/2026',
+        name: 'Capacitação dos monitores locais e abertura plena das turmas',
         deadline: '25/08/2026',
         deadlineISO: '2026-08-25',
+        completedAt: null,
+        deliverableDoc: 'Lista de presença dos monitores e grade horária publicada',
+        fieldNote: 'Seleção dos monitores concluída; treinamento inicia após ativação do 5º polo.',
         status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-101-1', category: 'Adequação Civil e Mobiliário', budgeted: 180000, executed: 145000, approvedProofs: 140000 },
-      { id: 'rub-101-2', category: 'Equipamentos de Informática e Rede', budgeted: 190000, executed: 135000, approvedProofs: 135000 },
-      { id: 'rub-101-3', category: 'Equipe Técnica de Implantação', budgeted: 50000, executed: 25000, approvedProofs: 25000 },
-      { id: 'rub-101-4', category: 'Logística e Seguro Patrimonial', budgeted: 30000, executed: 10000, approvedProofs: 8000 }
+      {
+        id: 'rub-101-1',
+        category: 'Adequação Civil e Mobiliário',
+        budgeted: 180000,
+        expenses: [
+          {
+            id: 'exp-101-1a',
+            date: '18/02/2026',
+            supplier: 'MestreObra Engenharia Ltda',
+            description: 'Adequação elétrica, iluminação e pintura dos Polos 1 a 3',
+            docRef: 'NF-e #1904',
+            amount: 85000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-1b',
+            date: '27/03/2026',
+            supplier: 'MestreObra Engenharia Ltda',
+            description: 'Reforma civil e bancadas sob medida dos Polos 4 e 5',
+            docRef: 'NF-e #2041',
+            amount: 55000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-1c',
+            date: '19/06/2026',
+            supplier: 'Marcenaria Sul Projetos',
+            description: 'Parcela final de montagem das bancadas do Polo Norte',
+            docRef: 'PIX #8821 · aguarda NF-e',
+            amount: 5000,
+            status: 'pending_proof'
+          }
+        ]
+      },
+      {
+        id: 'rub-101-2',
+        category: 'Equipamentos de Informática e Rede',
+        budgeted: 190000,
+        expenses: [
+          {
+            id: 'exp-101-2a',
+            date: '12/05/2026',
+            supplier: 'TecnoRede Distribuidora S.A.',
+            description: 'Aquisição dos 100 computadores desktop e monitores LED',
+            docRef: 'NF-e #4180',
+            amount: 115000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-2b',
+            date: '24/05/2026',
+            supplier: 'ConectaFibra Suprimentos',
+            description: 'Switches gerenciáveis, roteadores Wi-Fi e nobreaks',
+            docRef: 'NF-e #0912',
+            amount: 20000,
+            status: 'approved'
+          }
+        ]
+      },
+      {
+        id: 'rub-101-3',
+        category: 'Equipe Técnica de Implantação',
+        budgeted: 50000,
+        expenses: [
+          {
+            id: 'exp-101-3a',
+            date: '05/04/2026',
+            supplier: 'Ricardo Prado Engenharia · ME',
+            description: 'Coordenação técnica de obras e laudos elétricos (Jan–Mar)',
+            docRef: 'NFS-e #0311',
+            amount: 12500,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-3b',
+            date: '05/06/2026',
+            supplier: 'Ricardo Prado Engenharia · ME',
+            description: 'Configuração dos computadores e rede lógica (Abr–Mai)',
+            docRef: 'NFS-e #0389',
+            amount: 12500,
+            status: 'approved'
+          }
+        ]
+      },
+      {
+        id: 'rub-101-4',
+        category: 'Logística e Seguro Patrimonial',
+        budgeted: 30000,
+        expenses: [
+          {
+            id: 'exp-101-4a',
+            date: '22/05/2026',
+            supplier: 'TransRápido Cargas Urbanas',
+            description: 'Frete dedicado com seguro de transporte para os 5 polos',
+            docRef: 'CT-e #7740',
+            amount: 8000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-101-4b',
+            date: '24/06/2026',
+            supplier: 'SeguraMais Corretora Patrimonial',
+            description: 'Endosso da apólice anual contra furto para o Polo Norte',
+            docRef: 'Boleto #4410 · aguarda apólice/NF',
+            amount: 2000,
+            status: 'pending_proof'
+          }
+        ]
+      }
     ],
     curveS: [
       { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 15, actualFinancial: 14 },
@@ -101,7 +226,7 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-101-1',
-        description: 'Atraso da operadora local na instalação de fibra do Polo Norte',
+        description: 'Atraso da operadora local na ativação de fibra óptica do Polo Norte',
         impact: 'Médio',
         mitigation: 'Acionar fornecedor secundário de internet via rádio caso passe de 10/07'
       }
@@ -124,45 +249,152 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-102-1',
-        name: 'Mapeamento do solo e cercamento dos primeiros 3 terrenos',
+        period: 'Fev/2026',
+        name: 'Análise de solo, limpeza e cercamento dos 6 terrenos',
         deadline: '28/02/2026',
         deadlineISO: '2026-02-28',
+        completedAt: '26/02/2026',
+        deliverableDoc: 'Laudo agronômico LAUDO #SOLO-06 e NF-e #1120',
+        fieldNote: 'Todos os 6 terrenos delimitados e cercados com tela galvanizada.',
         status: 'done'
       },
       {
         id: 'del-102-2',
-        name: 'Instalação da rede de irrigação e pontos de água',
+        period: 'Mar–Abr/2026',
+        name: 'Instalação da rede de irrigação e pontos de água nos 6 terrenos',
         deadline: '30/04/2026',
         deadlineISO: '2026-04-30',
+        completedAt: null,
+        deliverableDoc: 'Termo de medição hidráulica por terreno',
+        fieldNote: '3 de 6 terrenos concluídos; os outros 3 atrasaram por sobrecusto em conexões e hidrômetros.',
         status: 'in_progress'
       },
       {
         id: 'del-102-3',
-        name: 'Preparo dos canteiros e adubagem orgânica (Polos 1 a 3)',
+        period: 'Mai–Jun/2026',
+        name: 'Preparo dos canteiros, adubagem orgânica e plantio inicial',
         deadline: '15/06/2026',
         deadlineISO: '2026-06-15',
+        completedAt: null,
+        deliverableDoc: 'Registro fotográfico e recibo de distribuição de mudas',
+        fieldNote: '3 hortas já em produção (48 famílias); expansão para os outros 3 terrenos aguarda revisão de verba.',
         status: 'in_progress'
       },
       {
         id: 'del-102-4',
-        name: 'Montagem das estufas nos 3 terrenos restantes',
+        period: 'Jul–Ago/2026',
+        name: 'Montagem das estufas de mudas e pátios de compostagem',
         deadline: '15/08/2026',
         deadlineISO: '2026-08-15',
+        completedAt: null,
+        deliverableDoc: 'Termo de aceite de estrutura e nota fiscal de montagem',
+        fieldNote: 'Cotação unificada em renegociação para caber no saldo restante do projeto.',
         status: 'pending'
       },
       {
         id: 'del-102-5',
-        name: 'Oficinas de cultivo orgânico e colheita para 120 famílias',
+        period: 'Ago–Set/2026',
+        name: 'Oficinas de cultivo orgânico e manejo para as 120 famílias',
         deadline: '30/09/2026',
         deadlineISO: '2026-09-30',
+        completedAt: null,
+        deliverableDoc: 'Listas de presença assinadas e certificados de participação',
+        fieldNote: 'Cronograma pedagógico pronto para início após entrega dos novos canteiros.',
         status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-102-1', category: 'Preparo do Solo, Adubo e Cercamento', budgeted: 120000, executed: 110000, approvedProofs: 95000 },
-      { id: 'rub-102-2', category: 'Sistema de Irrigação e Estufas', budgeted: 80000, executed: 78000, approvedProofs: 65000 },
-      { id: 'rub-102-3', category: 'Mudas Orgânicas e Ferramentas', budgeted: 50000, executed: 35000, approvedProofs: 35000 },
-      { id: 'rub-102-4', category: 'Oficinas Técnicas e Mobilização', budgeted: 30000, executed: 15000, approvedProofs: 15000 }
+      {
+        id: 'rub-102-1',
+        category: 'Preparo do Solo, Adubo e Cercamento',
+        budgeted: 120000,
+        expenses: [
+          {
+            id: 'exp-102-1a',
+            date: '25/02/2026',
+            supplier: 'AgroSolo Terraplenagem e Cercas',
+            description: 'Limpeza mecanizada e cercamento completo dos 6 terrenos',
+            docRef: 'NF-e #1120',
+            amount: 58000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-102-1b',
+            date: '18/04/2026',
+            supplier: 'BioHumus Composto Orgânico Ltda',
+            description: 'Fornecimento de 40 t de terra vegetal, composto e calcário',
+            docRef: 'NF-e #0542',
+            amount: 37000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-102-1c',
+            date: '22/05/2026',
+            supplier: 'Cooperativa de Transporte Rural Sul',
+            description: 'Adiantamento de fretes de terra e adubo entre os terrenos',
+            docRef: 'TED #5591 · faltam recibos fiscais',
+            amount: 15000,
+            status: 'pending_proof'
+          }
+        ]
+      },
+      {
+        id: 'rub-102-2',
+        category: 'Sistema de Irrigação e Estufas',
+        budgeted: 80000,
+        expenses: [
+          {
+            id: 'exp-102-2a',
+            date: '28/03/2026',
+            supplier: 'HidroCampo Irrigação Ltda',
+            description: 'Reservatórios, bombas e linhas de gotejamento (Terrenos 1 a 3)',
+            docRef: 'NF-e #3310',
+            amount: 65000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-102-2b',
+            date: '29/05/2026',
+            supplier: 'HidroCampo Irrigação Ltda',
+            description: 'Adiantamento para registros, valas e conexões extras de rede',
+            docRef: 'PIX #9104 · aguarda NF de medição',
+            amount: 13000,
+            status: 'pending_proof'
+          }
+        ]
+      },
+      {
+        id: 'rub-102-3',
+        category: 'Mudas Orgânicas e Ferramentas',
+        budgeted: 50000,
+        expenses: [
+          {
+            id: 'exp-102-3a',
+            date: '04/05/2026',
+            supplier: 'Viveiro VerdeVida Orgânicos',
+            description: '1º lote de mudas certificadas, sementes e kits de ferramentas',
+            docRef: 'NF-e #0887',
+            amount: 35000,
+            status: 'approved'
+          }
+        ]
+      },
+      {
+        id: 'rub-102-4',
+        category: 'Oficinas Técnicas e Mobilização',
+        budgeted: 30000,
+        expenses: [
+          {
+            id: 'exp-102-4a',
+            date: '10/06/2026',
+            supplier: 'Raízes Assessoria Agronômica S/S',
+            description: 'Assistência técnica de plantio inicial e mobilização das famílias',
+            docRef: 'NFS-e #0214',
+            amount: 15000,
+            status: 'approved'
+          }
+        ]
+      }
     ],
     curveS: [
       { month: 'Fev', plannedPhysical: 20, actualPhysical: 20, plannedFinancial: 15, actualFinancial: 20 },
@@ -202,9 +434,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-102-1',
-        description: 'Saldo curto para estufas (restam R$ 42 mil para finalizar os 3 últimos terrenos)',
+        description: 'Rubrica de irrigação e estufas com apenas R$ 2 mil livres (saldo global de R$ 42 mil)',
         impact: 'Alto',
-        mitigation: 'Unificar compras de irrigação e pausar adiantamentos sem nota fiscal'
+        mitigation: 'Solicitar remanejamento entre rubricas ao financiador e suspender novos adiantamentos sem NF'
       }
     ]
   },
@@ -225,44 +457,145 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-103-1',
-        name: 'Edital e seleção dos 30 pequenos negócios',
+        period: 'Fev–Mar/2026',
+        name: 'Edital público e seleção dos 30 pequenos negócios',
         deadline: '15/03/2026',
         deadlineISO: '2026-03-15',
+        completedAt: '13/03/2026',
+        deliverableDoc: 'Ata da comissão avaliadora e 30 termos de adesão',
+        fieldNote: 'Comércios, padarias e pequenas oficinas selecionados na região.',
         status: 'done'
       },
       {
         id: 'del-103-2',
+        period: 'Mar–Abr/2026',
         name: 'Diagnóstico ambiental individual das 30 empresas',
         deadline: '30/04/2026',
         deadlineISO: '2026-04-30',
+        completedAt: '28/04/2026',
+        deliverableDoc: '30 diagnósticos de consumo de água, energia e resíduos (NFS-e #0412)',
+        fieldNote: 'Metas individuais de redução pactuadas com cada proprietário.',
         status: 'done'
       },
       {
         id: 'del-103-3',
-        name: 'Oficinas coletivas de energia e gestão de resíduos',
+        period: 'Mai–Jul/2026',
+        name: 'Oficinas coletivas de eficiência energética e gestão de resíduos',
         deadline: '10/07/2026',
         deadlineISO: '2026-07-10',
+        completedAt: null,
+        deliverableDoc: 'Listas de presença e cadernos práticos aplicados',
+        fieldNote: '3 de 4 encontros realizados; oficina de encerramento confirmada para 08/07.',
         status: 'in_progress'
       },
       {
         id: 'del-103-4',
-        name: 'Consultorias técnicas de adequação nos negócios',
+        period: 'Mai–Ago/2026',
+        name: 'Consultorias presenciais de adequação ambiental nos negócios',
         deadline: '31/08/2026',
         deadlineISO: '2026-08-31',
+        completedAt: null,
+        deliverableDoc: 'Relatórios técnicos assinados (REL #ESG-18)',
+        fieldNote: '18 empresas já implantaram melhorias; 12 seguem em visitas técnicas.',
         status: 'in_progress'
       },
       {
         id: 'del-103-5',
-        name: 'Rodada comercial com empresas âncoras da região',
+        period: 'Set–Out/2026',
+        name: 'Rodada comercial com empresas compradoras da região',
         deadline: '15/10/2026',
         deadlineISO: '2026-10-15',
+        completedAt: null,
+        deliverableDoc: 'Catálogo de fornecedores locais e registro de negócios gerados',
+        fieldNote: 'Auditório já reservado mediante pagamento de sinal contratual.',
         status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-103-1', category: 'Consultorias Técnicas em Gestão e ESG', budgeted: 110000, executed: 77000, approvedProofs: 71000 },
-      { id: 'rub-103-2', category: 'Apoio para Adequações Ambientais', budgeted: 70000, executed: 45000, approvedProofs: 45000 },
-      { id: 'rub-103-3', category: 'Oficinas e Rodada de Negócios', budgeted: 40000, executed: 28000, approvedProofs: 25000 }
+      {
+        id: 'rub-103-1',
+        category: 'Consultorias Técnicas em Gestão e ESG',
+        budgeted: 110000,
+        expenses: [
+          {
+            id: 'exp-103-1a',
+            date: '29/04/2026',
+            supplier: 'Ciclo Limpo Consultoria Ambiental',
+            description: 'Diagnósticos presenciais nas 30 empresas participantes',
+            docRef: 'NFS-e #0412',
+            amount: 45000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-1b',
+            date: '02/06/2026',
+            supplier: 'Ciclo Limpo Consultoria Ambiental',
+            description: 'Horas técnicas de implantação no 1º grupo (18 empresas)',
+            docRef: 'NFS-e #0468',
+            amount: 26000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-1c',
+            date: '26/06/2026',
+            supplier: 'Ciclo Limpo Consultoria Ambiental',
+            description: 'Adiantamento de visitas técnicas da 2ª quinzena de junho',
+            docRef: 'TED #6320 · aguarda NFS-e mensal',
+            amount: 6000,
+            status: 'pending_proof'
+          }
+        ]
+      },
+      {
+        id: 'rub-103-2',
+        category: 'Apoio para Adequações Ambientais',
+        budgeted: 70000,
+        expenses: [
+          {
+            id: 'exp-103-2a',
+            date: '20/05/2026',
+            supplier: 'EcoLuz Eficiência & Coleta Ltda',
+            description: 'Kits de iluminação LED, arejadores e coletores seletivos (18 negócios)',
+            docRef: 'NF-e #2290',
+            amount: 45000,
+            status: 'approved'
+          }
+        ]
+      },
+      {
+        id: 'rub-103-3',
+        category: 'Oficinas e Rodada de Negócios',
+        budgeted: 40000,
+        expenses: [
+          {
+            id: 'exp-103-3a',
+            date: '15/05/2026',
+            supplier: 'Espaço Conecta Eventos Ltda',
+            description: 'Salas, sonorização e alimentação das 3 primeiras oficinas',
+            docRef: 'NFS-e #1105',
+            amount: 17000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-3b',
+            date: '12/06/2026',
+            supplier: 'Centro de Convenções Serra Azul',
+            description: 'Sinal de reserva do auditório para a Rodada Comercial de outubro',
+            docRef: 'NFS-e #0890',
+            amount: 8000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-103-3c',
+            date: '25/06/2026',
+            supplier: 'Gráfica Expressa Regional',
+            description: 'Impressão de guias práticos e crachás da 4ª oficina',
+            docRef: 'PIX #7712 · aguarda NF-e',
+            amount: 3000,
+            status: 'pending_proof'
+          }
+        ]
+      }
     ],
     curveS: [
       { month: 'Fev', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 12, actualFinancial: 15 },
@@ -303,9 +636,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-103-1',
-        description: 'Sinal de reserva do espaço da Rodada elevou o gasto antes da realização do evento',
+        description: 'Reserva antecipada do espaço da Rodada adiantou o desembolso frente ao físico',
         impact: 'Baixo',
-        mitigation: 'Concluir ciclo de consultorias em agosto para equilibrar entrega e desembolso'
+        mitigation: 'Concluir ciclo de consultorias em agosto para equilibrar avanço físico e financeiro'
       }
     ]
   },
@@ -326,37 +659,107 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-104-1',
-        name: 'Reforma civil e adequação sanitária das 3 cozinhas',
+        period: 'Jan–Mar/2026',
+        name: 'Reforma civil, exaustão e adequação sanitária das 3 cozinhas',
         deadline: '15/03/2026',
         deadlineISO: '2026-03-15',
+        completedAt: '12/03/2026',
+        deliverableDoc: 'Termo de vistoria civil e laudo de GLP (NF-e #1192)',
+        fieldNote: 'Piso lavável, telas milimétricas e exaustores instalados nas 3 unidades.',
         status: 'done'
       },
       {
         id: 'del-104-2',
-        name: 'Instalação dos fornos industriais e bancadas inox',
+        period: 'Abr–Mai/2026',
+        name: 'Entrega e instalação de fornos industriais, freezers e bancadas inox',
         deadline: '15/05/2026',
         deadlineISO: '2026-05-15',
+        completedAt: '14/05/2026',
+        deliverableDoc: 'Aceite técnico (NF-e #2844 paga · NF-e #3019 retida por CND)',
+        fieldNote: 'Equipamentos instalados e operando; liquidação dos fornos retida até CND fiscal.',
         status: 'done'
       },
       {
         id: 'del-104-3',
-        name: 'Capacitação em boas práticas e início da oferta de refeições',
+        period: 'Mai–Jun/2026',
+        name: 'Capacitação sanitária (RDC 216) e operação regular do 1º turno',
         deadline: '28/06/2026',
         deadlineISO: '2026-06-28',
+        completedAt: '26/06/2026',
+        deliverableDoc: 'Alvará sanitário ALV #COZ-2026 e controle diário de refeições',
+        fieldNote: 'Equipes habilitadas; 3.600 refeições/mês servidas regularmente em junho.',
         status: 'done'
       },
       {
         id: 'del-104-4',
-        name: 'Controle nutricional e distribuição diária de refeições',
+        period: 'Jul–Ago/2026',
+        name: 'Abertura do turno complementar e avaliação nutricional das famílias',
         deadline: '20/08/2026',
         deadlineISO: '2026-08-20',
+        completedAt: null,
+        deliverableDoc: 'Relatório nutricional consolidado (meta de 4.500 refeições/mês)',
+        fieldNote: 'Início do turno complementar agendado para a segunda quinzena de julho.',
         status: 'pending'
       }
     ],
     budgetBreakdown: [
-      { id: 'rub-104-1', category: 'Fornos, Freezers e Bancadas Inox', budgeted: 75000, executed: 55000, approvedProofs: 55000 },
-      { id: 'rub-104-2', category: 'Reforma Civil e Instalação de Gás', budgeted: 50000, executed: 25000, approvedProofs: 25000 },
-      { id: 'rub-104-3', category: 'Capacitação Sanitária e Utensílios', budgeted: 25000, executed: 10000, approvedProofs: 10000 }
+      {
+        id: 'rub-104-1',
+        category: 'Fornos, Freezers e Bancadas Inox',
+        budgeted: 75000,
+        expenses: [
+          {
+            id: 'exp-104-1a',
+            date: '18/04/2026',
+            supplier: 'InoxSul Cozinhas Profissionais',
+            description: 'Freezers horizontais, fogões industriais e bancadas em aço inox',
+            docRef: 'NF-e #2844',
+            amount: 55000,
+            status: 'approved'
+          },
+          {
+            id: 'exp-104-1b',
+            date: '14/05/2026',
+            supplier: 'TermoFornos Equipamentos Ltda',
+            description: '3 fornos combinados instalados (pagamento retido até renovação de CND municipal)',
+            docRef: 'NF-e #3019 · CND pendente',
+            amount: 18000,
+            status: 'retained'
+          }
+        ]
+      },
+      {
+        id: 'rub-104-2',
+        category: 'Reforma Civil e Instalação de Gás',
+        budgeted: 50000,
+        expenses: [
+          {
+            id: 'exp-104-2a',
+            date: '10/03/2026',
+            supplier: 'Construtora Alvorada Serviços',
+            description: 'Adequação de revestimentos, exaustão e central GLP das 3 cozinhas',
+            docRef: 'NF-e #1192',
+            amount: 25000,
+            status: 'approved'
+          }
+        ]
+      },
+      {
+        id: 'rub-104-3',
+        category: 'Capacitação Sanitária e Utensílios',
+        budgeted: 25000,
+        expenses: [
+          {
+            id: 'exp-104-3a',
+            date: '12/06/2026',
+            supplier: 'Instituto Nutrir & Cuidar',
+            description: 'Capacitação em boas práticas (RDC 216), EPIs e caixas térmicas',
+            docRef: 'NFS-e #0641',
+            amount: 10000,
+            status: 'approved'
+          }
+        ]
+      }
     ],
     curveS: [
       { month: 'Jan', plannedPhysical: 10, actualPhysical: 10, plannedFinancial: 10, actualFinancial: 10 },
@@ -396,9 +799,9 @@ export const INITIAL_PROJECTS = [
     risks: [
       {
         id: 'r-104-1',
-        description: 'Pagamento de R$ 18 mil dos fornos industriais retido por certidão vencida do fornecedor',
+        description: 'Pagamento de R$ 18 mil (NF-e #3019 · fornos industriais) retido por certidão vencida do fornecedor',
         impact: 'Médio',
-        mitigation: 'Notificar fornecedor para regularizar certidão fiscal até 10/07'
+        mitigation: 'Manter bloqueio preventivo na tesouraria e cobrar CND municipal atualizada até 10/07'
       }
     ]
   }
@@ -415,46 +818,46 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-102-1',
-        title: 'Revisar custos de irrigação e pausar adiantamentos de materiais',
+        title: 'Suspender novos adiantamentos de irrigação e revisar saldo por rubrica',
         checked: true,
         responsible: 'Thayâne Carvalho',
         deadline: '26/06/2026',
-        note: '85% da verba já consumida; novos adiantamentos suspensos até alinhamento.'
+        note: '85% do orçamento já utilizado; rubrica de irrigação/estufas restou com R$ 2 mil livres.'
       },
       {
         id: 'i-102-2',
-        title: 'Cobrar R$ 28.000 em recibos de frete de terra e adubo pendentes de maio',
+        title: 'Cobrar R$ 28.000 em comprovantes pendentes (fretes de solo e medição hidráulica)',
         checked: false,
         responsible: 'Juliana Duarte',
         deadline: '05/07/2026',
-        note: 'Faltam 12 recibos de frete e notas de insumos orgânicos.'
+        note: 'R$ 15 mil de fretes rurais (TED #5591) e R$ 13 mil da HidroCampo (PIX #9104).'
       },
       {
         id: 'i-102-3',
-        title: 'Concluir cercamento dos terrenos restantes (atrasado desde 30/04)',
+        title: 'Concluir rede de irrigação dos 3 terrenos restantes (atrasada desde 30/04)',
         checked: false,
         responsible: 'Rafael Nunes',
         deadline: '12/07/2026',
-        note: 'Mutirão com a comunidade agendado para o início de julho.'
+        note: 'Ligação dos pontos de água agendada após formalização do remanejamento.'
       }
     ],
     actionPlans: [
       {
         id: 'act-102-1',
         originGap: 'Orçamento',
-        what: 'Readequar compra de estufas e mudas ao saldo restante de R$ 42 mil',
+        what: 'Formalizar pedido de remanejamento de rubricas para viabilizar estufas dentro dos R$ 42 mil restantes',
         who: 'Juliana Duarte',
         when: '2026-07-15',
-        how: 'Unificar fornecedores para caber no saldo restante sem reduzir área plantada.',
+        how: 'Redirecionar folga parcial de mudas/oficinas sem reduzir o número de famílias atendidas.',
         status: 'Em Andamento'
       },
       {
         id: 'act-102-2',
         originGap: 'Notas Fiscais',
-        what: 'Condicionar liberação de novos lotes de mudas à entrega dos recibos pendentes',
+        what: 'Bloquear novos pagamentos aos fornecedores até baixa dos R$ 28 mil sem nota fiscal',
         who: 'Juliana Duarte',
         when: '2026-07-05',
-        how: 'Conferência quinzenal antes do envio para autorização financeira.',
+        how: 'Conferência documental obrigatória antes de enviar remessa ao financeiro.',
         status: 'Pendente'
       }
     ]
@@ -469,37 +872,37 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-101-1',
-        title: 'Conferir tombamento dos 80 computadores instalados nos Polos 1 a 4',
+        title: 'Conferir tombamento patrimonial dos 100 computadores entregues nos 5 polos',
         checked: true,
         responsible: 'Carlos Mendonça',
         deadline: '24/06/2026',
-        note: 'Notas fiscais e números de série validados.'
+        note: 'NF-e #4180 e planilha com 100 números de série conferidas.'
       },
       {
         id: 'i-101-2',
-        title: 'Confirmar entrega dos últimos 20 computadores no Polo Norte',
+        title: 'Acompanhar montagem final das bancadas e link fibra no 5º polo (Polo Norte)',
         checked: true,
         responsible: 'Carlos Mendonça',
         deadline: '30/06/2026',
-        note: 'Entrega agendada com a transportadora para 02/07.'
+        note: '4 polos já em operação; instalação técnica do Polo Norte dentro do prazo de 15/07.'
       },
       {
         id: 'i-101-3',
-        title: 'Baixar R$ 7.000 de comprovantes pendentes (reforma e seguro)',
+        title: 'Baixar R$ 7.000 em comprovantes pendentes (marcenaria e endosso do seguro)',
         checked: false,
         responsible: 'Patrícia Lima',
         deadline: '08/07/2026',
-        note: 'Aguardando comprovante quitado da seguradora.'
+        note: 'R$ 5 mil da Marcenaria Sul (PIX #8821) e R$ 2 mil da SeguraMais (Boleto #4410).'
       }
     ],
     actionPlans: [
       {
         id: 'act-101-1',
         originGap: 'Cronograma',
-        what: 'Deixar pré-aprovado link de internet via rádio para o Polo Norte',
+        what: 'Manter fornecedor secundário de internet via rádio pré-aprovado para o Polo Norte',
         who: 'Carlos Mendonça',
         when: '2026-07-10',
-        how: 'Acionar fornecedor local caso a operadora de fibra não instale até dia 10/07.',
+        how: 'Acionar contingência caso a operadora de fibra não conclua ativação até 10/07.',
         status: 'Concluída'
       }
     ]
@@ -514,19 +917,19 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-103-1',
-        title: 'Validar planos ambientais assinados pelas primeiras 18 empresas',
+        title: 'Validar planos ambientais assinados pelas primeiras 18 empresas atendidas',
         checked: true,
         responsible: 'Marina Alencar',
         deadline: '25/06/2026',
-        note: 'Documentação arquivada na pasta do programa.'
+        note: 'Relatórios arquivados no dossiê do programa (REL #ESG-18).'
       },
       {
         id: 'i-103-2',
-        title: 'Recolher notas fiscais de R$ 9.000 referentes à consultoria e espaço',
+        title: 'Recolher notas fiscais de R$ 9.000 referentes à consultoria e material gráfico',
         checked: false,
         responsible: 'Marina Alencar',
         deadline: '10/07/2026',
-        note: 'Emissão prevista no fechamento mensal da consultoria.'
+        note: 'R$ 6 mil da Ciclo Limpo (TED #6320) e R$ 3 mil da Gráfica Expressa (PIX #7712).'
       }
     ],
     actionPlans: []
@@ -541,29 +944,29 @@ export const INITIAL_FOLLOW_UPS = [
     items: [
       {
         id: 'i-104-1',
-        title: 'Conferir funcionamento das 3 cozinhas comunitárias em operação',
+        title: 'Conferir operação regular das 3 cozinhas comunitárias no 1º turno',
         checked: true,
         responsible: 'Roberto Tavares',
         deadline: '23/06/2026',
-        note: '3.600 refeições nutritivas servidas em junho.'
+        note: '3.600 refeições nutritivas servidas em junho com alvará sanitário vigente.'
       },
       {
         id: 'i-104-2',
-        title: 'Destravar pagamento dos fornos industriais retido por certidão vencida',
+        title: 'Cobrar CND municipal do fornecedor para liberar pagamento da NF-e #3019 (R$ 18 mil)',
         checked: false,
         responsible: 'Roberto Tavares',
         deadline: '10/07/2026',
-        note: 'Equipamentos já instalados; pagamento de R$ 18 mil aguarda CND renovada.'
+        note: 'Fornos já entregues e operando; valor segue retido na conta do convênio.'
       }
     ],
     actionPlans: [
       {
         id: 'act-104-1',
         originGap: 'Fornecedor',
-        what: 'Notificar fornecedor dos fornos para envio de certidão negativa atualizada',
+        what: 'Notificar TermoFornos Equipamentos para envio da certidão negativa municipal renovada',
         who: 'Roberto Tavares',
         when: '2026-07-10',
-        how: 'Prazo de 5 dias úteis para regularização e baixa do pagamento de R$ 18.000.',
+        how: 'Liberar transferência bancária de R$ 18.000 somente após validação fiscal no portal municipal.',
         status: 'Em Andamento'
       }
     ]
@@ -575,27 +978,27 @@ export const INITIAL_EVIDENCES = [
     id: 'ev-1',
     projectId: 'prog-101',
     category: 'Financeiro',
-    title: 'Notas fiscais e termo de tombamento — 80 computadores (Polos 1 a 4)',
-    referenceCode: 'NF #4180-09',
-    date: '18/06/2026',
+    title: 'Nota fiscal e termo de tombamento patrimonial — 100 computadores (5 polos)',
+    referenceCode: 'NF-e #4180',
+    date: '22/05/2026',
     responsible: 'Carlos Mendonça'
   },
   {
     id: 'ev-2',
     projectId: 'prog-101',
     category: 'Engenharia',
-    title: 'ART e relatório fotográfico da adequação elétrica dos 5 polos',
+    title: 'ART e relatório fotográfico da adequação elétrica e civil dos 5 polos',
     referenceCode: 'ART #884120',
-    date: '02/04/2026',
+    date: '28/03/2026',
     responsible: 'Carlos Mendonça'
   },
   {
     id: 'ev-3',
     projectId: 'prog-102',
     category: 'Técnico',
-    title: 'Laudo de análise de solo e termo de implantação dos primeiros 3 canteiros',
-    referenceCode: 'LAUDO #SOLO-03',
-    date: '15/06/2026',
+    title: 'Laudo agronômico de solo e termo de cercamento dos 6 terrenos',
+    referenceCode: 'LAUDO #SOLO-06',
+    date: '26/02/2026',
     responsible: 'Juliana Duarte'
   },
   {
@@ -611,9 +1014,9 @@ export const INITIAL_EVIDENCES = [
     id: 'ev-5',
     projectId: 'prog-104',
     category: 'Sanitário',
-    title: 'Alvará sanitário das 3 cozinhas e termo de entrega dos fornos industriais',
+    title: 'Alvará sanitário das 3 cozinhas e termo de aceite técnico dos fornos',
     referenceCode: 'ALV #COZ-2026',
-    date: '28/06/2026',
+    date: '26/06/2026',
     responsible: 'Roberto Tavares'
   }
 ];

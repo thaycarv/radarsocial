@@ -45,10 +45,10 @@ export const ExecutiveReportModal = () => {
           <div className="border-b-2 border-slate-900 pb-3 flex items-start justify-between">
             <div>
               <h2 className="text-lg font-extrabold text-slate-900">
-                RadarSocial — Resumo Executivo de Programas
+                RadarSocial — Posição Consolidada de Programas
               </h2>
               <p className="text-xs text-slate-600">
-                Posição consolidada de entregas, orçamento e indicadores de impacto
+                Relatório de entregas físicas, execução orçamentária, conciliação fiscal e resultados
               </p>
             </div>
             <div className="text-right text-xs">
@@ -65,39 +65,39 @@ export const ExecutiveReportModal = () => {
               </p>
             </div>
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <p className="text-[11px] font-medium text-slate-500">Total Pago</p>
+              <p className="text-[11px] font-medium text-slate-500">Orçamento Utilizado</p>
               <p className="text-sm font-extrabold text-sky-800 mt-0.5">
                 {formatCurrency(portfolioMetrics.totalExecuted)} ({formatPercent(portfolioMetrics.weightedActualFinancial)})
               </p>
             </div>
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <p className="text-[11px] font-medium text-slate-500">Avanço Físico</p>
+              <p className="text-[11px] font-medium text-slate-500">Entregas Realizadas</p>
               <p className="text-sm font-extrabold text-[#2D5A27] mt-0.5">
                 {formatPercent(portfolioMetrics.weightedActualPhysical)} (meta {formatPercent(portfolioMetrics.weightedPlannedPhysical)})
               </p>
             </div>
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-              <p className="text-[11px] font-medium text-slate-500">Sem Comprovante</p>
-              <p className="text-sm font-extrabold text-amber-800 mt-0.5">
-                {formatCurrency(portfolioMetrics.totalPendingProofs)}
+              <p className="text-[11px] font-medium text-slate-500">Prestação de Contas</p>
+              <p className="text-sm font-extrabold text-emerald-800 mt-0.5">
+                {formatPercent(portfolioMetrics.proofRegularityPercent)} regular ({formatCurrency(portfolioMetrics.totalPendingProofs)} em validação)
               </p>
             </div>
           </div>
 
           <div className="space-y-1.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              1. Execução e Orçamento por Programa
+              1. Execução Física, Orçamento e Conciliação por Programa
             </h3>
             <table className="w-full text-left text-[11px] border border-slate-300">
               <thead className="bg-slate-100 text-slate-800 font-bold">
                 <tr>
                   <th className="py-1.5 px-2.5">Programa</th>
+                  <th className="py-1.5 px-2.5 text-center">Status</th>
+                  <th className="py-1.5 px-2.5 text-center">Entregas (Real / Meta)</th>
                   <th className="py-1.5 px-2.5">Orçado</th>
                   <th className="py-1.5 px-2.5">Pago</th>
-                  <th className="py-1.5 px-2.5 text-center">Físico (Real / Meta)</th>
-                  <th className="py-1.5 px-2.5 text-center">Financeiro</th>
-                  <th className="py-1.5 px-2.5 text-center">Prazo</th>
-                  <th className="py-1.5 px-2.5 text-center">Custo</th>
+                  <th className="py-1.5 px-2.5">Saldo Livre</th>
+                  <th className="py-1.5 px-2.5">Conciliação</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -105,18 +105,28 @@ export const ExecutiveReportModal = () => {
                   <tr key={p.id}>
                     <td className="py-1.5 px-2.5">
                       <strong>{p.code} — {p.name}</strong>
-                      <span className="block text-[10px] text-slate-600">{p.funder}</span>
+                      <span className="block text-[10px] text-slate-600">
+                        {p.funder} · Coord.: {p.manager}
+                      </span>
                     </td>
-                    <td className="py-1.5 px-2.5">{formatCurrency(p.totalBudget)}</td>
-                    <td className="py-1.5 px-2.5 font-semibold">{formatCurrency(p.executedBudget)}</td>
+                    <td className="py-1.5 px-2.5 text-center font-semibold">
+                      {p.statusMeta.label}
+                    </td>
                     <td className="py-1.5 px-2.5 text-center">
                       <strong>{formatPercent(p.actualPhysical)}</strong> / {formatPercent(p.plannedPhysical)}
                     </td>
-                    <td className="py-1.5 px-2.5 text-center font-semibold">
-                      {formatPercent(p.actualFinancial)}
+                    <td className="py-1.5 px-2.5">{formatCurrency(p.totalBudget)}</td>
+                    <td className="py-1.5 px-2.5 font-semibold">
+                      {formatCurrency(p.executedBudget)} ({formatPercent(p.actualFinancial)})
                     </td>
-                    <td className="py-1.5 px-2.5 text-center font-semibold">{p.schedule.label}</td>
-                    <td className="py-1.5 px-2.5 text-center font-semibold">{p.cost.label}</td>
+                    <td className="py-1.5 px-2.5">{formatCurrency(p.freeBalance)}</td>
+                    <td className="py-1.5 px-2.5 text-slate-700">
+                      {p.pendingProofs > 0
+                        ? `${formatCurrency(p.pendingProofs)} sem NF`
+                        : p.retainedBudget > 0
+                        ? `${formatCurrency(p.retainedBudget)} retidos (CND)`
+                        : '100% comprovado'}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -125,7 +135,7 @@ export const ExecutiveReportModal = () => {
 
           <div className="space-y-1.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
-              2. Principais Resultados Alcançados
+              2. Principais Resultados Apurados
             </h3>
             <table className="w-full text-left text-[11px] border border-slate-300">
               <thead className="bg-slate-100 text-slate-800 font-bold">
@@ -134,7 +144,7 @@ export const ExecutiveReportModal = () => {
                   <th className="py-1.5 px-2.5">Indicador de Resultado</th>
                   <th className="py-1.5 px-2.5 text-center">Inicial → Meta</th>
                   <th className="py-1.5 px-2.5 text-center">Atual</th>
-                  <th className="py-1.5 px-2.5">Comprovação</th>
+                  <th className="py-1.5 px-2.5">Meio de Verificação</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">

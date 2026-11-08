@@ -7,43 +7,30 @@ import {
 } from '../data/mockData';
 import {
   deriveProjectMetrics,
+  deriveRubricMetrics,
   calculatePortfolioMetrics,
   generateGovernanceAlerts
 } from '../utils/calculations';
 
 const STORAGE_KEYS = {
-  projects: 'radarsocial_v10_projects',
-  followUps: 'radarsocial_v10_followups',
-  evidences: 'radarsocial_v10_evidences',
-  theme: 'radarsocial_v10_theme'
+  projects: 'radarsocial_v11_projects',
+  followUps: 'radarsocial_v11_followups',
+  evidences: 'radarsocial_v11_evidences',
+  theme: 'radarsocial_v11_theme'
 };
 
-// Purge all legacy storage keys to guarantee no cached institutional names linger in client browsers
+// Purge legacy storage keys so client browsers never load stale schemas or brand names
 if (typeof window !== 'undefined' && window.localStorage) {
-  const legacyKeys = [
-    'radarsocial_projects',
-    'radarsocial_v2_projects',
-    'radarsocial_v3_projects',
-    'radarsocial_v4_projects',
-    'radarsocial_v5_projects',
-    'radarsocial_v6_projects',
-    'radarsocial_followups',
-    'radarsocial_v2_followups',
-    'radarsocial_v3_followups',
-    'radarsocial_v4_followups',
-    'radarsocial_v5_followups',
-    'radarsocial_evidences',
-    'radarsocial_v2_evidences',
-    'radarsocial_v3_evidences',
-    'radarsocial_v4_evidences',
-    'radarsocial_v5_evidences'
-  ];
-  legacyKeys.forEach((k) => {
-    try {
-      localStorage.removeItem(k);
-    } catch {
-      // ignore
-    }
+  const versions = ['', '_v2', '_v3', '_v4', '_v5', '_v6', '_v7', '_v8', '_v9', '_v10'];
+  const suffixes = ['projects', 'followups', 'evidences', 'theme'];
+  versions.forEach((v) => {
+    suffixes.forEach((s) => {
+      try {
+        localStorage.removeItem(`radarsocial${v}_${s}`);
+      } catch {
+        // ignore
+      }
+    });
   });
 }
 
@@ -58,22 +45,29 @@ const sanitizeFictitiousNames = (data) => {
   return JSON.parse(str);
 };
 
-const safeLoad = (key, fallback) => {
+const safeLoad = (key, fallback, validator) => {
   try {
     const saved = localStorage.getItem(key);
     if (!saved) return fallback;
-    const parsed = JSON.parse(saved);
-    return sanitizeFictitiousNames(parsed);
+    const parsed = sanitizeFictitiousNames(JSON.parse(saved));
+    if (validator && !validator(parsed)) return fallback;
+    return parsed;
   } catch {
     return fallback;
   }
 };
 
+const hasCurrentProjectSchema = (arr) =>
+  Array.isArray(arr) &&
+  arr.length > 0 &&
+  Array.isArray(arr[0]?.budgetBreakdown?.[0]?.expenses) &&
+  typeof arr[0]?.deliverables?.[0]?.deliverableDoc === 'string';
+
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
   const [rawProjects, setRawProjects] = useState(() =>
-    safeLoad(STORAGE_KEYS.projects, INITIAL_PROJECTS)
+    safeLoad(STORAGE_KEYS.projects, INITIAL_PROJECTS, hasCurrentProjectSchema)
   );
   const [followUps, setFollowUps] = useState(() =>
     safeLoad(STORAGE_KEYS.followUps, INITIAL_FOLLOW_UPS)
@@ -90,14 +84,6 @@ export const ProjectProvider = ({ children }) => {
     () => rawProjects[0]?.id || 'prog-101'
   );
   const [showReportModal, setShowReportModal] = useState(false);
-
-  useEffect(() => {
-    // Immediate sanitization check on mount
-    const serialized = JSON.stringify(rawProjects);
-    if (/bndes|acif|sebrae/i.test(serialized)) {
-      setRawProjects(INITIAL_PROJECTS);
-    }
-  }, []);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(rawProjects));
@@ -142,17 +128,99 @@ export const ProjectProvider = ({ children }) => {
         if (p.id !== projectId) return p;
         return {
           ...p,
-          deliverables: p.deliverables.map((d) =>
-            d.id === deliverableId ? { ...d, status: newStatus } : d
-          )
+          deliverables: p.deliverables.map((d) => {
+            if (d.id !== deliverableId) return d;
+            return {
+              ...d,
+              status: newStatus,
+              completedAt:
+                newStatus === 'done' ? d.completedAt || PORTFOLIO_CUTOFF.formattedDate : null
+            };
+          })
         };
       })
     );
   };
 
-  const updateRubricValues = (projectId, rubricId, executed, approvedProofs) => {
-    const execVal = Math.max(0, Number(executed) || 0);
-    const approvedVal = Math.max(0, Math.min(execVal, Number(approvedProofs) || 0));
+  const validateExpenseProof = (projectId, rubricId, expenseId, docRef) => {
+    const cleanDoc = (docRef || '').trim();
+    if (!cleanDoc) return;
+
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          budgetBreakdown: p.budgetBreakdown.map((r) => {
+            if (r.id !== rubricId) return r;
+            return {
+              ...r,
+              expenses: (r.expenses || []).map((exp) =>
+                exp.id === expenseId
+                  ? { ...exp, status: 'approved', docRef: cleanDoc }
+                  : exp
+              )
+            };
+          })
+        };
+      })
+    );
+  };
+
+  const releaseRetainedExpense = (projectId, rubricId, expenseId) => {
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          budgetBreakdown: p.budgetBreakdown.map((r) => {
+            if (r.id !== rubricId) return r;
+            return {
+              ...r,
+              expenses: (r.expenses || []).map((exp) => {
+                if (exp.id !== expenseId) return exp;
+                const cleanRef = (exp.docRef || '')
+                  .replace(/\s*·\s*CND pendente/i, '')
+                  .trim();
+                return {
+                  ...exp,
+                  status: 'approved',
+                  docRef: cleanRef ? `${cleanRef} · CND regular` : 'CND regularizada'
+                };
+              })
+            };
+          })
+        };
+      })
+    );
+  };
+
+  const addRubricExpense = (projectId, rubricId, payload) => {
+    const amount = Math.round(Number(payload.amount) || 0);
+    if (amount <= 0) return { ok: false, error: 'Informe um valor válido maior que zero.' };
+
+    const targetProject = rawProjects.find((p) => p.id === projectId);
+    const targetRubric = targetProject?.budgetBreakdown?.find((r) => r.id === rubricId);
+    if (!targetRubric) return { ok: false, error: 'Rubrica não localizada.' };
+
+    const metrics = deriveRubricMetrics(targetRubric);
+    if (amount > metrics.availableBalance) {
+      return {
+        ok: false,
+        error: `Valor excede o saldo livre da rubrica (${metrics.availableBalance}). Acima do teto exige remanejamento formal.`
+      };
+    }
+
+    const newEntry = {
+      id: `exp-${Date.now()}`,
+      date: payload.date || PORTFOLIO_CUTOFF.formattedDate,
+      supplier: payload.supplier.trim(),
+      description: payload.description.trim(),
+      docRef: payload.docRef.trim(),
+      amount,
+      status: payload.status || 'approved'
+    };
+
     setRawProjects((prev) =>
       prev.map((p) => {
         if (p.id !== projectId) return p;
@@ -160,12 +228,14 @@ export const ProjectProvider = ({ children }) => {
           ...p,
           budgetBreakdown: p.budgetBreakdown.map((r) =>
             r.id === rubricId
-              ? { ...r, executed: execVal, approvedProofs: approvedVal }
+              ? { ...r, expenses: [...(r.expenses || []), newEntry] }
               : r
           )
         };
       })
     );
+
+    return { ok: true };
   };
 
   const updateImpactActual = (projectId, metricId, newActual) => {
@@ -290,7 +360,9 @@ export const ProjectProvider = ({ children }) => {
         showReportModal,
         setShowReportModal,
         updateDeliverableStatus,
-        updateRubricValues,
+        validateExpenseProof,
+        releaseRetainedExpense,
+        addRubricExpense,
         updateImpactActual,
         toggleChecklistItem,
         addChecklistItem,

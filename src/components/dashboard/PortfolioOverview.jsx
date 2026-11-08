@@ -37,27 +37,13 @@ export const PortfolioOverview = ({ onNavigate }) => {
   const visibleProjectIds = new Set(filteredProjects.map((p) => p.id));
   const filteredAlerts = governanceAlerts.filter((a) => visibleProjectIds.has(a.projectId));
 
-  const renderStatusBadge = (project) => {
-    if (project.overallStatus === 'Crítico') {
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-          Requer ação
-        </span>
-      );
-    }
-    if (project.cost.label === 'NF retida') {
-      return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200">
-          No prazo · NF retida
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
-        No prazo
-      </span>
-    );
-  };
+  const renderStatusBadge = (project) => (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${project.statusMeta.badgeClass}`}
+    >
+      {project.statusMeta.label}
+    </span>
+  );
 
   return (
     <div className="space-y-6">
