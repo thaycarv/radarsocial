@@ -3,7 +3,9 @@ import {
   PORTFOLIO_CUTOFF,
   INITIAL_PROJECTS,
   INITIAL_FOLLOW_UPS,
-  INITIAL_EVIDENCES
+  INITIAL_EVIDENCES,
+  INITIAL_COMMUNITY_FEEDBACKS,
+  INITIAL_COMMUNITY_ACTIONS
 } from '../data/mockData';
 import {
   deriveProjectMetrics,
@@ -16,6 +18,8 @@ const STORAGE_KEYS = {
   projects: 'radarsocial_v14_projects',
   followUps: 'radarsocial_v14_followups',
   evidences: 'radarsocial_v14_evidences',
+  communityFeedbacks: 'radarsocial_v14_feedbacks',
+  communityActions: 'radarsocial_v14_actions',
   theme: 'radarsocial_v14_theme'
 };
 
@@ -64,6 +68,13 @@ export const ProjectProvider = ({ children }) => {
   const [evidences, setEvidences] = useState(() =>
     safeLoad(STORAGE_KEYS.evidences, INITIAL_EVIDENCES)
   );
+  const [communityFeedbacks, setCommunityFeedbacks] = useState(() =>
+    safeLoad(STORAGE_KEYS.communityFeedbacks, INITIAL_COMMUNITY_FEEDBACKS)
+  );
+  const [communityActions, setCommunityActions] = useState(() =>
+    safeLoad(STORAGE_KEYS.communityActions, INITIAL_COMMUNITY_ACTIONS)
+  );
+
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.theme);
     return saved === 'dark' ? 'dark' : 'default';
@@ -85,6 +96,22 @@ export const ProjectProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.evidences, JSON.stringify(evidences));
   }, [evidences]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.communityFeedbacks, JSON.stringify(communityFeedbacks));
+    } catch {
+      // ignore
+    }
+  }, [communityFeedbacks]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.communityActions, JSON.stringify(communityActions));
+    } catch {
+      // ignore
+    }
+  }, [communityActions]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.theme, theme);
@@ -166,18 +193,9 @@ export const ProjectProvider = ({ children }) => {
             if (r.id !== rubricId) return r;
             return {
               ...r,
-              expenses: (r.expenses || []).map((exp) => {
-                if (exp.id !== expenseId) return exp;
-                const cleanRef = (exp.docRef || '')
-                  .replace(/\s*·\s*CND pendente/i, '')
-                  .trim();
-                return {
-                  ...exp,
-                  date: PORTFOLIO_CUTOFF.formattedDate,
-                  status: 'approved',
-                  docRef: cleanRef ? `${cleanRef} · CND regularizada` : 'CND regularizada'
-                };
-              })
+              expenses: (r.expenses || []).map((exp) =>
+                exp.id === expenseId ? { ...exp, status: 'approved' } : exp
+              )
             };
           })
         };
@@ -318,6 +336,52 @@ export const ProjectProvider = ({ children }) => {
     setEvidences((prev) => [{ id: `ev-${Date.now()}`, ...doc }, ...prev]);
   };
 
+  const updateCommunityFeedback = (id, updatedFields) => {
+    setCommunityFeedbacks((prev) =>
+      prev.map((f) => {
+        if (f.id !== id) return f;
+        const updatedHistory = [...(f.history || [])];
+        if (updatedFields.status && updatedFields.status !== f.status) {
+          const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          updatedHistory.push(`${timeNow} · Status alterado para ${updatedFields.status}`);
+        }
+        return {
+          ...f,
+          ...updatedFields,
+          history: updatedHistory
+        };
+      })
+    );
+  };
+
+  const addCommunityFeedback = (newFeedback) => {
+    setCommunityFeedbacks((prev) => [
+      {
+        id: `ESC-${Date.now().toString().slice(-4)}`,
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        slaHours: 0.5,
+        status: 'Aberto',
+        contingencyCost: 0,
+        history: [`${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} · Manifestação recebida e protocolada`],
+        ...newFeedback
+      },
+      ...prev
+    ]);
+  };
+
+  const toggleCommunityAction = (actionId) => {
+    setCommunityActions((prev) =>
+      prev.map((a) => {
+        if (a.id !== actionId) return a;
+        return {
+          ...a,
+          status: a.status === 'Concluída' ? 'Em andamento' : 'Concluída'
+        };
+      })
+    );
+  };
+
   const resetToDefault = () => {
     try {
       localStorage.clear();
@@ -327,6 +391,8 @@ export const ProjectProvider = ({ children }) => {
     setRawProjects(INITIAL_PROJECTS);
     setFollowUps(INITIAL_FOLLOW_UPS);
     setEvidences(INITIAL_EVIDENCES);
+    setCommunityFeedbacks(INITIAL_COMMUNITY_FEEDBACKS);
+    setCommunityActions(INITIAL_COMMUNITY_ACTIONS);
     setTheme('default');
     setSelectedProjectId(INITIAL_PROJECTS[0].id);
   };
@@ -343,6 +409,11 @@ export const ProjectProvider = ({ children }) => {
         governanceAlerts,
         followUps,
         evidences,
+        communityFeedbacks,
+        updateCommunityFeedback,
+        addCommunityFeedback,
+        communityActions,
+        toggleCommunityAction,
         theme,
         setTheme,
         showReportModal,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { ProjectProvider, useProjects } from './context/ProjectContext';
 import { Header } from './components/layout/Header';
 import { PortfolioOverview } from './components/dashboard/PortfolioOverview';
@@ -6,6 +6,10 @@ import { PhysicalFinancialCockpit } from './components/physicalFinancial/Physica
 import { FollowUpChecklist } from './components/operations/FollowUpChecklist';
 import { ImpactAndReports } from './components/impact/ImpactAndReports';
 import { ExecutiveReportModal } from './components/common/ExecutiveReportModal';
+
+const CommunityListening = lazy(() =>
+  import('./components/listening/CommunityListening').then(m => ({ default: m.CommunityListening }))
+);
 
 function MainApp() {
   const { theme } = useProjects();
@@ -24,6 +28,11 @@ function MainApp() {
           {activeTab === 'dashboard' && <PortfolioOverview onNavigate={setActiveTab} />}
           {activeTab === 'physicalFinancial' && <PhysicalFinancialCockpit onNavigate={setActiveTab} />}
           {activeTab === 'operations' && <FollowUpChecklist onNavigate={setActiveTab} />}
+          {activeTab === 'escuta' && (
+            <Suspense fallback={<div className="p-8 text-center text-slate-400">Carregando Escuta Comunitária...</div>}>
+              <CommunityListening />
+            </Suspense>
+          )}
           {activeTab === 'impact' && <ImpactAndReports />}
         </div>
       </main>

@@ -6,6 +6,7 @@ import {
   LineChart,
   ListTodo,
   Target,
+  HeartHandshake,
   Printer,
   RotateCcw,
   Sun,
@@ -25,6 +26,7 @@ export const Header = ({ activeTab, setActiveTab }) => {
     { id: 'dashboard', label: 'Portfólio', icon: LayoutDashboard },
     { id: 'physicalFinancial', label: 'Execução e Orçamento', icon: LineChart },
     { id: 'operations', label: 'Plano de Ação', icon: ListTodo },
+    { id: 'escuta', label: 'Escuta Comunitária', icon: HeartHandshake },
     { id: 'impact', label: 'Impacto', icon: Target }
   ];
 
