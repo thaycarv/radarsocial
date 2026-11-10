@@ -11,7 +11,8 @@ import {
   Sparkles,
   ChevronDown,
   ShieldCheck,
-  RotateCcw
+  RotateCcw,
+  HeartHandshake
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/calculations';
 
@@ -31,6 +32,7 @@ export const Header = ({ activeTab, setActiveTab }) => {
     { id: 'physicalFinancial', label: 'Ritmo de Entrega e Gastos', icon: LineChart },
     { id: 'dashboard', label: 'Painel Geral de Projetos', icon: LayoutDashboard },
     { id: 'operations', label: 'Plano de Ação e Rotinas', icon: ListTodo },
+    { id: 'escuta', label: 'Escuta Comunitária', icon: HeartHandshake },
     { id: 'documentation', label: 'Documentação & Relatórios', icon: FileText },
     { id: 'copilot', label: 'Copiloto IA', icon: Bot }
   ];

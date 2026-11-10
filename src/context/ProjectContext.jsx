@@ -6,7 +6,9 @@ import {
   INITIAL_PROJECTS,
   INITIAL_FOLLOW_UPS,
   INITIAL_DOCUMENTS,
-  NAMING_OPTIONS
+  NAMING_OPTIONS,
+  INITIAL_COMMUNITY_FEEDBACKS,
+  INITIAL_COMMUNITY_ACTIONS
 } from '../data/mockData';
 
 const ProjectContext = createContext();
@@ -40,6 +42,16 @@ export const ProjectProvider = ({ children }) => {
   const [documents, setDocuments] = useState(() => {
     const saved = localStorage.getItem('radarsocial_documents_v7');
     return saved ? JSON.parse(saved) : INITIAL_DOCUMENTS;
+  });
+
+  const [communityFeedbacks, setCommunityFeedbacks] = useState(() => {
+    const saved = localStorage.getItem('radarsocial_community_feedbacks_v7');
+    return saved ? JSON.parse(saved) : INITIAL_COMMUNITY_FEEDBACKS;
+  });
+
+  const [communityActions, setCommunityActions] = useState(() => {
+    const saved = localStorage.getItem('radarsocial_community_actions_v7');
+    return saved ? JSON.parse(saved) : INITIAL_COMMUNITY_ACTIONS;
   });
 
   const [selectedProjectId, setSelectedProjectId] = useState("proj-101");
@@ -79,6 +91,14 @@ export const ProjectProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('radarsocial_documents_v7', JSON.stringify(documents));
   }, [documents]);
+
+  useEffect(() => {
+    localStorage.setItem('radarsocial_community_feedbacks_v7', JSON.stringify(communityFeedbacks));
+  }, [communityFeedbacks]);
+
+  useEffect(() => {
+    localStorage.setItem('radarsocial_community_actions_v7', JSON.stringify(communityActions));
+  }, [communityActions]);
 
   useEffect(() => {
     localStorage.setItem('desdobra_follow_ups', JSON.stringify(followUps));
@@ -198,6 +218,48 @@ export const ProjectProvider = ({ children }) => {
     setDocuments(prev => prev.filter(d => d.id !== docId));
   };
 
+  const updateCommunityFeedback = (id, updatedFields) => {
+    setCommunityFeedbacks(prev => prev.map(f => {
+      if (f.id !== id) return f;
+      const updatedHistory = [...(f.history || [])];
+      if (updatedFields.status && updatedFields.status !== f.status) {
+        const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        updatedHistory.push(`${timeNow} · Status alterado para ${updatedFields.status}`);
+      }
+      return {
+        ...f,
+        ...updatedFields,
+        history: updatedHistory
+      };
+    }));
+  };
+
+  const addCommunityFeedback = (newFeedback) => {
+    setCommunityFeedbacks(prev => [
+      {
+        id: `ESC-${Date.now().toString().slice(-4)}`,
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        slaHours: 0.5,
+        status: 'Aberto',
+        contingencyCost: 0,
+        history: [`${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} · Manifestação recebida e protocolada`],
+        ...newFeedback
+      },
+      ...prev
+    ]);
+  };
+
+  const toggleCommunityAction = (actionId) => {
+    setCommunityActions(prev => prev.map(a => {
+      if (a.id !== actionId) return a;
+      return {
+        ...a,
+        status: a.status === 'Concluída' ? 'Em andamento' : 'Concluída'
+      };
+    }));
+  };
+
   const resetToDefault = () => {
     localStorage.clear();
     setIdentity(INITIAL_IDENTITY);
@@ -206,6 +268,8 @@ export const ProjectProvider = ({ children }) => {
     setProjects(INITIAL_PROJECTS);
     setFollowUps(INITIAL_FOLLOW_UPS);
     setDocuments(INITIAL_DOCUMENTS);
+    setCommunityFeedbacks(INITIAL_COMMUNITY_FEEDBACKS);
+    setCommunityActions(INITIAL_COMMUNITY_ACTIONS);
     setCurrentBrand(NAMING_OPTIONS[0]);
   };
 
@@ -230,6 +294,11 @@ export const ProjectProvider = ({ children }) => {
       documents,
       addDocument,
       deleteDocument,
+      communityFeedbacks,
+      updateCommunityFeedback,
+      addCommunityFeedback,
+      communityActions,
+      toggleCommunityAction,
       currentBrand,
       setCurrentBrand,
       theme,

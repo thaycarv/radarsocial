@@ -11,6 +11,7 @@ const PhysicalFinancialCockpit = lazy(() => import('./components/physicalFinanci
 const PortfolioOverview = lazy(() => import('./components/dashboard/PortfolioOverview').then(m => ({ default: m.PortfolioOverview })));
 const FollowUpChecklist = lazy(() => import('./components/operations/FollowUpChecklist').then(m => ({ default: m.FollowUpChecklist })));
 const DocumentationHub = lazy(() => import('./components/documentation/DocumentationHub').then(m => ({ default: m.DocumentationHub })));
+const CommunityListening = lazy(() => import('./components/listening/CommunityListening').then(m => ({ default: m.CommunityListening })));
 const StrategicCopilot = lazy(() => import('./components/aiCopilot/StrategicCopilot').then(m => ({ default: m.StrategicCopilot })));
 
 function MainApp() {
@@ -54,6 +55,10 @@ function MainApp() {
 
             {activeTab === 'operations' && (
               <FollowUpChecklist />
+            )}
+
+            {activeTab === 'escuta' && (
+              <CommunityListening />
             )}
 
             {activeTab === 'documentation' && (

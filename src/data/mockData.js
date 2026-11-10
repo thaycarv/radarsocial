@@ -361,3 +361,199 @@ export const NAMING_OPTIONS = [
     description: "Identidade moderna no modelo SaaS para aceleração de portfólios sociais."
   }
 ];
+
+export const INITIAL_COMMUNITY_FEEDBACKS = [
+  {
+    id: "ESC-101",
+    projectId: "proj-101",
+    projectName: "Laboratórios Comunitários de Inclusão Digital",
+    hub: "Polo Comunitário Norte",
+    channel: "WhatsApp Comunitário",
+    beneficiary: "Dona Maria Clara (Mãe de aluno)",
+    date: "2026-08-24",
+    time: "14:30",
+    text: "Boa tarde, meu filho foi para a aula hoje no Polo Norte e os computadores estavam sem conexão com a internet. A professora precisou passar atividade teórica no quadro e eles não conseguiram praticar no laboratório.",
+    category: "Conectividade & Infraestrutura",
+    severity: "Alta",
+    sector: "Infraestrutura & Redes",
+    rootCause: "Rompimento de fibra óptica na entrada da comunidade por obras na rede de drenagem.",
+    immediateAction: "Modem 4G de redundância acionado no polo em 40 minutos + Reposição prática agendada no sábado.",
+    contingencyCost: 85,
+    status: "Em Tratamento",
+    slaHours: 0.7,
+    history: [
+      "24/08 14:30 · Ocorrência registrada via canal comunitário",
+      "24/08 14:45 · Coordenação de infraestrutura acionou operadora e liberou roteador reserva",
+      "24/08 15:10 · Conexão provisória restabelecida para os 24 alunos da turma"
+    ]
+  },
+  {
+    id: "ESC-102",
+    projectId: "proj-102",
+    projectName: "Programa Bootcamp Dev e Dados para a Juventude",
+    hub: "Polo Regional Centro",
+    channel: "Formulário de Aluno/Turma",
+    beneficiary: "Lucas Ferreira (Aluno Bolsista)",
+    date: "2026-08-23",
+    time: "19:15",
+    text: "O ritmo das aulas de banco de dados e APIs está muito acelerado para quem não tinha base de lógica. Estamos com receio de não entregar o projeto prático final e perder a bolsa de apoio.",
+    category: "Pedagógico & Nivelamento",
+    severity: "Média",
+    sector: "Coordenação Pedagógica",
+    rootCause: "Descompasso na formação básica inicial de programação entre bolsistas recém-ingressos.",
+    immediateAction: "Plantão de monitoria técnica aos sábados com instrutores locais + prorrogação de 5 dias no prazo de entrega.",
+    contingencyCost: 150,
+    status: "Resolvido",
+    slaHours: 2.5,
+    history: [
+      "23/08 19:15 · Formulário de avaliação de módulo recebido",
+      "23/08 20:30 · Coordenadora Juliana Duarte reuniu equipe de instrutores",
+      "24/08 09:00 · Calendário de monitorias aos sábados publicado para as 4 turmas"
+    ]
+  },
+  {
+    id: "ESC-103",
+    projectId: "proj-201",
+    projectName: "Cozinhas Comunitárias e Segurança Alimentar",
+    hub: "Cozinha Solidária Esperança",
+    channel: "Reunião de Polo / Presencial",
+    beneficiary: "Dona Tereza (Liderança do Coletivo de Mães)",
+    date: "2026-08-22",
+    time: "10:00",
+    text: "Quatro crianças atendidas na distribuição de almoço têm diagnóstico médico de alergia severa a leite e derivados. Precisamos garantir que não haja contaminação cruzada no preparo dos caldos.",
+    category: "Segurança Sanitária & Alérgenos",
+    severity: "Crítica",
+    sector: "Qualidade & Nutrição (Thayâne Carvalho)",
+    rootCause: "Necessidade de protocolo operacional rigoroso conforme RDC 216 / RDC 727 para manipulação comunitária de alérgenos.",
+    immediateAction: "Visita técnica da nutricionista com cartilha de boas práticas, rotulagem e kit de panelas e tábuas exclusivas identificadas.",
+    contingencyCost: 120,
+    status: "Resolvido",
+    slaHours: 1.0,
+    history: [
+      "22/08 10:00 · Demanda apresentada na roda de alinhamento com a comunidade",
+      "22/08 11:30 · Nutricionista Thayâne realizou auditoria in loco na bancada",
+      "22/08 14:00 · Procedimento padrão RDC 727 fixado e equipe treinada"
+    ]
+  },
+  {
+    id: "ESC-104",
+    projectId: "proj-101",
+    projectName: "Laboratórios Comunitários de Inclusão Digital",
+    hub: "Polo Comunitário Sul",
+    channel: "Ouvidoria Digital",
+    beneficiary: "Camila Rocha (Educadora Voluntária)",
+    date: "2026-08-21",
+    time: "16:40",
+    text: "Três teclados e dois mouses da bancada de atendimento infantil estão com defeito e cabos rompidos após as oficinas do fim de semana.",
+    category: "Equipamentos & Suprimentos",
+    severity: "Média",
+    sector: "Infraestrutura & TI",
+    rootCause: "Desgaste natural de uso contínuo em bancadas comunitárias sem checklist de fechamento diário.",
+    immediateAction: "Reposição imediata a partir do estoque de reserva técnica do projeto + implantação de checklist diário.",
+    contingencyCost: 0,
+    status: "Resolvido",
+    slaHours: 3.0,
+    history: [
+      "21/08 16:40 · Chamado aberto na ouvidoria",
+      "21/08 18:00 · Peças substituídas com garantia de lote homologado",
+      "21/08 18:30 · Checklist de vistoria diária entregue ao responsável do polo"
+    ]
+  },
+  {
+    id: "ESC-105",
+    projectId: "proj-102",
+    projectName: "Programa Bootcamp Dev e Dados para a Juventude",
+    hub: "Polo Regional Norte",
+    channel: "WhatsApp Comunitário",
+    beneficiary: "Gabriel Souza (Bolsista do Programa)",
+    date: "2026-08-20",
+    time: "11:20",
+    text: "Gostaria de registrar um agradecimento! Fui contratado como Desenvolvedor Júnior na empresa parceira do projeto após a apresentação do projeto de conclusão de curso na semana passada.",
+    category: "Elogio & Impacto Social",
+    severity: "Baixa",
+    sector: "Parcerias & Empregabilidade",
+    rootCause: "Eficácia da metodologia prática e da ponte direta com o setor produtivo.",
+    immediateAction: "Registro do depoimento para o relatório trimestral aos financiadores e convite para mentoria com novos alunos.",
+    contingencyCost: 0,
+    status: "Resolvido",
+    slaHours: 4.0,
+    history: [
+      "20/08 11:20 · Mensagem de agradecimento recebida",
+      "20/08 12:00 · Caso de sucesso documentado no portfólio de impacto"
+    ]
+  },
+  {
+    id: "ESC-106",
+    projectId: "proj-101",
+    projectName: "Laboratórios Comunitários de Inclusão Digital",
+    hub: "Polo Digital Leste",
+    channel: "Reunião de Polo / Presencial",
+    beneficiary: "Marcos Vinicius (Líder Comunitário)",
+    date: "2026-08-19",
+    time: "18:00",
+    text: "Jovens do bairro que trabalham no comércio só chegam em casa após as 19h30 e não conseguem frequentar as turmas da tarde. A comunidade solicita uma turma noturna de informática básica.",
+    category: "Acesso & Grade Horária",
+    severity: "Média",
+    sector: "Planejamento & Operações",
+    rootCause: "Pesquisa diagnóstica inicial subdimensionou a demanda de trabalhadores diurnos.",
+    immediateAction: "Readequação da grade de instrutores para abertura de turma das 20h às 21h30 a partir de setembro.",
+    contingencyCost: 0,
+    status: "Em Tratamento",
+    slaHours: 5.0,
+    history: [
+      "19/08 18:00 · Demanda acolhida no conselho comunitário",
+      "20/08 14:00 · Ajuste de escala de instrutores planejado com a gerência do projeto"
+    ]
+  }
+];
+
+export const INITIAL_COMMUNITY_ACTIONS = [
+  {
+    id: "ACT-COM-01",
+    title: "Contingência 4G Redundante nos 5 Polos Comunitários",
+    projectId: "proj-101",
+    problem: "Quedas de fibra óptica em bairros periféricos interrompem aulas práticas dos jovens.",
+    action: "Instalação de roteadores com chip de dados de comutação automática para contingência imediata.",
+    sector: "Infraestrutura & Redes",
+    owner: "Coord. de Infraestrutura",
+    deadline: "30/08/2026",
+    metric: "Disponibilidade de conexão nos laboratórios > 98,5%",
+    status: "Em andamento"
+  },
+  {
+    id: "ACT-COM-02",
+    title: "Plantão de Monitoria Pedagógica aos Sábados",
+    projectId: "proj-102",
+    problem: "Evasão e descompasso de alunos com menor base de lógica de programação.",
+    action: "2 turmas presenciais de reforço aos sábados lideradas por monitores bolsistas seniores.",
+    sector: "Coordenação Pedagógica",
+    owner: "Juliana Duarte",
+    deadline: "25/08/2026",
+    metric: "Reduzir taxa de desistência dos módulos técnicos para < 5%",
+    status: "Em andamento"
+  },
+  {
+    id: "ACT-COM-03",
+    title: "Protocolo de Alérgenos e Boas Práticas (RDC 727)",
+    projectId: "proj-201",
+    problem: "Risco de contaminação cruzada para crianças alérgicas atendidas nas cozinhas comunitárias.",
+    action: "Treinamento presencial de voluntárias, cartilha plastificada e segregação de utensílios exclusivos.",
+    sector: "Qualidade & Nutrição",
+    owner: "Thayâne Carvalho (Nutricionista/PMO)",
+    deadline: "20/08/2026",
+    metric: "100% de conformidade com os requisitos da RDC 727 / RDC 26",
+    status: "Concluída"
+  },
+  {
+    id: "ACT-COM-04",
+    title: "Abertura de Turma Noturna para Trabalhadores",
+    projectId: "proj-101",
+    problem: "Jovens inseridos no comércio informal não conseguiam frequentar turmas vespertinas.",
+    action: "Remanejamento de escala para ofertar turma das 20h às 21h30 no Polo Digital Leste.",
+    sector: "Planejamento & Operações",
+    owner: "Carlos Mendonça",
+    deadline: "05/09/2026",
+    metric: "Ocupação de 25 vagas para trabalhadores no turno da noite",
+    status: "Planejada"
+  }
+];
