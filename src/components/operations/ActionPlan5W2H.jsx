@@ -1,197 +1,235 @@
 import React, { useState } from 'react';
 import { useProjects } from '../../context/ProjectContext';
-import { ShieldAlert, Edit2, Check, Target } from 'lucide-react';
-import { TooltipHelp } from '../common/TooltipHelp';
+import { Plus, User, Calendar } from 'lucide-react';
 
-export const ActionPlan5W2H = ({ followUp }) => {
-  const { addActionPlan } = useProjects();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(followUp?.actionPlan5W2H || {
+export const ActionPlan5W2H = ({ followUp, project }) => {
+  const { cutoff, addActionPlanItem, updateActionStatus } = useProjects();
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    originGap: 'Cronograma',
     what: '',
-    why: '',
-    where: '',
     who: '',
     when: '',
-    how: '',
-    howMuch: ''
+    how: ''
   });
 
   if (!followUp) return null;
 
-  const plan = followUp.actionPlan5W2H;
+  const actions = followUp.actionPlans || [];
+  const openCount = actions.filter((a) => a.status !== 'Concluída').length;
+  const doneCount = actions.filter((a) => a.status === 'Concluída').length;
 
-  const handleSave = () => {
-    addActionPlan(followUp.id, formData);
-    setIsEditing(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.what.trim() || !formData.who.trim() || !formData.when.trim()) return;
+    addActionPlanItem(followUp.id, {
+      ...formData,
+      what: formData.what.trim(),
+      who: formData.who.trim(),
+      how: formData.how.trim()
+    });
+    setFormData({
+      originGap: 'Cronograma',
+      what: '',
+      who: '',
+      when: '',
+      how: ''
+    });
+    setShowForm(false);
+  };
+
+  const getStatusSelectStyle = (status, isOverdue) => {
+    if (status === 'Concluída') {
+      return 'bg-emerald-50 text-emerald-800 border-emerald-200';
+    }
+    if (isOverdue) {
+      return 'bg-rose-50 text-rose-700 border-rose-200';
+    }
+    if (status === 'Em Andamento') {
+      return 'bg-sky-50 text-sky-800 border-sky-200';
+    }
+    return 'bg-amber-50 text-amber-800 border-amber-200';
   };
 
   return (
-    <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+    <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <Target className="w-4 h-4 text-[#2D5A27]" />
-            <span>Plano de Ação para Correção de Desvios</span>
-            <TooltipHelp
-              title="O que é o Plano de Ação?"
-              text="Ferramenta prática para registrar as decisões tomadas pela equipe para corrigir atrasos ou conter gastos fora da meta."
-            />
-          </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Registro claro de responsabilidades, prazos e medidas de contenção para manter o projeto no ritmo planejado.
+          <h2 className="text-sm font-bold text-slate-900">
+            Plano de Ação e Encaminhamentos ({actions.length})
+          </h2>
+          <p className="text-[11px] text-slate-500 mt-0.5">
+            {openCount} em aberto · {doneCount} {doneCount === 1 ? 'concluída' : 'concluídas'}
           </p>
         </div>
 
         <button
-          onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
-            isEditing
-              ? 'bg-[#2D5A27] hover:bg-[#1E3F20] text-white shadow-xs'
-              : 'bg-slate-50 hover:bg-emerald-50 text-[#1E3F20] border border-slate-200 hover:border-emerald-300'
-          }`}
+          type="button"
+          onClick={() => {
+            setShowForm((prev) => !prev);
+            if (!showForm && !formData.who && project?.manager) {
+              setFormData((prev) => ({ ...prev, who: project.manager }));
+            }
+          }}
+          className="px-3 py-1.5 bg-[#2D5A27] hover:bg-[#1E3F20] text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer self-start sm:self-auto shrink-0"
         >
-          {isEditing ? (
-            <>
-              <Check className="w-3.5 h-3.5" />
-              <span>Salvar Plano</span>
-            </>
-          ) : (
-            <>
-              <Edit2 className="w-3.5 h-3.5" />
-              <span>{plan ? 'Editar Plano' : 'Criar Plano de Ação'}</span>
-            </>
-          )}
+          <Plus className="w-3.5 h-3.5" />
+          <span>{showForm ? 'Cancelar' : 'Nova ação'}</span>
         </button>
       </div>
 
-      {isEditing ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-[#2D5A27]">O que fazer?</label>
+      {showForm && (
+        <form
+          onSubmit={handleSubmit}
+          className="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs"
+        >
+          <div className="space-y-1 sm:col-span-2">
+            <label className="font-semibold text-slate-700">Providência (O quê) *</label>
             <input
               type="text"
+              required
               value={formData.what}
               onChange={(e) => setFormData({ ...formData, what: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Ação corretiva..."
+              placeholder="Ex.: Protocolar pedido de remanejamento ou cobrar nota pendente..."
+              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-800"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-[#2D5A27]">Por que fazer?</label>
+            <label className="font-semibold text-slate-700">Responsável (Quem) *</label>
             <input
               type="text"
-              value={formData.why}
-              onChange={(e) => setFormData({ ...formData, why: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Justificativa..."
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-[#2D5A27]">Onde será feito?</label>
-            <input
-              type="text"
-              value={formData.where}
-              onChange={(e) => setFormData({ ...formData, where: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Localidade / polo..."
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-[#2D5A27]">Quem é o responsável?</label>
-            <input
-              type="text"
+              required
               value={formData.who}
               onChange={(e) => setFormData({ ...formData, who: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Responsável nominal..."
+              placeholder="Nome do responsável"
+              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-800"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-amber-800">Até quando? (Prazo)</label>
-            <input
-              type="text"
-              value={formData.when}
-              onChange={(e) => setFormData({ ...formData, when: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Prazo limite..."
-            />
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <label className="font-semibold text-slate-700">Prazo (Quando) *</label>
+              <input
+                type="date"
+                required
+                value={formData.when}
+                onChange={(e) => setFormData({ ...formData, when: e.target.value })}
+                className="w-full bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-slate-800"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="font-semibold text-slate-700">Frente</label>
+              <select
+                aria-label="Frente da ação"
+                value={formData.originGap}
+                onChange={(e) => setFormData({ ...formData, originGap: e.target.value })}
+                className="w-full bg-white border border-slate-300 rounded-lg px-2 py-1.5 text-slate-800"
+              >
+                <option>Cronograma</option>
+                <option>Orçamento</option>
+                <option>Notas Fiscais</option>
+                <option>Fornecedor</option>
+              </select>
+            </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase text-amber-800">Impacto no Orçamento?</label>
-            <input
-              type="text"
-              value={formData.howMuch}
-              onChange={(e) => setFormData({ ...formData, howMuch: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Impacto financeiro ou economia..."
-            />
-          </div>
-
-          <div className="sm:col-span-2 md:col-span-3 space-y-1">
-            <label className="text-[10px] font-bold uppercase text-sky-800">Como será feito? (Passo a passo)</label>
+          <div className="space-y-1 sm:col-span-2">
+            <label className="font-semibold text-slate-700">Como executar (opcional)</label>
             <input
               type="text"
               value={formData.how}
               onChange={(e) => setFormData({ ...formData, how: e.target.value })}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#2D5A27]"
-              placeholder="Método e etapas de execução..."
+              placeholder="Detalhe operacional ou critério de liberação..."
+              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-800"
             />
           </div>
-        </div>
-      ) : plan ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-[#2D5A27] tracking-wider">O que fazer?</p>
-            <p className="text-xs font-semibold text-slate-900">{plan.what}</p>
-          </div>
 
-          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-[#2D5A27] tracking-wider">Por que fazer?</p>
-            <p className="text-xs text-slate-600">{plan.why}</p>
+          <div className="sm:col-span-2 flex justify-end">
+            <button
+              type="submit"
+              className="px-4 py-1.5 bg-[#2D5A27] hover:bg-[#1E3F20] text-white font-semibold rounded-lg cursor-pointer"
+            >
+              Salvar ação
+            </button>
           </div>
+        </form>
+      )}
 
-          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-[#2D5A27] tracking-wider">Onde será feito?</p>
-            <p className="text-xs text-slate-600">{plan.where}</p>
-          </div>
-
-          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-[#2D5A27] tracking-wider">Quem é o responsável?</p>
-            <p className="text-xs font-semibold text-slate-900">{plan.who}</p>
-          </div>
-
-          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-amber-800 tracking-wider">Até quando? (Prazo)</p>
-            <p className="text-xs font-semibold text-amber-800">{plan.when}</p>
-          </div>
-
-          <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-amber-800 tracking-wider">Impacto no Orçamento?</p>
-            <p className="text-xs font-semibold text-[#2D5A27]">{plan.howMuch}</p>
-          </div>
-
-          <div className="sm:col-span-2 md:col-span-3 p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1">
-            <p className="text-[10px] font-bold uppercase text-sky-800 tracking-wider">Como será feito?</p>
-            <p className="text-xs text-slate-600">{plan.how}</p>
-          </div>
+      {actions.length === 0 ? (
+        <div className="p-6 rounded-xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+          Nenhuma providência registrada para este programa.
         </div>
       ) : (
-        <div className="p-6 rounded-xl bg-slate-50 border border-slate-200 text-center space-y-2">
-          <p className="text-xs text-slate-500">Nenhum plano de ação registrado para esta reunião.</p>
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-[#1E3F20] border border-emerald-200 rounded-lg text-xs font-semibold transition"
-          >
-            Cadastrar Plano de Ação
-          </button>
+        <div className="space-y-2.5">
+          {actions.map((act) => {
+            const isOverdue =
+              act.status !== 'Concluída' && Boolean(act.when && act.when < cutoff.date);
+            const formattedWhen = act.when.includes('-')
+              ? act.when.split('-').reverse().join('/')
+              : act.when;
+
+            return (
+              <div
+                key={act.id}
+                className={`p-3.5 rounded-xl border space-y-2 text-xs transition ${
+                  act.status === 'Concluída'
+                    ? 'bg-slate-50/60 border-slate-200/80'
+                    : isOverdue
+                    ? 'bg-rose-50/30 border-rose-200'
+                    : 'bg-slate-50 border-slate-200/90'
+                }`}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5">
+                  <p className="font-semibold text-slate-900 text-xs leading-snug">
+                    {act.what}
+                  </p>
+
+                  <select
+                    aria-label={`Status da ação ${act.what}`}
+                    value={act.status}
+                    onChange={(e) => updateActionStatus(followUp.id, act.id, e.target.value)}
+                    className={`shrink-0 text-[11px] font-semibold rounded-lg px-2.5 py-1 border cursor-pointer focus:outline-none ${getStatusSelectStyle(
+                      act.status,
+                      isOverdue
+                    )}`}
+                  >
+                    <option value="Pendente">Pendente</option>
+                    <option value="Em Andamento">Em andamento</option>
+                    <option value="Concluída">Concluída</option>
+                  </select>
+                </div>
+
+                {act.how && (
+                  <p className="text-slate-600 leading-normal">{act.how}</p>
+                )}
+
+                <div className="flex items-center gap-3 flex-wrap pt-1 text-[11px] text-slate-500">
+                  <span className="px-2 py-0.5 rounded bg-white border border-slate-200 font-medium text-slate-700">
+                    {act.originGap}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <User className="w-3 h-3 text-slate-400" />
+                    <strong className="text-slate-700">{act.who}</strong>
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-slate-400" />
+                    <strong className={isOverdue ? 'text-rose-700' : 'text-slate-700'}>
+                      {formattedWhen}
+                    </strong>
+                  </span>
+                  {isOverdue && (
+                    <span className="px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-semibold">
+                      Prazo vencido
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
   );
 };
-

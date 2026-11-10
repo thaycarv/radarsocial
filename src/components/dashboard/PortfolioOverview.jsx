@@ -1,269 +1,347 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useProjects } from '../../context/ProjectContext';
 import {
   TrendingUp,
-  AlertCircle,
-  CheckCircle2,
   DollarSign,
   Briefcase,
-  Layers,
-  ArrowRight,
-  ShieldAlert,
-  Search
+  AlertTriangle,
+  FileCheck,
+  ChevronRight,
+  X
 } from 'lucide-react';
-import { formatCurrency, calculatePortfolioMetrics, calculatePhysicalFinancialGap } from '../../utils/calculations';
+import { formatCurrency, formatPercent } from '../../utils/calculations';
 
 export const PortfolioOverview = ({ onNavigate }) => {
-  const { projects, setSelectedProjectId, currentBrand } = useProjects();
-  const [filter, setFilter] = React.useState('Todos');
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const {
+    cutoff,
+    projects,
+    selectedProjectId,
+    setSelectedProjectId,
+    portfolioMetrics,
+    governanceAlerts
+  } = useProjects();
 
-  const metrics = calculatePortfolioMetrics(projects);
+  const [filter, setFilter] = useState('Todos');
+
+  const toggleStatusFilter = (targetStatus) => {
+    setFilter((prev) => (prev === targetStatus ? 'Todos' : targetStatus));
+  };
 
   const filteredProjects = projects.filter((p) => {
-    const matchesFilter = filter === 'Todos' || p.status === filter;
-    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          p.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          p.manager.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
+    if (filter === 'Todos') return true;
+    if (filter === 'No prazo') return p.overallStatus === 'Normal';
+    if (filter === 'Em atenção') return p.overallStatus !== 'Normal';
+    return true;
   });
 
+  const visibleProjectIds = new Set(filteredProjects.map((p) => p.id));
+  const filteredAlerts = governanceAlerts.filter((a) => visibleProjectIds.has(a.projectId));
+
+  const renderStatusBadge = (project) => (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border ${project.statusMeta.badgeClass}`}
+    >
+      {project.statusMeta.label}
+    </span>
+  );
+
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      {/* Top Banner Clean */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-50 text-[#1E3F20] text-xs font-semibold border border-emerald-200/80">
-            <Layers className="w-3.5 h-3.5" />
-            <span>Visão Consolidada do Portfólio</span>
-          </div>
-          <h2 className="text-xl font-bold text-slate-900">
-            Painel Geral de Acompanhamento
-          </h2>
-          <p className="text-xs text-slate-500 max-w-2xl">
-            Resumo de todos os projetos ativos: comparação entre entregas físicas, orçamento consumido e status de cada iniciativa.
+    <div className="space-y-6">
+      {/* Título enxuto + indicador de filtro ativo */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">Portfólio de Programas</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Posição consolidada em {cutoff.formattedDate}
           </p>
         </div>
 
-        <button
-          onClick={() => onNavigate('physicalFinancial')}
-          className="px-4 py-2 bg-[#2D5A27] hover:bg-[#1E3F20] text-white text-xs font-semibold rounded-lg flex items-center gap-2 transition shadow-xs shrink-0 cursor-pointer"
-        >
-          <span>Ver Ritmo de Entrega do Projeto Ativo</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        {filter !== 'Todos' && (
+          <button
+            type="button"
+            onClick={() => setFilter('Todos')}
+            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition cursor-pointer"
+          >
+            <span>Filtro: {filter} ({filteredProjects.length})</span>
+            <X className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
-      {/* KPI Cards Clean */}
+      {/* 4 Cards Principais - Limpos e Executivos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs flex items-center justify-between">
+        {/* Card 1: Programas (sem o label "Saúde da Carteira") */}
+        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div>
-            <p className="text-xs text-slate-500 font-medium">Projetos Ativos</p>
-            <h3 className="text-2xl font-extrabold text-slate-900 mt-1">{metrics.totalProjects}</h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">Em acompanhamento contínuo</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 rounded-xl text-[#2D5A27] border border-slate-200">
-            <Briefcase className="w-5 h-5" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-xs text-slate-500 font-medium">Orçamento Aprovado</p>
-            <h3 className="text-xl font-extrabold text-slate-900 mt-1">{formatCurrency(metrics.totalBudget)}</h3>
-            <p className="text-[11px] text-[#2D5A27] font-medium mt-0.5">{formatCurrency(metrics.totalExecuted)} gastos</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 rounded-xl text-[#2D5A27] border border-slate-200">
-            <DollarSign className="w-5 h-5" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-xs text-slate-500 font-medium">Média Físico vs Gastos</p>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="text-xl font-extrabold text-[#2D5A27]">{metrics.avgPhysical.toFixed(1)}%</span>
-              <span className="text-xs text-slate-400 font-medium">fís. /</span>
-              <span className="text-xl font-extrabold text-slate-800">{metrics.avgFinancial.toFixed(1)}%</span>
-              <span className="text-xs text-slate-400 font-medium">gasto</span>
-            </div>
-            <p className="text-[11px] text-slate-400 mt-0.5">Desvio médio: {(metrics.overallGap).toFixed(1)} p.p.</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 rounded-xl text-[#2D5A27] border border-slate-200">
-            <TrendingUp className="w-5 h-5" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-xs text-slate-500 font-medium">Saúde do Portfólio</p>
-            <div className="flex items-center gap-1.5 mt-2">
-              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                {metrics.healthyProjects} Normais
-              </span>
-              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                {metrics.warningProjects} Atenção
-              </span>
-              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-200">
-                {metrics.criticalProjects} Críticos
-              </span>
+            <p className="text-2xl font-extrabold text-slate-900">
+              {portfolioMetrics.totalProjects} programas
+            </p>
+            <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => toggleStatusFilter('No prazo')}
+                className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition cursor-pointer ${
+                  filter === 'No prazo'
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-2xs'
+                    : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                }`}
+              >
+                {portfolioMetrics.healthyCount} no prazo
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleStatusFilter('Em atenção')}
+                className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition cursor-pointer ${
+                  filter === 'Em atenção'
+                    ? 'bg-rose-600 text-white border-rose-600 shadow-2xs'
+                    : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                }`}
+              >
+                {portfolioMetrics.criticalCount + portfolioMetrics.warningCount} em atenção
+              </button>
             </div>
           </div>
-          <div className="p-2.5 bg-slate-50 rounded-xl text-rose-600 border border-slate-200">
-            <ShieldAlert className="w-5 h-5" />
+          <div className="p-2 bg-slate-50 rounded-lg text-[#2D5A27] border border-slate-200">
+            <Briefcase className="w-4 h-4" />
           </div>
         </div>
-      </div>
 
-      {/* Projects Table & Filters */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        {/* Card 2: Orçamento Total */}
+        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
           <div>
-            <h3 className="text-base font-bold text-slate-900">Projetos em Acompanhamento Ativo</h3>
-            <p className="text-xs text-slate-500">Clique para selecionar e abrir os detalhes do projeto</p>
+            <p className="text-xs text-slate-500 font-medium">Orçamento Total</p>
+            <p className="text-xl font-extrabold text-slate-900 mt-1">
+              {formatCurrency(portfolioMetrics.totalBudget)}
+            </p>
+            <p className="text-xs text-slate-500 mt-1.5">
+              Utilizado: <strong className="text-slate-800">{formatCurrency(portfolioMetrics.totalExecuted)}</strong> ({formatPercent(portfolioMetrics.weightedActualFinancial)})
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Saldo em caixa: {formatCurrency(portfolioMetrics.totalRemaining)}
+            </p>
           </div>
+          <div className="p-2 bg-slate-50 rounded-lg text-[#2D5A27] border border-slate-200">
+            <DollarSign className="w-4 h-4" />
+          </div>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Search Input */}
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Buscar projeto, código..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-500 w-52"
+        {/* Card 3: Entregas Realizadas */}
+        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
+          <div className="flex-1 pr-2">
+            <p className="text-xs text-slate-500 font-medium">Entregas Realizadas</p>
+            <div className="flex items-baseline gap-1.5 mt-1">
+              <span className="text-2xl font-extrabold text-[#2D5A27]">
+                {formatPercent(portfolioMetrics.weightedActualPhysical)}
+              </span>
+              <span className="text-xs text-slate-400">concluído</span>
+            </div>
+            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-2">
+              <div
+                className="bg-[#2D5A27] h-full rounded-full"
+                style={{ width: `${Math.min(100, portfolioMetrics.weightedActualPhysical)}%` }}
               />
             </div>
-
-            {/* Filter Buttons */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs">
-              {['Todos', 'Normal', 'Atenção', 'Crítico'].map((st) => (
-                <button
-                  key={st}
-                  onClick={() => setFilter(st)}
-                  className={`px-2.5 py-1 rounded-md font-medium transition ${
-                    filter === st ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {st}
-                </button>
-              ))}
-            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              Média ponderada do escopo físico
+            </p>
+          </div>
+          <div className="p-2 bg-slate-50 rounded-lg text-[#2D5A27] border border-slate-200">
+            <TrendingUp className="w-4 h-4" />
           </div>
         </div>
 
-        {/* Table */}
+        {/* Card 4: Prestação de Contas */}
+        <div className="bg-white border border-slate-200/90 rounded-xl p-4 shadow-2xs flex items-start justify-between">
+          <div>
+            <p className="text-xs text-slate-500 font-medium">Prestação de Contas</p>
+            <p className="text-xl font-extrabold text-slate-900 mt-1">
+              {formatPercent(portfolioMetrics.proofRegularityPercent)} <span className="text-xs font-normal text-slate-500">regular</span>
+            </p>
+            <p className="text-xs text-slate-500 mt-1.5">
+              Aprovado: <strong className="text-emerald-700">{formatCurrency(portfolioMetrics.totalApprovedProofs)}</strong>
+            </p>
+            <p className="text-[11px] text-slate-400 mt-0.5">
+              Em validação: {formatCurrency(portfolioMetrics.totalPendingProofs)}
+            </p>
+          </div>
+          <div className="p-2 bg-slate-50 rounded-lg text-emerald-700 border border-slate-200">
+            <FileCheck className="w-4 h-4" />
+          </div>
+        </div>
+      </div>
+
+      {/* Tabela de Programas - 5 Colunas Claras e Humanas */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-bold text-slate-900">
+              {filter === 'Todos' ? 'Em execução' : `Em execução · ${filter}`}
+            </h2>
+            <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold border border-slate-200">
+              {filteredProjects.length}
+            </span>
+          </div>
+
+          <div className="flex items-center bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs self-start">
+            {['Todos', 'No prazo', 'Em atenção'].map((st) => (
+              <button
+                key={st}
+                type="button"
+                onClick={() => setFilter(st)}
+                className={`px-3 py-1 rounded-md font-medium transition cursor-pointer ${
+                  filter === st
+                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {st}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold uppercase tracking-wider border-y border-slate-200">
+            <thead className="bg-slate-50 text-slate-600 font-semibold border-y border-slate-200">
               <tr>
-                <th className="py-2.5 px-4">Código / Projeto</th>
-                <th className="py-2.5 px-4">Gestor & Sponsor</th>
-                <th className="py-2.5 px-4">Orçamento</th>
-                <th className="py-2.5 px-4 text-center">Físico (% Prev / Real)</th>
-                <th className="py-2.5 px-4 text-center">Financeiro (% Prev / Real)</th>
-                <th className="py-2.5 px-4 text-center">Descompasso</th>
-                <th className="py-2.5 px-4 text-center">Status</th>
-                <th className="py-2.5 px-4 text-right">Ação</th>
+                <th className="py-2.5 px-3">Programa</th>
+                <th className="py-2.5 px-3 text-center">Status</th>
+                <th className="py-2.5 px-3">Entregas</th>
+                <th className="py-2.5 px-3">Orçamento Utilizado</th>
+                <th className="py-2.5 px-3">Situação Atual</th>
+                <th className="py-2.5 px-2 w-8"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredProjects.map((p) => {
-                const gapAnalysis = calculatePhysicalFinancialGap(p.actualPhysical, p.actualFinancial);
-                const isSelected = selectedProjectId === p.id;
-                return (
-                  <tr
-                    key={p.id}
-                    className={`card-interactive hover:bg-slate-50/80 transition cursor-pointer ${isSelected ? 'ring-2 ring-emerald-500/20 bg-emerald-50/30' : ''}`}
-                    onClick={() => {
-                      setSelectedProjectId(p.id);
-                      onNavigate('physicalFinancial');
-                    }}
-                  >
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-slate-900 text-sm hover:text-emerald-700 transition">
-                        {p.name}
-                      </div>
-                      <div className="text-[11px] text-slate-400 font-mono mt-0.5">{p.code}</div>
-                    </td>
+              {filteredProjects.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-slate-500">
+                    Nenhum programa encontrado com o filtro <strong>{filter}</strong>.
+                  </td>
+                </tr>
+              ) : (
+                filteredProjects.map((p) => {
+                  const isSelected = selectedProjectId === p.id;
+                  return (
+                    <tr
+                      key={p.id}
+                      onClick={() => {
+                        setSelectedProjectId(p.id);
+                        onNavigate('physicalFinancial');
+                      }}
+                      className={`hover:bg-slate-50/80 transition cursor-pointer group ${
+                        isSelected ? 'bg-emerald-50/30' : ''
+                      }`}
+                    >
+                      {/* 1. Programa & Financiador */}
+                      <td className="py-3.5 px-3">
+                        <div className="font-bold text-slate-900 text-xs">
+                          <span className="font-mono text-[11px] text-[#2D5A27] mr-1.5">{p.code}</span>
+                          {p.name}
+                        </div>
+                        <div className="text-[11px] text-slate-500 mt-0.5">
+                          {p.funder} · {p.manager}
+                        </div>
+                      </td>
 
-                    <td className="py-3 px-4">
-                      <div className="text-slate-800 font-medium">{p.manager}</div>
-                      <div className="text-[11px] text-slate-400">{p.sponsor}</div>
-                    </td>
+                      {/* 2. Status Geral Unificado */}
+                      <td className="py-3.5 px-3 text-center whitespace-nowrap">
+                        {renderStatusBadge(p)}
+                      </td>
 
-                    <td className="py-3 px-4 font-semibold text-slate-800">
-                      <div>{formatCurrency(p.totalBudget)}</div>
-                      <div className="text-[11px] text-slate-400">{formatCurrency(p.executedBudget)} gasto</div>
-                    </td>
+                      {/* 3. Entregas Físicas */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-900">{formatPercent(p.actualPhysical)}</span>
+                          <span className="text-[11px] text-slate-400">meta {formatPercent(p.plannedPhysical)}</span>
+                        </div>
+                        <div className="w-24 bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden">
+                          <div
+                            className="bg-[#2D5A27] h-full rounded-full"
+                            style={{ width: `${Math.min(100, p.actualPhysical)}%` }}
+                          />
+                        </div>
+                      </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <div className="flex items-center justify-center gap-1 font-medium">
-                        <span className="text-slate-400">{p.plannedPhysical}%</span>
-                        <span className="text-slate-300">/</span>
-                        <span className="font-bold text-slate-900">{p.actualPhysical}%</span>
-                      </div>
-                      <div className="w-20 bg-slate-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
-                        <div className="bg-emerald-600 h-full rounded-full transition-all duration-500" style={{ width: `${p.actualPhysical}%` }}></div>
-                      </div>
-                    </td>
+                      {/* 4. Orçamento Utilizado */}
+                      <td className="py-3.5 px-3 whitespace-nowrap">
+                        <div className="font-bold text-slate-900">
+                          {formatCurrency(p.executedBudget)}{' '}
+                          <span className="text-[11px] font-normal text-slate-500">
+                            ({formatPercent(p.actualFinancial)})
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-slate-400">
+                          Total: {formatCurrency(p.totalBudget)}
+                        </div>
+                      </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <div className="flex items-center justify-center gap-1 font-medium">
-                        <span className="text-slate-400">{p.plannedFinancial}%</span>
-                        <span className="text-slate-300">/</span>
-                        <span className={`font-bold ${p.actualFinancial > p.actualPhysical + 10 ? 'text-rose-600' : 'text-slate-800'}`}>
-                          {p.actualFinancial}%
-                        </span>
-                      </div>
-                      <div className="w-20 bg-slate-100 h-1.5 rounded-full mx-auto mt-1 overflow-hidden">
-                        <div className="bg-sky-600 h-full rounded-full transition-all duration-500" style={{ width: `${p.actualFinancial}%` }}></div>
-                      </div>
-                    </td>
+                      {/* 5. Situação Atual / Headline */}
+                      <td className="py-3.5 px-3 max-w-xs sm:max-w-sm">
+                        <p className="text-xs text-slate-700 leading-snug">
+                          {p.operationalHeadline || p.name}
+                        </p>
+                      </td>
 
-                    <td className="py-3 px-4 text-center">
-                      <span className={`inline-block font-bold text-xs px-2 py-0.5 rounded-md border ${
-                        gapAnalysis.severity === 'high' ? 'bg-rose-50 border-rose-200 text-rose-700' :
-                        gapAnalysis.severity === 'medium' ? 'bg-amber-50 border-amber-200 text-amber-800' :
-                        'bg-emerald-50 border-emerald-200 text-emerald-800'
-                      }`}>
-                        {gapAnalysis.gap > 0 ? `+${gapAnalysis.gap.toFixed(1)}%` : `${gapAnalysis.gap.toFixed(1)}%`}
-                      </span>
-                    </td>
-
-                    <td className="py-3 px-4 text-center">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                        project.status === 'Crítico'
-                          ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                          : project.status === 'Atenção'
-                          ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                          : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                      }`}>
-                        {project.status}
-                      </span>
-                    </td>
-
-                    <td className="py-3 px-4 text-right">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedProjectId(project.id);
-                          onNavigate('operations');
-                        }}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-teal-600 text-slate-700 hover:text-white rounded-md transition font-medium text-xs border border-slate-200"
-                      >
-                        Follow-up
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+                      {/* 6. Seta de Navegação */}
+                      <td className="py-3.5 px-2 text-right">
+                        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-[#2D5A27] inline" />
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Prioridades de Gestão do Mês (apenas ações reais necessárias) */}
+      {filteredAlerts.length > 0 && (
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-3">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-amber-600" />
+            <h2 className="text-sm font-bold text-slate-900">
+              Prioridades de Gestão do Mês ({filteredAlerts.length})
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {filteredAlerts.map((alert) => {
+              const borderStyle =
+                alert.severity === 'high'
+                  ? 'border-l-4 border-l-rose-600 bg-rose-50/40 border-slate-200'
+                  : 'border-l-4 border-l-amber-500 bg-amber-50/40 border-slate-200';
+
+              return (
+                <button
+                  key={alert.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedProjectId(alert.projectId);
+                    onNavigate(alert.targetTab);
+                  }}
+                  className={`text-left p-3.5 rounded-xl border ${borderStyle} hover:shadow-xs transition cursor-pointer flex items-center justify-between gap-3 group`}
+                >
+                  <div className="space-y-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-700">
+                        {alert.category}
+                      </span>
+                      <span className="text-xs font-bold text-slate-900 truncate">
+                        {alert.projectName}
+                      </span>
+                    </div>
+                    <p className="text-xs font-semibold text-slate-800">{alert.title}</p>
+                    <p className="text-[11px] text-slate-600 leading-relaxed">{alert.detail}</p>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-slate-700 shrink-0" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-

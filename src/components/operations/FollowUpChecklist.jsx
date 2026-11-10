@@ -1,133 +1,212 @@
 import React, { useState } from 'react';
 import { useProjects } from '../../context/ProjectContext';
 import {
-  ListTodo,
   CheckCircle2,
   Circle,
+  Plus,
   AlertTriangle,
-  Calendar,
-  User,
-  ClipboardList
+  LineChart
 } from 'lucide-react';
 import { ActionPlan5W2H } from './ActionPlan5W2H';
+import { ProgramSelectorBar } from '../common/ProgramSelectorBar';
 
-export const FollowUpChecklist = () => {
-  const { followUps, toggleChecklistItem } = useProjects();
-  const [selectedChecklistId, setSelectedChecklistId] = useState(followUps[0]?.id);
+export const FollowUpChecklist = ({ onNavigate }) => {
+  const {
+    cutoff,
+    selectedProjectId,
+    selectedProject,
+    followUps,
+    toggleChecklistItem,
+    addChecklistItem
+  } = useProjects();
 
-  const activeFollowUp = followUps.find(f => f.id === selectedChecklistId) || followUps[0];
+  const [newItemTitle, setNewItemTitle] = useState('');
 
-  const totalItems = activeFollowUp?.items.length || 0;
-  const completedItems = activeFollowUp?.items.filter(i => i.checked).length || 0;
-  const progressPercent = totalItems ? Math.round((completedItems / totalItems) * 100) : 0;
+  const activeFollowUp =
+    followUps.find((f) => f.projectId === selectedProjectId) || followUps[0];
+
+  if (!selectedProject || !activeFollowUp) return null;
+
+  const p = selectedProject;
+  const completedItems = activeFollowUp.items.filter((i) => i.checked).length;
+  const totalItems = activeFollowUp.items.length;
+
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    if (!newItemTitle.trim()) return;
+    addChecklistItem(activeFollowUp.id, {
+      title: newItemTitle.trim(),
+      responsible: p.manager || activeFollowUp.responsible,
+      deadline: cutoff.formattedDate,
+      note: 'Incluído no acompanhamento da carteira.'
+    });
+    setNewItemTitle('');
+  };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      {/* Top Banner */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-          <div>
-            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <ClipboardList className="w-4 h-4 text-[#2D5A27]" />
-              <span>Plano de Ação e Acompanhamento de Rotinas</span>
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Registro de combinados, checagens periódicas e ações para manter as entregas no prazo.
-            </p>
-          </div>
+    <div className="space-y-5">
+      <ProgramSelectorBar />
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500 font-medium">Reunião Selecionada:</span>
-            <select
-              value={selectedChecklistId}
-              onChange={(e) => setSelectedChecklistId(e.target.value)}
-              className="bg-slate-50 text-slate-800 font-semibold text-xs py-1.5 px-3 rounded-lg border border-slate-200 focus:outline-none focus:border-[#2D5A27] cursor-pointer"
-            >
-              {followUps.map(f => (
-                <option key={f.id} value={f.id}>
-                  {f.date} - {f.projectName}
-                </option>
-              ))}
-            </select>
+      {/* Cabeçalho consistente com a aba de Execução e Orçamento */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-xs text-slate-500 flex-wrap">
+            <span className="font-mono font-bold text-[#2D5A27]">{p.code}</span>
+            <span>·</span>
+            <span>{p.funder}</span>
+            <span>·</span>
+            <span>Rotina {activeFollowUp.frequency?.toLowerCase()}</span>
           </div>
+          <h1 className="text-lg font-bold text-slate-900">{p.name}</h1>
+          <p className="text-xs text-slate-600">
+            Reunião conduzida por <strong className="text-slate-800">{activeFollowUp.responsible}</strong> com{' '}
+            <strong className="text-slate-800">{p.manager}</strong> · Última ata: <strong>{activeFollowUp.date}</strong>
+          </p>
         </div>
 
-        {/* Metadata */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70">
-            <p className="text-slate-400">Iniciativa</p>
-            <p className="font-bold text-slate-800 mt-0.5">{activeFollowUp?.projectName}</p>
-          </div>
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70">
-            <p className="text-slate-400">Responsável</p>
-            <p className="font-bold text-slate-800 mt-0.5 flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-[#2D5A27]" />
-              {activeFollowUp?.responsible}
-            </p>
-          </div>
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70">
-            <p className="text-slate-400">Data e Frequência</p>
-            <p className="font-bold text-slate-800 mt-0.5 flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-sky-600" />
-              {activeFollowUp?.date} ({activeFollowUp?.frequency})
-            </p>
-          </div>
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200/70">
-            <p className="text-slate-400">Itens Verificados</p>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="font-extrabold text-[#2D5A27]">{completedItems} de {totalItems}</span>
-              <span className="text-slate-400">({progressPercent}%)</span>
-            </div>
-          </div>
+        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+          {p.statusMeta && (
+            <span className={`px-3 py-1 rounded-full border text-xs font-semibold ${p.statusMeta.badgeClass}`}>
+              {p.statusMeta.label}
+            </span>
+          )}
+          {onNavigate && (
+            <button
+              type="button"
+              onClick={() => onNavigate('physicalFinancial')}
+              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg border border-slate-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <LineChart className="w-3.5 h-3.5 text-[#2D5A27]" />
+              <span>Ver Execução e Orçamento</span>
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Checklist Items Interactive List */}
-      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <ListTodo className="w-4 h-4 text-[#2D5A27]" />
-            <span>Itens de Verificação e Combinados</span>
-          </h3>
-          <span className="text-xs text-slate-400">Clique para marcar ou desmarcar o item</span>
-        </div>
-
-        <div className="space-y-2.5">
-          {activeFollowUp?.items.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => toggleChecklistItem(activeFollowUp.id, item.id)}
-              className={`p-3.5 rounded-xl border cursor-pointer card-interactive flex items-start gap-3 transition-all duration-200 select-none ${
-                item.checked
-                  ? 'bg-emerald-50/70 border-emerald-300 shadow-xs'
-                  : 'bg-white border-slate-200/90 hover:border-slate-300 hover:bg-slate-50/70'
-              }`}
-            >
-              <div className="mt-0.5 transition-transform duration-200 hover:scale-110">
-                {item.checked ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 animate-fade-scale" />
-                ) : (
-                  <Circle className="w-4 h-4 text-slate-300" />
-                )}
-              </div>
-              <div className="flex-1 text-xs">
-                <p className={`font-medium transition-colors duration-200 ${item.checked ? 'line-through text-slate-400' : 'text-slate-800'}`}>
-                  {item.text}
+      {/* Layout em 2 Colunas: Conferências + Riscos | Plano de Ação */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <div className="lg:col-span-5 space-y-5">
+          {/* Verificações da Última Reunião */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-3.5">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h2 className="text-sm font-bold text-slate-900">Verificações da Última Reunião</h2>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Pontos checados junto à coordenação local em {activeFollowUp.date}
                 </p>
-                <div className="flex items-center gap-3 mt-1 text-[11px] text-slate-400">
-                  <span className="font-semibold text-slate-500">Resp: {item.responsible}</span>
-                  <span>•</span>
-                  <span>Prazo: {item.deadline}</span>
-                </div>
+              </div>
+              <span className="text-xs font-semibold text-slate-500 shrink-0">
+                {completedItems}/{totalItems} conferidos
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {activeFollowUp.items.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => toggleChecklistItem(activeFollowUp.id, item.id)}
+                  className={`w-full text-left p-3 rounded-xl border cursor-pointer flex items-start gap-2.5 transition ${
+                    item.checked
+                      ? 'bg-emerald-50/40 border-emerald-200/80'
+                      : 'bg-white border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="mt-0.5 shrink-0">
+                    {item.checked ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                    ) : (
+                      <Circle className="w-4 h-4 text-slate-400" />
+                    )}
+                  </div>
+
+                  <div className="flex-1 text-xs space-y-1">
+                    <p
+                      className={`font-medium leading-snug ${
+                        item.checked ? 'line-through text-slate-500' : 'text-slate-900'
+                      }`}
+                    >
+                      {item.title}
+                    </p>
+                    {item.note && (
+                      <p className="text-[11px] text-slate-500 leading-normal">{item.note}</p>
+                    )}
+                    <p className="text-[11px] text-slate-400">
+                      {item.responsible} · Ref.: {item.deadline}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <form onSubmit={handleAddItem} className="flex items-center gap-2 pt-1 text-xs">
+              <input
+                type="text"
+                value={newItemTitle}
+                onChange={(e) => setNewItemTitle(e.target.value)}
+                placeholder="Registrar novo ponto de verificação..."
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-slate-800 focus:outline-none focus:border-[#2D5A27]"
+              />
+              <button
+                type="submit"
+                className="p-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition cursor-pointer shrink-0"
+                title="Registrar ponto"
+                aria-label="Registrar ponto de verificação"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+
+          {/* Riscos em Monitoramento */}
+          {p.risks && p.risks.length > 0 && (
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-3">
+              <div>
+                <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600" />
+                  <span>Riscos em Monitoramento</span>
+                </h2>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Eventos que podem afetar entregas futuras e resposta preventiva definida
+                </p>
+              </div>
+              <div className="space-y-2.5">
+                {p.risks.map((risk) => (
+                  <div
+                    key={risk.id}
+                    className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-semibold text-slate-900 leading-snug">
+                        {risk.description}
+                      </p>
+                      <span
+                        className={`shrink-0 px-2 py-0.5 rounded border text-[11px] font-semibold ${
+                          risk.impact === 'Alto'
+                            ? 'bg-rose-50 text-rose-700 border-rose-200'
+                            : risk.impact === 'Médio'
+                            ? 'bg-amber-50 text-amber-800 border-amber-200'
+                            : 'bg-white text-slate-600 border-slate-200'
+                        }`}
+                      >
+                        Impacto {risk.impact}
+                      </span>
+                    </div>
+                    <p className="text-slate-600 text-[11px] leading-normal">
+                      <strong>Mitigação:</strong> {risk.mitigation}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          )}
+        </div>
+
+        {/* Coluna Direita: Plano de Ação (Providências) */}
+        <div className="lg:col-span-7">
+          <ActionPlan5W2H key={p.id} followUp={activeFollowUp} project={p} />
         </div>
       </div>
-
-      {/* 5W2H Action Plan Section */}
-      <ActionPlan5W2H followUp={activeFollowUp} />
     </div>
   );
 };
-

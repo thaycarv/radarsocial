@@ -1,241 +1,361 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import {
-  INITIAL_IDENTITY,
-  INITIAL_SWOT,
-  INITIAL_STRATEGY_TREE,
+  PORTFOLIO_CUTOFF,
   INITIAL_PROJECTS,
   INITIAL_FOLLOW_UPS,
-  INITIAL_DOCUMENTS,
-  NAMING_OPTIONS,
+  INITIAL_EVIDENCES,
   INITIAL_COMMUNITY_FEEDBACKS,
   INITIAL_COMMUNITY_ACTIONS
 } from '../data/mockData';
+import {
+  deriveProjectMetrics,
+  deriveRubricMetrics,
+  calculatePortfolioMetrics,
+  generateGovernanceAlerts
+} from '../utils/calculations';
+
+const STORAGE_KEYS = {
+  projects: 'radarsocial_v14_projects',
+  followUps: 'radarsocial_v14_followups',
+  evidences: 'radarsocial_v14_evidences',
+  communityFeedbacks: 'radarsocial_v14_feedbacks',
+  communityActions: 'radarsocial_v14_actions',
+  theme: 'radarsocial_v14_theme'
+};
+
+// Purge legacy storage keys so client browsers always initialize with the current schema
+if (typeof window !== 'undefined' && window.localStorage) {
+  const versions = ['', '_v2', '_v3', '_v4', '_v5', '_v6', '_v7', '_v8', '_v9', '_v10', '_v11', '_v12', '_v13'];
+  const suffixes = ['projects', 'followups', 'evidences', 'theme'];
+  versions.forEach((v) => {
+    suffixes.forEach((s) => {
+      try {
+        localStorage.removeItem(`radarsocial${v}_${s}`);
+      } catch {
+        // ignore
+      }
+    });
+  });
+}
+
+const safeLoad = (key, fallback, validator) => {
+  try {
+    const saved = localStorage.getItem(key);
+    if (!saved) return fallback;
+    const parsed = JSON.parse(saved);
+    if (validator && !validator(parsed)) return fallback;
+    return parsed;
+  } catch {
+    return fallback;
+  }
+};
+
+const hasCurrentProjectSchema = (arr) =>
+  Array.isArray(arr) &&
+  arr.length > 0 &&
+  Array.isArray(arr[0]?.budgetBreakdown?.[0]?.expenses) &&
+  typeof arr[0]?.deliverables?.[0]?.deliverableDoc === 'string';
 
 const ProjectContext = createContext();
 
 export const ProjectProvider = ({ children }) => {
-  const [identity, setIdentity] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_identity_v7');
-    return saved ? JSON.parse(saved) : INITIAL_IDENTITY;
-  });
+  const [rawProjects, setRawProjects] = useState(() =>
+    safeLoad(STORAGE_KEYS.projects, INITIAL_PROJECTS, hasCurrentProjectSchema)
+  );
+  const [followUps, setFollowUps] = useState(() =>
+    safeLoad(STORAGE_KEYS.followUps, INITIAL_FOLLOW_UPS)
+  );
+  const [evidences, setEvidences] = useState(() =>
+    safeLoad(STORAGE_KEYS.evidences, INITIAL_EVIDENCES)
+  );
+  const [communityFeedbacks, setCommunityFeedbacks] = useState(() =>
+    safeLoad(STORAGE_KEYS.communityFeedbacks, INITIAL_COMMUNITY_FEEDBACKS)
+  );
+  const [communityActions, setCommunityActions] = useState(() =>
+    safeLoad(STORAGE_KEYS.communityActions, INITIAL_COMMUNITY_ACTIONS)
+  );
 
-  const [swot, setSwot] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_swot_v7');
-    return saved ? JSON.parse(saved) : INITIAL_SWOT;
-  });
-
-  const [strategyTree, setStrategyTree] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_strategy_tree_v7');
-    return saved ? JSON.parse(saved) : INITIAL_STRATEGY_TREE;
-  });
-
-  const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_projects_v7');
-    return saved ? JSON.parse(saved) : INITIAL_PROJECTS;
-  });
-
-  const [followUps, setFollowUps] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_follow_ups_v7');
-    return saved ? JSON.parse(saved) : INITIAL_FOLLOW_UPS;
-  });
-
-  const [documents, setDocuments] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_documents_v7');
-    return saved ? JSON.parse(saved) : INITIAL_DOCUMENTS;
-  });
-
-  const [communityFeedbacks, setCommunityFeedbacks] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_community_feedbacks_v7');
-    return saved ? JSON.parse(saved) : INITIAL_COMMUNITY_FEEDBACKS;
-  });
-
-  const [communityActions, setCommunityActions] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_community_actions_v7');
-    return saved ? JSON.parse(saved) : INITIAL_COMMUNITY_ACTIONS;
-  });
-
-  const [selectedProjectId, setSelectedProjectId] = useState("proj-101");
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('radarsocial_theme') || 'default';
-  });
-  const [currentBrand, setCurrentBrand] = useState(() => {
-    const saved = localStorage.getItem('radarsocial_current_brand_v7');
-    return saved ? JSON.parse(saved) : NAMING_OPTIONS[0];
+    const saved = localStorage.getItem(STORAGE_KEYS.theme);
+    return saved === 'dark' ? 'dark' : 'default';
   });
 
-  useEffect(() => {
-    localStorage.setItem('radarsocial_theme', theme);
-  }, [theme]);
-
-  // Sync with LocalStorage
-  useEffect(() => {
-    localStorage.setItem('radarsocial_identity_v7', JSON.stringify(identity));
-  }, [identity]);
+  const [selectedProjectId, setSelectedProjectId] = useState(
+    () => rawProjects[0]?.id || 'prog-101'
+  );
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('radarsocial_swot_v7', JSON.stringify(swot));
-  }, [swot]);
+    localStorage.setItem(STORAGE_KEYS.projects, JSON.stringify(rawProjects));
+  }, [rawProjects]);
 
   useEffect(() => {
-    localStorage.setItem('radarsocial_strategy_tree_v7', JSON.stringify(strategyTree));
-  }, [strategyTree]);
-
-  useEffect(() => {
-    localStorage.setItem('radarsocial_projects_v7', JSON.stringify(projects));
-  }, [projects]);
-
-  useEffect(() => {
-    localStorage.setItem('radarsocial_follow_ups_v7', JSON.stringify(followUps));
+    localStorage.setItem(STORAGE_KEYS.followUps, JSON.stringify(followUps));
   }, [followUps]);
 
   useEffect(() => {
-    localStorage.setItem('radarsocial_documents_v7', JSON.stringify(documents));
-  }, [documents]);
+    localStorage.setItem(STORAGE_KEYS.evidences, JSON.stringify(evidences));
+  }, [evidences]);
 
   useEffect(() => {
-    localStorage.setItem('radarsocial_community_feedbacks_v7', JSON.stringify(communityFeedbacks));
+    try {
+      localStorage.setItem(STORAGE_KEYS.communityFeedbacks, JSON.stringify(communityFeedbacks));
+    } catch {
+      // ignore
+    }
   }, [communityFeedbacks]);
 
   useEffect(() => {
-    localStorage.setItem('radarsocial_community_actions_v7', JSON.stringify(communityActions));
+    try {
+      localStorage.setItem(STORAGE_KEYS.communityActions, JSON.stringify(communityActions));
+    } catch {
+      // ignore
+    }
   }, [communityActions]);
 
   useEffect(() => {
-    localStorage.setItem('desdobra_follow_ups', JSON.stringify(followUps));
-  }, [followUps]);
+    localStorage.setItem(STORAGE_KEYS.theme, theme);
+  }, [theme]);
 
-  useEffect(() => {
-    localStorage.setItem('desdobra_current_brand', JSON.stringify(currentBrand));
-  }, [currentBrand]);
+  const projects = useMemo(
+    () => rawProjects.map((p) => deriveProjectMetrics(p)),
+    [rawProjects]
+  );
 
-  const selectedProject = projects.find(p => p.id === selectedProjectId) || projects[0];
+  const selectedProject = useMemo(
+    () => projects.find((p) => p.id === selectedProjectId) || projects[0],
+    [projects, selectedProjectId]
+  );
 
-  const updateIdentity = (newIdentity) => setIdentity(newIdentity);
+  const portfolioMetrics = useMemo(
+    () => calculatePortfolioMetrics(projects),
+    [projects]
+  );
 
-  const addSwotItem = (quadrant, text) => {
-    setSwot(prev => ({
-      ...prev,
-      [quadrant]: [...prev[quadrant], { id: `swot-${Date.now()}`, text }]
-    }));
-  };
+  const governanceAlerts = useMemo(
+    () => generateGovernanceAlerts(projects),
+    [projects]
+  );
 
-  const removeSwotItem = (quadrant, id) => {
-    setSwot(prev => ({
-      ...prev,
-      [quadrant]: prev[quadrant].filter(item => item.id !== id)
-    }));
-  };
-
-  const updateProjectProgress = (id, actualPhysical, actualFinancial) => {
-    const physical = Number(actualPhysical);
-    const financial = Number(actualFinancial);
-
-    let status = "Normal";
-    if (financial - physical > 15) status = "Crítico";
-    else if (financial - physical > 5) status = "Atenção";
-
-    setProjects(prev => prev.map(p => {
-      if (p.id === id) {
-        // Atualizar o último ponto medido na Curva S para refletir no gráfico imediatamente
-        const updatedCurveS = p.curveS ? p.curveS.map((pt, idx, arr) => {
-          // Encontrar o último mês com medição real ou o mês atual (Jun)
-          if (idx === 5 || idx === arr.findIndex(item => item.actualPhysical === null) - 1 || idx === arr.length - 1) {
-            return { ...pt, actualPhysical: physical, actualFinancial: financial };
-          }
-          return pt;
-        }) : [];
-
+  const updateDeliverableStatus = (projectId, deliverableId, newStatus) => {
+    if (!['pending', 'in_progress', 'done'].includes(newStatus)) return;
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
         return {
           ...p,
-          actualPhysical: physical,
-          actualFinancial: financial,
-          status,
-          executedBudget: Math.round((financial / 100) * p.totalBudget),
-          curveS: updatedCurveS
+          deliverables: p.deliverables.map((d) => {
+            if (d.id !== deliverableId) return d;
+            return {
+              ...d,
+              status: newStatus,
+              completedAt:
+                newStatus === 'done' ? d.completedAt || PORTFOLIO_CUTOFF.formattedDate : null
+            };
+          })
         };
-      }
-      return p;
-    }));
-
-    // Sincronizar também na árvore de desdobramento
-    setStrategyTree(prev => prev.map(oe => ({
-      ...oe,
-      tacticalProjects: oe.tacticalProjects ? oe.tacticalProjects.map(tp => {
-        if (tp.id === id) {
-          return {
-            ...tp,
-            physicalProgress: physical,
-            financialProgress: financial,
-            spent: Math.round((financial / 100) * (tp.budget || 300000)),
-            status: status === "Normal" ? "Em Dia" : status === "Crítico" ? "Em Risco" : "Atenção"
-          };
-        }
-        return tp;
-      }) : []
-    })));
+      })
+    );
   };
 
-  const resetProjectProgress = (id) => {
-    const original = INITIAL_PROJECTS.find(p => p.id === id);
-    if (!original) return;
+  const validateExpenseProof = (projectId, rubricId, expenseId, docRef) => {
+    const cleanDoc = (docRef || '').trim();
+    if (!cleanDoc) return;
 
-    updateProjectProgress(id, original.actualPhysical, original.actualFinancial);
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          budgetBreakdown: p.budgetBreakdown.map((r) => {
+            if (r.id !== rubricId) return r;
+            return {
+              ...r,
+              expenses: (r.expenses || []).map((exp) =>
+                exp.id === expenseId
+                  ? { ...exp, status: 'approved', docRef: cleanDoc }
+                  : exp
+              )
+            };
+          })
+        };
+      })
+    );
+  };
+
+  const releaseRetainedExpense = (projectId, rubricId, expenseId) => {
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          budgetBreakdown: p.budgetBreakdown.map((r) => {
+            if (r.id !== rubricId) return r;
+            return {
+              ...r,
+              expenses: (r.expenses || []).map((exp) =>
+                exp.id === expenseId ? { ...exp, status: 'approved' } : exp
+              )
+            };
+          })
+        };
+      })
+    );
+  };
+
+  const addRubricExpense = (projectId, rubricId, payload) => {
+    const amount = Math.round(Number(payload.amount) || 0);
+    if (amount <= 0) return { ok: false, error: 'Informe um valor válido maior que zero.' };
+
+    const targetProject = rawProjects.find((p) => p.id === projectId);
+    const targetRubric = targetProject?.budgetBreakdown?.find((r) => r.id === rubricId);
+    if (!targetRubric) return { ok: false, error: 'Rubrica não localizada.' };
+
+    const metrics = deriveRubricMetrics(targetRubric);
+    if (amount > metrics.availableBalance) {
+      return {
+        ok: false,
+        error: `Valor excede o saldo livre da rubrica (${metrics.availableBalance}). Acima do teto exige remanejamento formal.`
+      };
+    }
+
+    const newEntry = {
+      id: `exp-${Date.now()}`,
+      date: payload.date || PORTFOLIO_CUTOFF.formattedDate,
+      supplier: payload.supplier.trim(),
+      description: payload.description.trim(),
+      docRef: payload.docRef.trim(),
+      amount,
+      status: payload.status || 'approved'
+    };
+
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          budgetBreakdown: p.budgetBreakdown.map((r) =>
+            r.id === rubricId
+              ? { ...r, expenses: [...(r.expenses || []), newEntry] }
+              : r
+          )
+        };
+      })
+    );
+
+    return { ok: true };
+  };
+
+  const updateImpactActual = (projectId, metricId, newActual) => {
+    const val = Math.max(0, Number(newActual) || 0);
+    setRawProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p;
+        const targetMetric = p.impactMetrics.find((m) => m.id === metricId);
+        return {
+          ...p,
+          beneficiariesActual: targetMetric?.syncsBeneficiaries
+            ? Math.round(val)
+            : p.beneficiariesActual,
+          impactMetrics: p.impactMetrics.map((m) =>
+            m.id === metricId ? { ...m, actual: val } : m
+          )
+        };
+      })
+    );
   };
 
   const toggleChecklistItem = (followUpId, itemId) => {
-    setFollowUps(prev => prev.map(f => {
-      if (f.id === followUpId) {
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
         return {
           ...f,
-          items: f.items.map(item => item.id === itemId ? { ...item, checked: !item.checked } : item)
+          items: f.items.map((item) =>
+            item.id === itemId ? { ...item, checked: !item.checked } : item
+          )
         };
-      }
-      return f;
-    }));
+      })
+    );
   };
 
-  const addActionPlan = (followUpId, plan) => {
-    setFollowUps(prev => prev.map(f => {
-      if (f.id === followUpId) {
-        return { ...f, actionPlan5W2H: plan };
-      }
-      return f;
-    }));
+  const addChecklistItem = (followUpId, newItem) => {
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
+        return {
+          ...f,
+          items: [
+            ...f.items,
+            {
+              id: `item-${Date.now()}`,
+              checked: false,
+              ...newItem
+            }
+          ]
+        };
+      })
+    );
   };
 
-  const addDocument = (newDoc) => {
-    setDocuments(prev => [
-      {
-        id: `doc-${Date.now()}`,
-        uploadDate: new Date().toISOString().split('T')[0],
-        ...newDoc
-      },
-      ...prev
-    ]);
+  const addActionPlanItem = (followUpId, actionData) => {
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
+        return {
+          ...f,
+          actionPlans: [
+            ...(f.actionPlans || []),
+            {
+              id: `act-${Date.now()}`,
+              status: 'Pendente',
+              ...actionData
+            }
+          ]
+        };
+      })
+    );
   };
 
-  const deleteDocument = (docId) => {
-    setDocuments(prev => prev.filter(d => d.id !== docId));
+  const updateActionStatus = (followUpId, actionId, newStatus) => {
+    if (!['Pendente', 'Em Andamento', 'Concluída'].includes(newStatus)) return;
+    setFollowUps((prev) =>
+      prev.map((f) => {
+        if (f.id !== followUpId) return f;
+        return {
+          ...f,
+          actionPlans: (f.actionPlans || []).map((a) =>
+            a.id === actionId ? { ...a, status: newStatus } : a
+          )
+        };
+      })
+    );
+  };
+
+  const addEvidence = (doc) => {
+    setEvidences((prev) => [{ id: `ev-${Date.now()}`, ...doc }, ...prev]);
   };
 
   const updateCommunityFeedback = (id, updatedFields) => {
-    setCommunityFeedbacks(prev => prev.map(f => {
-      if (f.id !== id) return f;
-      const updatedHistory = [...(f.history || [])];
-      if (updatedFields.status && updatedFields.status !== f.status) {
-        const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        updatedHistory.push(`${timeNow} · Status alterado para ${updatedFields.status}`);
-      }
-      return {
-        ...f,
-        ...updatedFields,
-        history: updatedHistory
-      };
-    }));
+    setCommunityFeedbacks((prev) =>
+      prev.map((f) => {
+        if (f.id !== id) return f;
+        const updatedHistory = [...(f.history || [])];
+        if (updatedFields.status && updatedFields.status !== f.status) {
+          const timeNow = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+          updatedHistory.push(`${timeNow} · Status alterado para ${updatedFields.status}`);
+        }
+        return {
+          ...f,
+          ...updatedFields,
+          history: updatedHistory
+        };
+      })
+    );
   };
 
   const addCommunityFeedback = (newFeedback) => {
-    setCommunityFeedbacks(prev => [
+    setCommunityFeedbacks((prev) => [
       {
         id: `ESC-${Date.now().toString().slice(-4)}`,
         date: new Date().toISOString().split('T')[0],
@@ -251,64 +371,70 @@ export const ProjectProvider = ({ children }) => {
   };
 
   const toggleCommunityAction = (actionId) => {
-    setCommunityActions(prev => prev.map(a => {
-      if (a.id !== actionId) return a;
-      return {
-        ...a,
-        status: a.status === 'Concluída' ? 'Em andamento' : 'Concluída'
-      };
-    }));
+    setCommunityActions((prev) =>
+      prev.map((a) => {
+        if (a.id !== actionId) return a;
+        return {
+          ...a,
+          status: a.status === 'Concluída' ? 'Em andamento' : 'Concluída'
+        };
+      })
+    );
   };
 
   const resetToDefault = () => {
-    localStorage.clear();
-    setIdentity(INITIAL_IDENTITY);
-    setSwot(INITIAL_SWOT);
-    setStrategyTree(INITIAL_STRATEGY_TREE);
-    setProjects(INITIAL_PROJECTS);
+    try {
+      localStorage.clear();
+    } catch {
+      // ignore
+    }
+    setRawProjects(INITIAL_PROJECTS);
     setFollowUps(INITIAL_FOLLOW_UPS);
-    setDocuments(INITIAL_DOCUMENTS);
+    setEvidences(INITIAL_EVIDENCES);
     setCommunityFeedbacks(INITIAL_COMMUNITY_FEEDBACKS);
     setCommunityActions(INITIAL_COMMUNITY_ACTIONS);
-    setCurrentBrand(NAMING_OPTIONS[0]);
+    setTheme('default');
+    setSelectedProjectId(INITIAL_PROJECTS[0].id);
   };
 
   return (
-    <ProjectContext.Provider value={{
-      identity,
-      updateIdentity,
-      swot,
-      addSwotItem,
-      removeSwotItem,
-      strategyTree,
-      setStrategyTree,
-      projects,
-      selectedProject,
-      selectedProjectId,
-      setSelectedProjectId,
-      updateProjectProgress,
-      resetProjectProgress,
-      followUps,
-      toggleChecklistItem,
-      addActionPlan,
-      documents,
-      addDocument,
-      deleteDocument,
-      communityFeedbacks,
-      updateCommunityFeedback,
-      addCommunityFeedback,
-      communityActions,
-      toggleCommunityAction,
-      currentBrand,
-      setCurrentBrand,
-      theme,
-      setTheme,
-      namingOptions: NAMING_OPTIONS,
-      resetToDefault
-    }}>
+    <ProjectContext.Provider
+      value={{
+        cutoff: PORTFOLIO_CUTOFF,
+        projects,
+        selectedProjectId,
+        setSelectedProjectId,
+        selectedProject,
+        portfolioMetrics,
+        governanceAlerts,
+        followUps,
+        evidences,
+        communityFeedbacks,
+        updateCommunityFeedback,
+        addCommunityFeedback,
+        communityActions,
+        toggleCommunityAction,
+        theme,
+        setTheme,
+        showReportModal,
+        setShowReportModal,
+        updateDeliverableStatus,
+        validateExpenseProof,
+        releaseRetainedExpense,
+        addRubricExpense,
+        updateImpactActual,
+        toggleChecklistItem,
+        addChecklistItem,
+        addActionPlanItem,
+        updateActionStatus,
+        addEvidence,
+        resetToDefault
+      }}
+    >
       {children}
     </ProjectContext.Provider>
   );
 };
 
+// oxlint-disable-next-line react/only-export-components
 export const useProjects = () => useContext(ProjectContext);

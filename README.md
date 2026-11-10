@@ -1,71 +1,46 @@
-# 🌐 RadarSocial
-> **"Transparência e ritmo na execução dos recursos que movem a sociedade"**
+# RadarSocial
 
-O **RadarSocial** é um painel de gestão desenvolvido para facilitar o acompanhamento de metas, organizar rituais de trabalho e apoiar o equilíbrio físico-financeiro em projetos socioambientais e iniciativas de inovação.
+Painel web para acompanhar a execução física, o orçamento e a prestação de contas de programas sociais e ambientais.
 
----
-
-## 🎯 Proposta de Valor
-Acompanhar projetos sociais exige conectar o planejamento orçamentário às entregas reais que acontecem no dia a dia das comunidades. O **RadarSocial** apoia gestores e equipes ao reunir em um só lugar:
-1. **Mapa de Fluxo Estratégico**: Conexão simples e direta entre os objetivos gerais do projeto e as entregas em campo.
-2. **Ritmo de Execução & Custos**: Acompanhamento visual da Curva S e leitura do equilíbrio entre o avanço físico e os recursos aplicados.
-3. **Visão Integrada de Portfólio**: Painel consolidado com indicadores claros para apoiar a tomada de decisão rápida e preventiva.
-4. **Planos de Ação & Rituais (5W2H em Português)**: Rotinas periódicas de alinhamento focadas em destravar atividades e apoiar a equipe técnica.
-5. **Documentação & Relatórios Oficiais**: Central de laudos e comprovantes com geração de relatório executivo em 1 página (*One-Pager*) para conselhos e financiadores.
-6. **Apoio Analítico**: Diagnósticos orientados a dados para sugerir ajustes de cronograma e logística de forma construtiva.
+🔗 **Acesse a aplicação:** [https://thaycarv.github.io/radarsocial/](https://thaycarv.github.io/radarsocial/)
 
 ---
 
-## 🎨 Sistema de Temas & Acessibilidade
-A plataforma possui alternância instantânea entre 3 perfis visuais acessíveis:
-* 🟢 **Padrão**: Tons de verde militar institucional (`#2D5A27`).
-* 🍂 **Boho**: Tons de terracota acolhedores (`#A64B2A`).
-* 🌙 **Modo Escuro (Dark Mode)**: Alto contraste.
+## O que o projeto resolve
+
+Na gestão de convênios, fundos e patrocínios incentivados, olhar apenas para o saldo bancário costuma esconder atrasos de entrega, estouros de rubrica ou notas fiscais pendentes. O **RadarSocial** organiza essa governança em quatro frentes integradas:
+
+* **Portfólio:** visão consolidada da carteira com status unificado e alertas automáticos de prazo, orçamento e retenções fiscais.
+* **Execução e Orçamento:** Curva S mensal (planejado vs. realizado derivado das despesas), cronograma de entregas do plano de trabalho e razão analítico por rubrica com trava de teto orçamentário e conciliação de notas/CND.
+* **Plano de Ação:** verificações da última reunião de acompanhamento, riscos em monitoramento e encaminhamentos com responsável, prazo e status.
+* **Impacto e Exportação PDF:** matriz de indicadores de entrega e resultado (alinhada ao MROSC), dossiê de evidências comprobatórias e resumo executivo pronto para impressão em 1 página.
 
 ---
 
-## 🤝 Concepção Metodológica & Gestão do Projeto (RACI)
+## Regras de cálculo e governança
 
-O **RadarSocial** foi idealizado e estruturado sob as melhores práticas de **Gestão de Projetos, Governança de Portfólio e PMO**, utilizando Inteligência Artificial aplicada para prototipagem rápida e validação de hipóteses:
-
-| Dimensão da Gestão | Concepção & Gestão de Projetos (**Thayâne Carvalho**) | Implementação Técnica Apoiada por IA |
-| :--- | :--- | :--- |
-| **Governança & Escopo do Portfólio** | Definição da metodologia de acompanhamento, critérios de desdobramento estratégico e indicadores de sucesso (KPIs). | Arquitetura SPA em React 19, Vite, Tailwind CSS e Recharts. |
-| **Aferição Físico-Financeira** | Estruturação da Curva S, limites de descompasso orçamentário territorial e semáforos de risco preventivo. | Fórmulas de cálculo de desvio, gráficos analíticos e modelagem reativa de dados. |
-| **Rituais de Gestão & 5W2H** | Padronização dos rituais de acompanhamento, checklists de status report e planos de ação focados em resolução de bloqueios. | Componentes interativos de acompanhamento, armazenamento local e formulários dinâmicos. |
-| **Prestação de Contas & Auditoria** | Requisitos do repositório de evidências técnicas e especificação do relatório executivo em 1 página (*One-Pager*). | Hub de upload de documentos e estilização `@media print` calibrada para PDF oficial. |
-| **Usabilidade & Experiência do Gestor** | Critérios de clareza visual, micro-ajudas conceituais (`?`), acessibilidade e sistemas de temas (Militar, Boho, Dark). | Componentes visuais com alto contraste e validação de acessibilidade (WCAG). |
-| **Garantia de Qualidade & Homologação** | Auditoria de integridade dos dados, validação de regras de negócio e homologação dos casos de uso. | Refatoração de código, testes de compilação (*npm run build*) e esteira de CI/CD. |
+* **Avanço físico (regra 0 / 50 / 100):** medido por etapas sequenciais do plano de trabalho (`Não iniciada` = `0%`, `Em andamento` = `50%`, `Concluída` = `100%`), com peso explícito e cálculo automático de dias de atraso na data de corte.
+* **Execução orçamentária *bottom-up*:** totais por rubrica são calculados diretamente a partir dos lançamentos fiscais vinculados (`NF validada`, `Sem NF` ou `Retido por CND`), bloqueando novas despesas acima do saldo livre da rubrica sem remanejamento.
+* **Carteira consolidada:** médias ponderadas pelo orçamento de cada programa, evitando que projetos menores distorçam o indicador global.
+* **Persistência:** aplicação *client-side* com salvamento automático no `localStorage` do navegador e botão para restaurar o cenário inicial de demonstração.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
-* **Frontend**: React 19, Vite, Tailwind CSS
-* **Ícones & Gráficos**: Lucide React, Recharts
-* **Armazenamento**: LocalStorage com sincronização reativa
-* **Impressão**: CSS Print Engine com `@media print` otimizado para A4
+## Stack e execução local
 
----
-
-## 🚀 Como Executar o Projeto Localmente
+* **Frontend:** React 19, Vite 8, Tailwind CSS 4, Recharts e Lucide React
+* **Qualidade & Deploy:** Oxlint + GitHub Actions (GitHub Pages)
 
 ```bash
-# 1. Clonar o repositório
-git clone https://github.com/SEU_USUARIO/radarsocial.git
-
-# 2. Acessar a pasta do projeto
+git clone https://github.com/thaycarv/radarsocial.git
 cd radarsocial
-
-# 3. Instalar dependências
 npm install
-
-# 4. Iniciar servidor de desenvolvimento
 npm run dev
 ```
 
-Acesse em seu navegador: `http://localhost:5173/`
-
 ---
 
-## 📄 Licença
-Distribuído sob a licença MIT. Projeto concebido para fins de inovação social e governança pública/privada.
+## Autoria
+
+Desenvolvido por **Thayâne Carvalho** — Engenharia de Produção, Gestão de Projetos e Operações ([LinkedIn](https://www.linkedin.com/in/thaycc/)).  
+Licença [MIT](./LICENSE).
