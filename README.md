@@ -42,5 +42,5 @@ npm run dev
 
 ## Autoria
 
-Desenvolvido por **Thayâne Carvalho** — Engenharia de Produção, Gestão de Projetos e Operações ([LinkedIn](https://www.linkedin.com/in/thaycc/)).  
+Desenvolvido por **Thayâne Carvalho**, Engenharia de Produção, Gestão de Projetos e Operações ([LinkedIn](https://www.linkedin.com/in/thaycc/)).  
 Licença [MIT](./LICENSE).

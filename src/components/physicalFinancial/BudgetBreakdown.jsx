@@ -74,7 +74,7 @@ export const BudgetBreakdown = ({ project }) => {
     addEvidence({
       projectId: project.id,
       category: 'Financeiro',
-      title: `${exp.supplier} — ${exp.description}`,
+      title: `${exp.supplier}: ${exp.description}`,
       referenceCode: cleanRef,
       date: cutoff.formattedDate,
       responsible: project.manager
@@ -115,7 +115,7 @@ export const BudgetBreakdown = ({ project }) => {
       addEvidence({
         projectId: project.id,
         category: 'Financeiro',
-        title: `${expenseForm.supplier.trim()} — ${expenseForm.description.trim()}`,
+        title: `${expenseForm.supplier.trim()}: ${expenseForm.description.trim()}`,
         referenceCode: expenseForm.docRef.trim(),
         date: cutoff.formattedDate,
         responsible: project.manager
@@ -423,7 +423,7 @@ export const BudgetBreakdown = ({ project }) => {
                         <div className="px-4 py-3 border-l-4 border-l-[#2D5A27] space-y-2">
                           <div className="flex items-center justify-between text-[11px] text-slate-500">
                             <span className="font-semibold text-slate-700">
-                              Lançamentos vinculados — {item.category}
+                              Lançamentos vinculados · {item.category}
                             </span>
                             <span>
                               Teto: {formatCurrency(item.budgeted)} · Comprometido:{' '}
@@ -535,7 +535,7 @@ export const BudgetBreakdown = ({ project }) => {
                                                 addEvidence({
                                                   projectId: project.id,
                                                   category: 'Financeiro',
-                                                  title: `${exp.supplier} — quitação liberada após renovação da CND`,
+                                                  title: `${exp.supplier}: quitação liberada após renovação da CND`,
                                                   referenceCode:
                                                     (exp.docRef || '')
                                                       .replace(/\s*·\s*CND pendente/i, '')

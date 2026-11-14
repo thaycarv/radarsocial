@@ -45,7 +45,7 @@ export const ExecutiveReportModal = () => {
           <div className="border-b-2 border-slate-900 pb-3 flex items-start justify-between">
             <div>
               <h2 className="text-lg font-extrabold text-slate-900">
-                RadarSocial — Posição Consolidada de Programas
+                RadarSocial: Posição Consolidada de Programas
               </h2>
               <p className="text-xs text-slate-600">
                 Relatório de entregas físicas, execução orçamentária, conciliação fiscal e resultados
@@ -104,7 +104,7 @@ export const ExecutiveReportModal = () => {
                 {projects.map((p) => (
                   <tr key={p.id}>
                     <td className="py-1.5 px-2.5">
-                      <strong>{p.code} — {p.name}</strong>
+                      <strong>{p.code} · {p.name}</strong>
                       <span className="block text-[10px] text-slate-600">
                         {p.funder} · Coord.: {p.manager}
                       </span>

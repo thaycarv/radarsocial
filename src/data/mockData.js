@@ -23,7 +23,7 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-101-1',
-        period: 'Jan–Fev/2026',
+        period: 'Jan a Fev/2026',
         name: 'Vistoria técnica e projeto elétrico dos 5 polos',
         deadline: '15/02/2026',
         deadlineISO: '2026-02-15',
@@ -34,7 +34,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-101-2',
-        period: 'Fev–Mar/2026',
+        period: 'Fev a Mar/2026',
         name: 'Adequação civil, elétrica e cabeamento estruturado dos 5 polos',
         deadline: '31/03/2026',
         deadlineISO: '2026-03-31',
@@ -45,7 +45,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-101-3',
-        period: 'Abr–Mai/2026',
+        period: 'Abr a Mai/2026',
         name: 'Compra, entrega e tombamento dos 50 computadores (10 por polo)',
         deadline: '25/05/2026',
         deadlineISO: '2026-05-25',
@@ -56,7 +56,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-101-4',
-        period: 'Jun–Jul/2026',
+        period: 'Jun a Jul/2026',
         name: 'Montagem das bancadas finais, 50 cadeiras ergonômicas e internet fibra',
         deadline: '15/07/2026',
         deadlineISO: '2026-07-15',
@@ -67,7 +67,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-101-5',
-        period: 'Jul–Ago/2026',
+        period: 'Jul a Ago/2026',
         name: 'Kits multimídia (projetores e impressoras), capacitação de monitores e turmas',
         deadline: '25/08/2026',
         deadlineISO: '2026-08-25',
@@ -288,7 +288,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-102-2',
-        period: 'Mar–Abr/2026',
+        period: 'Mar a Abr/2026',
         name: 'Instalação da rede de irrigação e pontos de água nos 6 terrenos',
         deadline: '30/04/2026',
         deadlineISO: '2026-04-30',
@@ -299,7 +299,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-102-3',
-        period: 'Mai–Jun/2026',
+        period: 'Mai a Jun/2026',
         name: 'Preparo dos canteiros, adubagem orgânica e plantio inicial',
         deadline: '15/06/2026',
         deadlineISO: '2026-06-15',
@@ -310,7 +310,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-102-4',
-        period: 'Jul–Ago/2026',
+        period: 'Jul a Ago/2026',
         name: 'Montagem das estufas de mudas e pátios de compostagem',
         deadline: '15/08/2026',
         deadlineISO: '2026-08-15',
@@ -321,7 +321,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-102-5',
-        period: 'Ago–Set/2026',
+        period: 'Ago a Set/2026',
         name: 'Oficinas de cultivo orgânico e manejo para as 120 famílias',
         deadline: '30/09/2026',
         deadlineISO: '2026-09-30',
@@ -486,7 +486,7 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-103-1',
-        period: 'Fev–Mar/2026',
+        period: 'Fev a Mar/2026',
         name: 'Edital público e seleção dos 30 pequenos negócios',
         deadline: '15/03/2026',
         deadlineISO: '2026-03-15',
@@ -497,7 +497,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-103-2',
-        period: 'Mar–Abr/2026',
+        period: 'Mar a Abr/2026',
         name: 'Diagnóstico ambiental individual das 30 empresas',
         deadline: '30/04/2026',
         deadlineISO: '2026-04-30',
@@ -508,7 +508,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-103-3',
-        period: 'Mai–Jul/2026',
+        period: 'Mai a Jul/2026',
         name: 'Oficinas coletivas de eficiência energética e gestão de resíduos',
         deadline: '10/07/2026',
         deadlineISO: '2026-07-10',
@@ -519,7 +519,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-103-4',
-        period: 'Mai–Ago/2026',
+        period: 'Mai a Ago/2026',
         name: 'Consultorias presenciais de adequação ambiental nos negócios',
         deadline: '31/08/2026',
         deadlineISO: '2026-08-31',
@@ -530,7 +530,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-103-5',
-        period: 'Set–Out/2026',
+        period: 'Set a Out/2026',
         name: 'Rodada comercial com empresas compradoras da região',
         deadline: '15/10/2026',
         deadlineISO: '2026-10-15',
@@ -724,7 +724,7 @@ export const INITIAL_PROJECTS = [
     deliverables: [
       {
         id: 'del-104-1',
-        period: 'Jan–Mar/2026',
+        period: 'Jan a Mar/2026',
         name: 'Reforma civil, exaustão e adequação sanitária das 3 cozinhas',
         deadline: '15/03/2026',
         deadlineISO: '2026-03-15',
@@ -735,7 +735,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-104-2',
-        period: 'Abr–Mai/2026',
+        period: 'Abr a Mai/2026',
         name: 'Entrega e instalação de fornos industriais, freezers e bancadas inox',
         deadline: '15/05/2026',
         deadlineISO: '2026-05-15',
@@ -746,7 +746,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-104-3',
-        period: 'Mai–Jun/2026',
+        period: 'Mai a Jun/2026',
         name: 'Capacitação sanitária (RDC 216) e operação regular do 1º turno',
         deadline: '28/06/2026',
         deadlineISO: '2026-06-28',
@@ -757,7 +757,7 @@ export const INITIAL_PROJECTS = [
       },
       {
         id: 'del-104-4',
-        period: 'Jul–Ago/2026',
+        period: 'Jul a Ago/2026',
         name: 'Abertura do turno complementar e avaliação nutricional das famílias',
         deadline: '20/08/2026',
         deadlineISO: '2026-08-20',
@@ -795,7 +795,7 @@ export const INITIAL_PROJECTS = [
             id: 'exp-104-1c',
             date: '14/05/2026',
             supplier: 'TermoFornos Equipamentos Ltda',
-            description: '3 fornos industriais a gás (6 esteiras) instalados — retido por CND',
+            description: '3 fornos industriais a gás (6 esteiras) instalados (retido por CND)',
             docRef: 'NF-e #3019 · CND pendente',
             amount: 18000,
             status: 'retained'

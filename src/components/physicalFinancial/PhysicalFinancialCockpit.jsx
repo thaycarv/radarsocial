@@ -162,7 +162,7 @@ export const PhysicalFinancialCockpit = ({ onNavigate }) => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 className="text-sm font-bold text-slate-900">
-              Evolução Mensal — Entregas vs. Desembolso
+              Evolução Mensal: Entregas vs. Desembolso
             </h2>
             <p className="text-xs text-slate-500">
               Curva acumulada prevista no plano de trabalho frente ao realizado até {cutoff.formattedDate}
