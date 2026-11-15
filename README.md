@@ -8,12 +8,13 @@ Painel web para acompanhar a execução física, o orçamento e a prestação de
 
 ## O que o projeto resolve
 
-Na gestão de convênios, fundos e patrocínios incentivados, olhar apenas para o saldo bancário costuma esconder atrasos de entrega, estouros de rubrica ou notas fiscais pendentes. O **RadarSocial** organiza essa governança em quatro frentes integradas:
+Na gestão de convênios, fundos e patrocínios incentivados, olhar apenas para o saldo bancário costuma esconder atrasos de entrega, estouros de rubrica ou notas fiscais pendentes. O **RadarSocial** organiza essa governança em cinco frentes integradas:
 
 * **Portfólio:** visão consolidada da carteira com status unificado e alertas automáticos de prazo, orçamento e retenções fiscais.
 * **Execução e Orçamento:** Curva S mensal (planejado vs. realizado derivado das despesas), cronograma de entregas do plano de trabalho e razão analítico por rubrica com trava de teto orçamentário e conciliação de notas/CND.
 * **Plano de Ação:** verificações da última reunião de acompanhamento, riscos em monitoramento e encaminhamentos com responsável, prazo e status.
-* **Impacto e Exportação PDF:** matriz de indicadores de entrega e resultado (alinhada ao MROSC), dossiê de evidências comprobatórias e resumo executivo pronto para impressão em 1 página.
+* **Escuta Comunitária:** registro e acompanhamento das manifestações dos polos comunitários dentro do painel executivo (com módulo operacional dedicado em [Escuta Operações](https://thaycarv.github.io/escuta-operacoes/)).
+* **Impacto e Exportação PDF:** matriz de indicadores de entrega e resultado, dossiê de evidências comprobatórias e resumo executivo pronto para impressão em 1 página.
 
 ---
 
@@ -29,7 +30,7 @@ Na gestão de convênios, fundos e patrocínios incentivados, olhar apenas para 
 ## Stack e execução local
 
 * **Frontend:** React 19, Vite 8, Tailwind CSS 4, Recharts e Lucide React
-* **Qualidade & Deploy:** Oxlint + GitHub Actions (GitHub Pages)
+* **Qualidade & Deploy:** Oxlint + Vitest + GitHub Actions (GitHub Pages)
 
 ```bash
 git clone https://github.com/thaycarv/radarsocial.git

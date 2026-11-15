@@ -262,7 +262,7 @@ export const ImpactAndReports = () => {
         ))}
       </div>
 
-      {/* Dossiê de Evidências (Relatório de Execução do Objeto - MROSC) */}
+      {/* Dossiê de Evidências e Prestação de Contas */}
       <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-2xs space-y-3.5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>

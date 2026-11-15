@@ -5,18 +5,11 @@ import {
   MessageSquare,
   Clock,
   CheckCircle2,
-  AlertTriangle,
   ShieldCheck,
   Search,
-  Filter,
   Plus,
   Copy,
-  ChevronRight,
-  User,
   MapPin,
-  Calendar,
-  Layers,
-  ArrowRight,
   TrendingUp,
   X
 } from 'lucide-react';
@@ -24,7 +17,6 @@ import { formatCurrency } from '../../utils/calculations';
 
 export const CommunityListening = () => {
   const {
-    projects,
     communityFeedbacks,
     updateCommunityFeedback,
     addCommunityFeedback,
@@ -80,7 +72,6 @@ export const CommunityListening = () => {
   // Opções para dropdowns de filtro
   const projectOptions = ['Todos', ...new Set(communityFeedbacks.map(f => f.projectName))];
   const channelOptions = ['Todos', ...new Set(communityFeedbacks.map(f => f.channel))];
-  const sectorOptions = ['Todos', ...new Set(communityFeedbacks.map(f => f.sector))];
   const statusOptions = ['Todos', 'Aberto', 'Em Tratamento', 'Resolvido'];
 
   // Agrupamentos para gráficos de causa raiz
