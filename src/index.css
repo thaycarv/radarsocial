@@ -19,7 +19,21 @@
 }
 
 .animate-fade-scale {
-  animation: fadeInScale 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeInScale 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-skeleton {
+  animation: skeletonPulse 1.4s ease-in-out infinite;
 }
 
 /* Tema Padrão: Verde Institucional */
@@ -243,5 +257,16 @@ body {
     color: #0f172a !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
